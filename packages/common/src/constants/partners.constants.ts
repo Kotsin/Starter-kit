@@ -1,0 +1,2 @@
+export const TOPCOIN_REFERRAL_CODE = '8927351647';
+export const GAME_POINTS_LIMIT = 0;

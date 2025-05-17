@@ -1,0 +1,39 @@
+{
+  "name": "@crypton-nestjs-kit/io-emitter",
+  "version": "1.0.0",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "tsc-version": "tsc --version",
+    "node-version": "node --version",
+    "check-engines": "node ../../node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
+    "clean": "rimraf build && rimraf coverage",
+    "prebuild": "npm run clean && npm run check-engines",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run build",
+    "test": "npm run test:ci",
+    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests"
+  },
+  "engines": {
+    "node": ">=20.x",
+    "npm": ">=10.2.x"
+  },
+  "devEngines": {
+    "node": ">=20.x",
+    "npm": ">=10.2.x"
+  },
+  "dependencies": {
+    "@nestjs/common": "10.4.15",
+    "@nestjs/config": "^3.2.3",
+    "@nestjs/swagger": "^7.4.2",
+    "@socket.io/redis-emitter": "^5.1.0",
+    "@crypton-nestjs-kit/common": "workspace:^1.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "redis": "^4.6.13",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "tslib": "^2.6.2"
+  }
+}

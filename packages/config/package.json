@@ -1,0 +1,50 @@
+{
+  "name": "@crypton-nestjs-kit/config",
+  "version": "1.0.0",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "check-engines": "node ../../node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
+    "clean": "rimraf build && rimraf coverage",
+    "prebuild": "npm run clean && npm run check-engines",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run build",
+    "test": "npm run test:ci",
+    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests"
+  },
+  "engines": {
+    "node": ">=18.x",
+    "npm": ">=10.2.x"
+  },
+  "devEngines": {
+    "node": ">=18.x",
+    "npm": ">=10.2.x"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@nestjs/common": "10.4.15",
+    "@nestjs/microservices": "10.4.15",
+    "@nestjs/config": "3.2.2",
+    "@nestjs/core": "10.4.15",
+    "@nestjs/testing": "10.4.15",
+    "@types/eslint-plugin-prettier": "^3.1.0",
+    "@types/jest": "29.5.12",
+    "@types/node": "^20.12.11",
+    "@types/uuid": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "prettier": "^2.3.2",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.5"
+  }
+}

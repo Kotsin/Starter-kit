@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.9.20
+    hostname: rabbitmq
+    ports:
+      - '5673:5672'
+      - '15673:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+    volumes:
+      - './rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf'
+
+volumes:
+  database: null

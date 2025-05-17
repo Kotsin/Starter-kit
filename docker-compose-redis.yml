@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  redis:
+    image: redis:latest
+    hostname: redis
+    ports:
+      - '${REDIS_PORT}:6378'
+    volumes:
+      - redis_data:/data
+    environment:
+      - REDIS_PASSWORD=${REDIS_DEFAULT_PSWD} # Устанавливаем пароль
+    command: ["redis-server", "--requirepass", "yourpassword"]
+
+volumes:
+  redis_data:
