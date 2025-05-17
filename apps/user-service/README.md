@@ -7,78 +7,75 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## 1. Installation
+User Service is responsible for managing user data, profiles, and user-related operations in the microservices architecture. Built with NestJS, it provides a robust and scalable solution for user management.
+
+## Features
+
+- 👤 User Management
+  - User profiles
+  - User preferences
+  - Account settings
+- 🔄 Data Synchronization
+  - Real-time updates
+  - Cache management
+- 🔐 Security
+  - Data encryption
+  - Access control
+- 📊 Monitoring
+  - User activity tracking
+  - System health checks
+
+## Prerequisites
+
+- Node.js (v20 or higher)
+- pnpm
+- PostgreSQL
+- Redis
+- RabbitMQ
+
+## Installation
 
 ```bash
 $ pnpm install
 ```
 
-# 2. Filling in the parameters .env
-```
+## Configuration
+
+Create a `.env` file in the service root directory with the following configuration:
+
+```env
+# Environment
 NODE_ENV=local
 
-DB_HOST=
-DB_NAME=
-DB_USERNAME=
-DB_PASSWORD=
-DB_PORT=
+# Redis Configuration
+REDIS_URL=redis://:password@localhost:6379/0
 
-RUN_MIGRATIONS='false'
+# Database Configuration
+DB_HOST=127.0.0.1
+DB_NAME=shared_db
+DB_USERNAME=shared
+DB_PASSWORD=your_password
+DB_PORT=5433
 
-DB_REPLICATION='true'
-DB_REPLICATION_COUNT=2
+# RabbitMQ Services
+AUTH_SERVICE_RMQ_URL=amqp://@localhost:5672
+AUTH_SERVICE_RMQ_QUEUE=auth
 
-DB_HOST_R_1=
-DB_NAME_R_1=
-DB_USERNAME_R_1=
-DB_PASSWORD_R_1=
-DB_PORT_R_1=
+USER_SERVICE_RMQ_URL=amqp://@localhost:5672
+USER_SERVICE_RMQ_QUEUE=user
 
-DB_HOST_R_2=
-DB_NAME_R_2=
-DB_USERNAME_R_2=
-DB_PASSWORD_R_2=
-DB_PORT_R_2=
-
-USER_SERVICE_RMQ_URL=
-USER_SERVICE_RMQ_QUEUE=
-
-GAME_SERVICE_RMQ_URL=
-GAME_SERVICE_RMQ_QUEUE=
-
-BOT_SERVICE_RMQ_URL=
-BOT_SERVICE_RMQ_QUEUE=
-
-BALANCE_SERVICE_RMQ_URL=
-BALANCE_SERVICE_RMQ_QUEUE=
-
-TWEET_SCOUT_CLIENT_ID=
-TWITTER_CLIENT_ID=
-TWITTER_CALLBACK_URI=
-TWITTER_ZARGATES_USERNAME=
-
-DISCORD_CLIENT_SECRET_ID=
-DISCORD_CLIENT_ID=
-DISCORD_CALLBACK_URI=
-DISCORD_BOT_TOKEN=
-DISCORD_ZARGATES_GUILD_ID=
-
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET_ID=
-GOOGLE_CALLBACK_URI=
-YOUTUBE_ZARGATES_CHANNEL_ID=
-
-LOG_LEVEL='info'
-
+# Logging
+LOG_LEVEL=info
 ```
 
-## 3.Running docker (optional)
+## Running the Application
+
+### Using Docker (optional)
 ```bash
 $ sudo docker compose up
 ```
 
-## 3.Running the app
-
+### Local Development
 ```bash
 # development
 $ pnpm run start
@@ -88,3 +85,47 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
+```
+
+## Project Structure
+
+```
+src/
+├── controllers/    # API endpoints and route handlers
+├── services/      # Business logic layer
+├── interfaces/    # TypeScript interfaces
+├── entities/      # Database entities
+└── main.ts        # Application entry point
+```
+
+## API Documentation
+
+The service exposes its API documentation through Swagger. Once running, you can access it at:
+```
+http://localhost:3000/api/docs
+```
+
+## Testing
+
+```bash
+# unit tests
+$ pnpm run test
+
+# e2e tests
+$ pnpm run test:e2e
+
+# test coverage
+$ pnpm run test:cov
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
