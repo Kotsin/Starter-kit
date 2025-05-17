@@ -41,12 +41,22 @@ pnpm install
 # Environment
 NODE_ENV=local
 
+# Authentication Configuration
+AUTH_ACCESS_TOKEN_EXPIRES_IN=900000
+AUTH_REFRESH_TOKEN_EXPIRES_IN=86400000
+AUTH_TOKEN_SECRET=your_secret_key
+AUTH_SESSION_CACHE_TTL=3600000
+AUTH_MAX_SESSIONS_PER_USER=5
+
+# Redis Configuration
+REDIS_URL=redis://:password@localhost:6379/0
+
 # Database Configuration
-DB_HOST=localhost
-DB_NAME=auth_db
-DB_USERNAME=postgres
+DB_HOST=127.0.0.1
+DB_NAME=shared_db
+DB_USERNAME=shared
 DB_PASSWORD=your_password
-DB_PORT=5432
+DB_PORT=5433
 
 # Database Replication Settings
 RUN_MIGRATIONS=false
@@ -60,29 +70,15 @@ DB_USERNAME_R_1=
 DB_PASSWORD_R_1=
 DB_PORT_R_1=
 
-# Replica 2 Configuration (if DB_REPLICATION=true)
-DB_HOST_R_2=
-DB_NAME_R_2=
-DB_USERNAME_R_2=
-DB_PASSWORD_R_2=
-DB_PORT_R_2=
+# RabbitMQ Services
+AUTH_SERVICE_RMQ_URL=amqp://@localhost:5672
+AUTH_SERVICE_RMQ_QUEUE=auth
 
-# RabbitMQ Configuration
-USER_SERVICE_RMQ_URL=amqp://localhost:5672
-USER_SERVICE_RMQ_QUEUE=user_queue
+USER_SERVICE_RMQ_URL=amqp://@localhost:5672
+USER_SERVICE_RMQ_QUEUE=user
 
 # Logging
 LOG_LEVEL=info
-
-# OAuth Configuration (required for social authentication)
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-TWITTER_CONSUMER_KEY=
-TWITTER_CONSUMER_SECRET=
-APPLE_CLIENT_ID=
-APPLE_TEAM_ID=
-APPLE_KEY_ID=
-APPLE_PRIVATE_KEY=
 ```
 
 ## Running the Application

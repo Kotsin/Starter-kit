@@ -149,3 +149,6 @@ docker/
 
 # Cursor IDE files
 .cursor/
+
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md

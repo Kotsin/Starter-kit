@@ -1,8 +1,8 @@
 {
   "run": {
     "command": "nx run @crypton-nestjs-kit/auth-service:start:dev",
-    "startTime": "2025-05-17T09:07:12.691Z",
-    "endTime": "2025-05-17T09:07:16.775Z",
+    "startTime": "2025-05-17T18:50:08.544Z",
+    "endTime": "2025-05-17T18:50:37.878Z",
     "inner": false
   },
   "tasks": [
@@ -10,9 +10,9 @@
       "taskId": "@crypton-nestjs-kit/auth-service:start:dev",
       "target": "start:dev",
       "projectName": "@crypton-nestjs-kit/auth-service",
-      "hash": "13286621353294656307",
-      "startTime": "2025-05-17T09:07:12.699Z",
-      "endTime": "2025-05-17T09:07:16.774Z",
+      "hash": "17813446840101351530",
+      "startTime": "2025-05-17T18:50:08.558Z",
+      "endTime": "2025-05-17T18:50:37.878Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 1

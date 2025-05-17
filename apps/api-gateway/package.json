@@ -40,6 +40,8 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "ioredis": "^5.4.1",
+    "moment": "^2.30.1",
+    "@types/moment": "^2.13.0",
     "nestjs-throttler-storage-redis": "^0.5.1",
     "pg": "^8.11.5",
     "passport": "0.7.0",

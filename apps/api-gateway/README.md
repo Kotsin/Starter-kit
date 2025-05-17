@@ -48,27 +48,30 @@ pnpm install
 The service uses environment variables for configuration. Create a `.env` file in the root directory with the following variables:
 
 ```env
-# Server
-PORT=3000
-NODE_ENV=development
+# Environment
+NODE_ENV=local
+HOST=localhost
+PORT=3001
 
-# Database
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USERNAME=postgres
-DATABASE_PASSWORD=postgres
-DATABASE_NAME=your_db_name
+# Swagger Authentication
+SWAGGER_USERNAME=your_username
+SWAGGER_PASSWORD=your_password
 
-# Redis
-REDIS_HOST=localhost
-REDIS_PORT=6379
+# API Security
+SECRET_API_KEY=your_secret_key
 
-# RabbitMQ
-RABBITMQ_URL=amqp://localhost:5672
+# Redis Configuration
+REDIS_URL=redis://:password@localhost:6379/0
 
-# Auth
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRES_IN=1h
+# RabbitMQ Services
+AUTH_SERVICE_RMQ_URL=amqp://@localhost:5672
+AUTH_SERVICE_RMQ_QUEUE=auth
+
+USER_SERVICE_RMQ_URL=amqp://@localhost:5672
+USER_SERVICE_RMQ_QUEUE=user
+
+# Logging
+LOG_LEVEL=info
 ```
 
 ## Running the Service
