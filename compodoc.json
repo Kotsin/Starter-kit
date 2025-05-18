@@ -1,0 +1,21 @@
+{
+  "tsconfig": "./tsconfig.base.json",
+  "output": "./docs",
+  "serve": true,
+  "port": 8080,
+  "silent": true,
+  "disableCoverage": true,
+  "disablePrivate": false,
+  "disableProtected": false,
+  "disableInternal": false,
+  "silent": true,
+  "theme": "gitbook",
+  "hideGenerator": true,
+  "name": "Starter Kit Documentation",
+  "navLinks": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Kirill9970/Starter-kit"
+    }
+  ]
+} 

@@ -11,7 +11,10 @@
     "start:test": "tsc-watch -p tsconfig.build.json --onSuccess \"node -r dotenv/config dist/main.js dotenv_config_path=../.env.test\"",
     "start:prod": "node dist/main.js",
     "lint": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
-    "test": "jest --config ./test/jest-e2e.json --detectOpenHandles"
+    "test": "jest --config ./test/jest-e2e.json --detectOpenHandles",
+    "docs:generate": "compodoc -p tsconfig.build.json -d ../../docs/api-gateway",
+    "docs:serve": "compodoc -p tsconfig.build.json -d ../../docs/api-gateway -s",
+    "docs:watch": "compodoc -p tsconfig.build.json -d ../../docs/api-gateway -w"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.2.1",
@@ -91,6 +94,7 @@
     "ts-jest": "^29.1.2",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@compodoc/compodoc": "^1.1.23"
   }
 }

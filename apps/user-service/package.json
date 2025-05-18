@@ -10,7 +10,10 @@
     "build": "tsc -p tsconfig.build.json",
     "start:test": "tsc-watch -p tsconfig.build.json --onSuccess \"node -r dotenv/config dist/main.js dotenv_config_path=../.env.test\"",
     "start:prod": "node dist/main.js",
-    "lint": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix"
+    "lint": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
+    "docs:generate": "compodoc -p tsconfig.build.json -d ../../docs/user-service",
+    "docs:serve": "compodoc -p tsconfig.build.json -d ../../docs/user-service -s",
+    "docs:watch": "compodoc -p tsconfig.build.json -d ../../docs/user-service -w"
   },
   "engines": {
     "node": ">=18.x",
@@ -51,6 +54,7 @@
     "winston": "^3.13.0"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.23",
     "@nestjs/cli": "^10.3.2",
     "@nestjs/schematics": "^10.1.1",
     "@nestjs/testing": "^10.3.8",

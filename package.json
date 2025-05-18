@@ -9,7 +9,10 @@
     "prepare": "husky",
     "start:gateway": "node apps/api-gateway/dist/main.js",
     "prettier": "../node_modules/.bin/prettier --check \"**/*.{js,json,ts,yml,yaml}\"",
-    "prettier:write": "../node_modules/.bin/prettier --write \"**/*.{js,json,ts,yml,yaml}\""
+    "prettier:write": "../node_modules/.bin/prettier --write \"**/*.{js,json,ts,yml,yaml}\"",
+    "docs:generate": "pnpm run docs:generate -r",
+    "docs:serve": "pnpm run docs:serve -r",
+    "docs:watch": "pnpm run docs:watch -r"
   },
   "keywords": [],
   "license": "UNLICENSED",
@@ -32,7 +35,8 @@
     "prettier-plugin-svelte": "^3.2.3",
     "rimraf": "^5.0.7",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "@compodoc/compodoc": "^1.1.23"
   },
   "config": {
     "commitizen": {
