@@ -6,7 +6,7 @@
 
 ## Overview
 
-ZarGates Backend is a modern microservices-based application built with NestJS. The system is designed to provide a scalable, maintainable, and robust backend infrastructure for handling various business operations through a set of specialized services.
+Starter-kit Backend is a modern microservices-based application built with NestJS. The system is designed to provide a scalable, maintainable, and robust backend infrastructure for handling various business operations through a set of specialized services.
 
 ## Architecture
 
@@ -101,8 +101,6 @@ Located in the `packages/` directory:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/zargates-backend.git
-   cd zargates-backend
    ```
 
 2. **Install dependencies**
