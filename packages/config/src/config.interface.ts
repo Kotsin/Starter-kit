@@ -113,4 +113,10 @@ export interface ConfigData {
   taskScheduler?: RmqOptions;
 
   throttler: ThrottlerConfig;
+
+  captcha: {
+    secretKey: string;
+    siteKey: string;
+    enabled: boolean;
+  };
 }

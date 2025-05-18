@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class AuthenticationFailedException extends HttpException {
-  constructor(message: string = 'Authentication failed') {
+  constructor() {
     super(
       {
-        status: HttpStatus.UNAUTHORIZED,
-        error: 'Authentication failed',
-        message,
+        message: 'Authentication failed',
+        error: 'Unauthorized',
       },
       HttpStatus.UNAUTHORIZED,
     );
@@ -14,12 +13,11 @@ export class AuthenticationFailedException extends HttpException {
 }
 
 export class AccountConfirmationFailedException extends HttpException {
-  constructor(message: string = 'Account confirmation failed') {
+  constructor() {
     super(
       {
-        status: HttpStatus.BAD_REQUEST,
-        error: 'Confirmation failed',
-        message,
+        message: 'Account confirmation failed',
+        error: 'Bad Request',
       },
       HttpStatus.BAD_REQUEST,
     );
@@ -27,12 +25,11 @@ export class AccountConfirmationFailedException extends HttpException {
 }
 
 export class RegistrationFailedException extends HttpException {
-  constructor(message: string = 'User registration failed') {
+  constructor() {
     super(
       {
-        status: HttpStatus.BAD_REQUEST,
-        error: 'Registration failed',
-        message,
+        message: 'Registration failed',
+        error: 'Bad Request',
       },
       HttpStatus.BAD_REQUEST,
     );
@@ -40,14 +37,25 @@ export class RegistrationFailedException extends HttpException {
 }
 
 export class TooManyAttemptsException extends HttpException {
-  constructor(message: string = 'Too many attempts. Try again later') {
+  constructor() {
     super(
       {
-        status: HttpStatus.TOO_MANY_REQUESTS,
-        error: 'Rate limit exceeded',
-        message,
+        message: 'Too many attempts. Try again later',
+        error: 'Too Many Requests',
       },
       HttpStatus.TOO_MANY_REQUESTS,
+    );
+  }
+}
+
+export class CaptchaVerificationFailedException extends HttpException {
+  constructor() {
+    super(
+      {
+        message: 'Captcha verification failed',
+        error: 'Bad Request',
+      },
+      HttpStatus.BAD_REQUEST,
     );
   }
 } 

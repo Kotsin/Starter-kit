@@ -60,6 +60,11 @@ SWAGGER_PASSWORD=your_password
 # API Security
 SECRET_API_KEY=your_secret_key
 
+# CAPTCHA Configuration
+CAPTCHA_ENABLED=true
+CAPTCHA_SECRET_KEY=your_secret_key
+CAPTCHA_SITE_KEY=your_site_key
+
 # Redis Configuration
 REDIS_URL=redis://:password@localhost:6379/0
 
@@ -149,51 +154,3 @@ pnpm test:cov
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-# Filling in the parameters .env
-```
-NODE_ENV=local
-PORT=
-
-SWAGGER_USERNAME=
-SWAGGER_PASSWORD=
-
-SECRET_API_KEY=
-AMIKIN_SECRET_KEY=
-
-REDIS_HOST=
-REDIS_PORT=
-
-JWT_ACCESS_TOKEN_SECRET=
-JWT_REFRESH_TOKEN_SECRET=
-TOKEN_EXPIRY=
-
-AUTH_SERVICE_RMQ_URL=
-AUTH_SERVICE_RMQ_QUEUE=
-
-USER_SERVICE_RMQ_URL=
-USER_SERVICE_RMQ_QUEUE=
-
-GAME_SERVICE_RMQ_URL=
-GAME_SERVICE_RMQ_QUEUE=
-
-OFFER_MANAGER_RMQ_URL=
-OFFER_MANAGER_RMQ_QUEUE=
-
-TG_BOT_NAME=
-
-LOG_LEVEL=info
-
-```
-
-## Running the app
-
-```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod

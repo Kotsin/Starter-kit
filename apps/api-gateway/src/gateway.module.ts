@@ -33,6 +33,8 @@ import { SessionsController } from './v1/auth/sessions.controller';
 import { UserController } from './v1/user/user.controller';
 import { GatewayController } from './gateway.controller';
 import { TransformResponseInterceptor } from './interceptors';
+import { CaptchaService } from './v1/auth/services/captcha.service';
+import { CaptchaGuard } from './guards/captcha.guard';
 
 @Module({
   imports: [
@@ -87,6 +89,8 @@ import { TransformResponseInterceptor } from './interceptors';
     DiscoveryService,
     Reflector,
     CustomThrottlerGuard,
+    CaptchaService,
+    CaptchaGuard,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

@@ -1,18 +1,10 @@
 import {
   ApiExtraModels,
   ApiProperty,
-  ApiPropertyOptional,
   ApiResponseOptions,
-  getSchemaPath,
 } from '@nestjs/swagger';
+import { IUser } from '@crypton-nestjs-kit/common';
 import {
-  IUser,
-  UserEntity,
-  UserStatus,
-  UserType,
-} from '@crypton-nestjs-kit/common';
-import {
-  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -119,6 +111,16 @@ export class RegisterDtoRequest {
   readonly password!: string;
 }
 
+export class CaptchaDto {
+  @ApiProperty({
+    description: 'Captcha token from reCAPTCHA',
+    example: '03AFcWeA5...',
+  })
+  @IsNotEmpty({ message: 'Captcha token cannot be empty' })
+  @IsString({ message: 'Captcha token must be a string' })
+  readonly token!: string;
+}
+
 export class AuthDtoRequest extends RegisterDtoRequest {
   @ApiProperty({
     description: '2FA codes object. Is it setting up.',
@@ -130,6 +132,13 @@ export class AuthDtoRequest extends RegisterDtoRequest {
   })
   @IsOptional()
   readonly twoFaCodes!: TwoFaCodesDto;
+
+  @ApiProperty({
+    description: 'reCAPTCHA verification token',
+    type: CaptchaDto,
+  })
+  @IsNotEmpty({ message: 'Captcha verification is required' })
+  readonly captcha!: CaptchaDto;
 }
 
 export class SigninSolanaDtoRequest {

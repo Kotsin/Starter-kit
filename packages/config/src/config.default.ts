@@ -98,4 +98,9 @@ export const DEFAULT_CONFIG: ConfigData = {
     ttl: 6000,
     limit: 3,
   },
+  captcha: {
+    secretKey: '',
+    siteKey: '',
+    enabled: false,
+  },
 };

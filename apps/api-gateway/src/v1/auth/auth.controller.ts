@@ -1,39 +1,23 @@
-import { Cache } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
-  Get,
   Headers,
   Injectable,
   Post,
   Req,
-  Res,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiHeader,
-  ApiOperation,
-  ApiResponse,
-  ApiSecurity,
-  ApiTags,
-} from '@nestjs/swagger';
-import { AuthClient, UserClient } from '@crypton-nestjs-kit/common';
-import { ConfigService } from '@crypton-nestjs-kit/config';
-import { RedisStore } from 'cache-manager-redis-yet';
-import { Request, Response } from 'express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserClient } from '@crypton-nestjs-kit/common';
+import { Request } from 'express';
 
-import { ApiKey } from '../../decorators/api-key.decorator';
-// import { Keypair, PublicKey } from '@solana/web3.js';
-// import * as nacl from 'tweetnacl';
-import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
 import { RequestIpFromRequest } from '../../decorators/extract-ip.decorator';
 import { RequestUserAgentFromRequest } from '../../decorators/extract-userAgent.decorator';
 import { CheckPermissions } from '../../decorators/role-permissions-decorator';
-import { ApiKeyGuard } from '../../guards/api-key.guard';
 import { BruteForceGuard } from '../../guards/bruteForce.guard';
+import { CaptchaGuard } from '../../guards/captcha.guard';
 import { RolesGuard } from '../../guards/role.guard';
 import { BaseCodeBruteForceGuard } from '../../guards/twoFA.guard';
 import { LoginValidationPipe } from '../../pipes/login-validator.pipe';
@@ -43,21 +27,17 @@ import {
   AuthDtoRequest,
   RegisterConfirmRequestDTO,
   RegisterDtoRequest,
-  RegisterResponseDto,
-  SigninSolanaDtoRequest,
 } from './dto/auth.dto';
 import {
   AccountConfirmationFailedException,
   AuthenticationFailedException,
   RegistrationFailedException,
-  TooManyAttemptsException,
 } from './exceptions/auth.exceptions';
 import {
   IAuthResponse,
   IConfirmationResponse,
   IRegistrationResponse,
 } from './interfaces/auth.interfaces';
-import { LockService } from './services/lock.service';
 
 /**
  * Authentication and Authorization Controller
@@ -74,12 +54,9 @@ import { LockService } from './services/lock.service';
 @UseGuards(RolesGuard)
 export class AuthController {
   constructor(
-    private readonly authClient: AuthClient,
     private readonly userClient: UserClient,
-    private readonly configService: ConfigService,
     private readonly bruteForceGuard: BruteForceGuard,
     private readonly codeBruteForceGuard: BaseCodeBruteForceGuard,
-    private readonly cacheManager: Cache,
   ) {}
 
   /**
@@ -208,6 +185,7 @@ export class AuthController {
     description: `
       Authenticates user in the system.
       - Validates credentials
+      - Verifies captcha
       - Supports 2FA
       - Creates user session
       - Returns access tokens
@@ -240,7 +218,7 @@ export class AuthController {
     status: 429,
     description: 'Too many attempts. Try again later',
   })
-  @UseGuards(BruteForceGuard)
+  @UseGuards(BruteForceGuard, CaptchaGuard)
   @Post('signin')
   async auth(
     @CorrelationIdFromRequest() traceId: string,
@@ -266,16 +244,10 @@ export class AuthController {
 
     if (!userData.status) {
       await this.bruteForceGuard.registerFailedAttempt(requestIp, body.login);
-
       throw new AuthenticationFailedException();
     }
 
     await this.bruteForceGuard.resetAttempts(requestIp, body.login);
-
-    console.log({
-      message: 'User successfully authenticated',
-      tokens: userData,
-    });
 
     return {
       message: 'User successfully authenticated',

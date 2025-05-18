@@ -148,6 +148,11 @@ export class ConfigService {
         ttl: Number(env.THROTTLE_TTL) || 1000,
         limit: Number(env.THROTTLE_LIMIT) || 30,
       },
+      captcha: {
+        secretKey: process.env.CAPTCHA_SECRET_KEY || '',
+        siteKey: process.env.CAPTCHA_SITE_KEY || '',
+        enabled: process.env.CAPTCHA_ENABLED === 'true',
+      },
     };
   }
 
