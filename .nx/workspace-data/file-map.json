@@ -38,56 +38,24 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".env.example",
-        "hash": "13047457774715171156"
-      },
-      {
-        "file": ".eslintignore",
-        "hash": "4660892077869316414"
+        "file": ".gitignore",
+        "hash": "6083886884481296167"
       },
       {
         "file": ".eslintrc",
         "hash": "6564936168741561034"
       },
       {
-        "file": ".gitignore",
-        "hash": "6083886884481296167"
-      },
-      {
-        "file": ".husky/pre-commit",
-        "hash": "1038190505859968275"
-      },
-      {
-        "file": ".prettierignore",
-        "hash": "10293546368267736695"
-      },
-      {
-        "file": ".prettierrc",
-        "hash": "174943607064940844"
-      },
-      {
-        "file": "README.md",
-        "hash": "4710163631506373049"
-      },
-      {
         "file": "commitlint.config.js",
         "hash": "15089399635272455297"
-      },
-      {
-        "file": "compodoc.json",
-        "hash": "1795656203220061925"
       },
       {
         "file": "docs/.gitkeep",
         "hash": "3244421341483603138"
       },
       {
-        "file": "nx.json",
-        "hash": "17754476680881658738"
-      },
-      {
-        "file": "package.json",
-        "hash": "3948271154729596665"
+        "file": ".eslintignore",
+        "hash": "4660892077869316414"
       },
       {
         "file": "pnpm-lock.yaml",
@@ -98,8 +66,40 @@
         "hash": "14507441423813387645"
       },
       {
+        "file": "README.md",
+        "hash": "12454062967696092093"
+      },
+      {
         "file": "tsconfig.json",
         "hash": "1698454359300394519"
+      },
+      {
+        "file": ".husky/pre-commit",
+        "hash": "1038190505859968275"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "174943607064940844"
+      },
+      {
+        "file": ".env.example",
+        "hash": "13047457774715171156"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "10293546368267736695"
+      },
+      {
+        "file": "compodoc.json",
+        "hash": "1795656203220061925"
+      },
+      {
+        "file": "nx.json",
+        "hash": "17754476680881658738"
+      },
+      {
+        "file": "package.json",
+        "hash": "3948271154729596665"
       }
     ],
     "projectFileMap": {
