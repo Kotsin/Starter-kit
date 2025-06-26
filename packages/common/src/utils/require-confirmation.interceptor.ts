@@ -48,7 +48,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       userId = data.user.id;
     }
 
-    const data = await this.userClient.getUserById({ user_id: userId }, '0000');
+    const data = await this.userClient.getUserById({ userId }, '0000');
 
     const twoFaEntries = data.user.twoFaPermissions.filter(
       (entry: any) => entry.permission.id === permissionId,

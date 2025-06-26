@@ -9,7 +9,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserClient } from '@crypton-nestjs-kit/common';
+import { AuthClient, UserClient } from '@crypton-nestjs-kit/common';
 import { Request } from 'express';
 
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
@@ -55,6 +55,7 @@ import {
 export class AuthController {
   constructor(
     private readonly userClient: UserClient,
+    private readonly authClient: AuthClient,
     private readonly bruteForceGuard: BruteForceGuard,
     private readonly codeBruteForceGuard: BaseCodeBruteForceGuard,
   ) {}
@@ -219,6 +220,7 @@ export class AuthController {
     description: 'Too many attempts. Try again later',
   })
   @UseGuards(BruteForceGuard, CaptchaGuard)
+  @UsePipes(LoginValidationPipe)
   @Post('signin')
   async auth(
     @CorrelationIdFromRequest() traceId: string,
@@ -227,23 +229,28 @@ export class AuthController {
     @Body() body: AuthDtoRequest,
     @Headers() headers: Record<string, string>,
   ): Promise<IAuthResponse> {
-    const userData = await this.userClient.nativeLogin(
+    const userData = await this.authClient.authenticateNative(
       {
-        password: body.password,
-        login: body.login,
-        userAgent: user_agent,
-        userIp: requestIp,
-        fingerprint: headers['fingerprint'] || '',
-        country: headers['cf-ipcountry'] || '',
-        city: headers['cf-ipcity'] || '',
-        twoFaCodes: body.twoFaCodes,
-        traceId,
+        credentials: {
+          password: body.password,
+          login: body.login,
+          loginType: body['loginType'],
+        },
+        sessionData: {
+          userAgent: user_agent,
+          userIp: requestIp,
+          fingerprint: headers['fingerprint'] || '',
+          country: headers['cf-ipcountry'] || '',
+          city: headers['cf-ipcity'] || '',
+          twoFaCodes: body.twoFaCodes,
+        },
       },
       traceId,
     );
 
     if (!userData.status) {
       await this.bruteForceGuard.registerFailedAttempt(requestIp, body.login);
+
       throw new AuthenticationFailedException();
     }
 
@@ -251,7 +258,7 @@ export class AuthController {
 
     return {
       message: 'User successfully authenticated',
-      tokens: userData.tokens,
+      tokens: userData['tokens'],
     };
   }
 }

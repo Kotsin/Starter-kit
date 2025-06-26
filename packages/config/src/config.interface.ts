@@ -23,6 +23,10 @@ export interface AuthConfig {
   access_token_expires_in: number;
   refresh_token_expires_in: number;
   token_secret: string;
+  service_secrets: {
+    user_service: string;
+    default: string;
+  };
   session_cache_ttl: number;
   max_sessions_per_user: number;
   rate_limit: {

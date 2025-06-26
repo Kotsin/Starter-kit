@@ -18,4 +18,5 @@ export interface IRequest {
   traceId?: string;
   limit?: number;
   page?: number;
+  serviceId?: string;
 }

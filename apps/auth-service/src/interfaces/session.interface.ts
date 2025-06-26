@@ -23,13 +23,3 @@ export class AuthenticationError extends Error {
     this.name = 'AuthenticationError';
   }
 }
-
-export enum AuthErrorCodes {
-  INVALID_TOKEN = 'AUTH_001',
-  SESSION_NOT_FOUND = 'AUTH_002',
-  SESSION_EXPIRED = 'AUTH_003',
-  INVALID_CREDENTIALS = 'AUTH_004',
-  RATE_LIMIT_EXCEEDED = 'AUTH_005',
-  SESSION_LIMIT_EXCEEDED = 'AUTH_006',
-  USER_NOT_FOUND = 'AUTH_007',
-}

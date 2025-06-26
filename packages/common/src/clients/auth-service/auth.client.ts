@@ -50,6 +50,30 @@ export class AuthClient {
     @Inject(AUTH_INJECT_TOKEN) private readonly authClientProxy: ClientProxy,
   ) {}
 
+  async authenticateNative(
+    request: any,
+    traceId: string,
+  ): Promise<ISessionCreateResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.AUTHENTICATE_NATIVE,
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
+
+  async authenticateSocial(
+    request: any,
+    traceId: string,
+  ): Promise<ISessionCreateResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.AUTHENTICATE_NATIVE,
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
+
   /**
    * Creates a new session based on the provided request data.
    *
@@ -169,16 +193,18 @@ export class AuthClient {
    *
    * @param traceId
    * @param {IActiveSessionsRequest} request
+   * @param serviceToken
    * @return {Promise<IActiveSessionsResponse>} An object with the following properties:
    */
   async getActiveSessions(
     traceId: string,
     request: IActiveSessionsRequest,
+    serviceToken?: string,
   ): Promise<IActiveSessionsResponse> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.GET_ACTIVE_SESSIONS,
-        await createRmqMessage(traceId, request),
+        await createRmqMessage(traceId, request, serviceToken),
       ),
     );
   }
@@ -215,6 +241,8 @@ export class AuthClient {
 }
 
 export enum AuthClientPatterns {
+  AUTHENTICATE_NATIVE = 'authenticate_native',
+  AUTHENTICATE_SOCIAL = 'authenticate_social',
   SESSION_CREATE = 'session_create',
   TOKENS_CREATE = 'tokens_create',
   TOKEN_VERIFY = 'token_verify',

@@ -195,7 +195,7 @@ export class UserService implements OnModuleInit {
       const { userId } = request;
 
       const userData = await this.getUserById({
-        user_id: userId,
+        userId,
       });
 
       if (!userData.status) {
@@ -648,7 +648,7 @@ export class UserService implements OnModuleInit {
     data: IGetUserByIdRequest,
   ): Promise<IGetUserByIdResponse> {
     try {
-      const CACHE_KEY = `getUserById:${data.user_id}`;
+      const CACHE_KEY = `getUserById:${data.userId}`;
       const cachedData = await this.cacheManager.get(CACHE_KEY);
 
       if (cachedData) {
@@ -661,7 +661,7 @@ export class UserService implements OnModuleInit {
 
       const user = await this.userRepo.findOne({
         where: {
-          id: data.user_id,
+          id: data.userId,
         },
         relations: [
           'roles.role',
@@ -718,6 +718,7 @@ export class UserService implements OnModuleInit {
         .where('ulm.login = :login', { login: data.login })
         .select([
           'user.id AS id',
+          'user.password AS password',
           'ulm.login AS login',
           'ulm.method AS login_type',
         ])

@@ -59,6 +59,7 @@ export class AuthGuard implements CanActivate {
     }
 
     request.user = tokenInfo.user;
+    request.serviceToken = tokenInfo.serviceJwt;
 
     return true;
   }

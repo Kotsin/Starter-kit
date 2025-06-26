@@ -17,6 +17,7 @@ import { RedisClientType } from 'redis';
 
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
+import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
 import { UsersMeResponseDto } from '../../dto/user-me-respone.dto';
@@ -197,12 +198,14 @@ export class UserController {
     @UserIdFromRequest() userId: string,
     @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<any> {
     const userData = await this.userClient.getMe(
       {
         userId,
       },
       traceId,
+      serviceToken,
     );
 
     if (!userData.status) {

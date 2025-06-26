@@ -34,11 +34,12 @@ export class UserClient {
   async getMe(
     request: IGetMeRequest,
     traceId: string,
+    serviceToken?: string,
   ): Promise<IGetMeResponse> {
     return await firstValueFrom(
       this.userClientProxy.send(
         UserClientPatterns.GET_ME,
-        await createRmqMessage(traceId, request),
+        await createRmqMessage(traceId, request, serviceToken),
       ),
     );
   }
@@ -193,18 +194,18 @@ export interface IGetMeRequest extends IRequest {
 export interface IGetMeResponse extends IResponse {
   readonly user: {
     readonly id: string;
-    readonly full_name: string;
+    readonly fullName: string;
     readonly username: string;
-    readonly referral_code: number;
+    readonly referralCode: number;
     readonly type: string;
-    readonly extra_data: any;
-    readonly created_at: Date;
-    readonly updated_at: Date;
+    readonly extraData: any;
+    readonly createdAt: Date;
+    readonly updatedAt: Date;
   };
 }
 
 export interface IGetUserByIdRequest extends IRequest {
-  readonly user_id: string;
+  readonly userId: string;
 }
 
 export interface IGetUserByLoginRequest extends IRequest {

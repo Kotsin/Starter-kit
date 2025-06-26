@@ -6,7 +6,6 @@ import {
   IActiveSessionsRequest,
   IActiveSessionsResponse,
   IDeleteSessionRequest,
-  IResponse,
   ISessionCreateRequest,
   ISessionCreateResponse,
   ISessionsHistoryRequest,
@@ -26,16 +25,22 @@ import {
   UserClient,
 } from '@crypton-nestjs-kit/common';
 import { ConfigService } from '@crypton-nestjs-kit/config';
-import { log } from 'node:console';
 import { In, LessThan, Repository } from 'typeorm';
 
 import { SessionEntity, SessionStatus } from '../entity/session.entity';
+import { AUTH_ERROR_CODES, authErrorMessages } from '../errors';
+import {
+  AuthCredentials,
+  INativeAuthCredentials,
+  IOAuthAuthCredentials,
+} from '../interfaces/auth-strategy.interface';
 import {
   AuthenticationError,
-  AuthErrorCodes,
   ICachedSessionData,
-  ISessionData,
 } from '../interfaces/session.interface';
+import { ServiceJwtUseCase } from '../use-cases/service-jwt.use-case';
+
+import { AuthStrategyFactory } from './auth-strategy-factory.service';
 
 @Injectable()
 export class AuthService {
@@ -47,7 +52,138 @@ export class AuthService {
     private readonly cacheManager: Cache,
     private readonly configService: ConfigService,
     private readonly userClient: UserClient,
+    private readonly authStrategyFactory: AuthStrategyFactory,
+    private readonly serviceJwtUseCase: ServiceJwtUseCase,
   ) {}
+
+  /**
+   * Аутентификация пользователя с автоматическим выбором стратегии
+   */
+  async authenticate(credentials: AuthCredentials): Promise<any> {
+    try {
+      const result = await this.authStrategyFactory.authenticate(credentials);
+
+      if (!result.status) {
+        return {
+          status: false,
+          message:
+            result.error ||
+            authErrorMessages[AUTH_ERROR_CODES.INVALID_CREDENTIALS],
+          error: null,
+          errorCode: result.errorCode || AUTH_ERROR_CODES.INVALID_CREDENTIALS,
+        };
+      }
+
+      return {
+        status: true,
+        message: 'Authentication successful',
+        user: result.user,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        message:
+          error.message ||
+          authErrorMessages[AUTH_ERROR_CODES.AUTHENTICATION_FAILED],
+        error: error.message,
+        errorCode: AUTH_ERROR_CODES.AUTHENTICATION_FAILED,
+      };
+    }
+  }
+
+  /**
+   * Аутентификация с нативными учетными данными (email/password)
+   */
+  async authenticateNative(credentials: INativeAuthCredentials): Promise<any> {
+    return this.authenticate(credentials);
+  }
+
+  /**
+   * Аутентификация с OAuth учетными данными
+   */
+  async authenticateOAuth(credentials: IOAuthAuthCredentials): Promise<any> {
+    return this.authenticate(credentials);
+  }
+
+  /**
+   * Полная аутентификация с созданием сессии и токенов
+   */
+  async authenticateAndCreateSession(
+    credentials: AuthCredentials,
+    sessionData: {
+      userAgent?: string;
+      userIp?: string;
+      fingerprint?: string;
+      country?: string;
+      city?: string;
+      traceId?: string;
+    },
+  ): Promise<any> {
+    try {
+      const authResult = await this.authenticate(credentials);
+
+      if (!authResult.status || !authResult.user) {
+        return {
+          status: false,
+          message: authResult.message,
+          error: authResult.error,
+          errorCode: authResult.errorCode,
+        };
+      }
+
+      const sessionRequest: ISessionCreateRequest = {
+        userId: authResult.user.id,
+        userAgent: sessionData.userAgent,
+        userIp: sessionData.userIp,
+        fingerprint: sessionData.fingerprint,
+        country: sessionData.country,
+        city: sessionData.city,
+        traceId: sessionData.traceId || 'auth-session-trace',
+      };
+      const sessionResponse = await this.createSession(sessionRequest);
+
+      if (!sessionResponse.status) {
+        return {
+          status: false,
+          message: sessionResponse.message,
+          error: sessionResponse.error,
+          errorCode: sessionResponse.errorCode,
+        };
+      }
+
+      const tokenRequest: ITokenCreateRequest = {
+        userId: authResult.user.id,
+        sessionId: sessionResponse.sessionId,
+      };
+      const tokenResponse = await this.createTokens(tokenRequest);
+
+      if (!tokenResponse.status) {
+        return {
+          status: false,
+          message: tokenResponse.message,
+          error: tokenResponse.error,
+          errorCode: tokenResponse.errorCode,
+        };
+      }
+
+      return {
+        status: true,
+        message: 'User authenticated successfully',
+        tokens: tokenResponse.tokens,
+        user: authResult.user,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        message:
+          error.message ||
+          authErrorMessages[AUTH_ERROR_CODES.AUTHENTICATION_FAILED],
+        error: error.message,
+        errorCode: AUTH_ERROR_CODES.AUTHENTICATION_FAILED,
+      };
+    }
+  }
+
   /**
    * Creates a new session based on the provided request data.
    *
@@ -68,14 +204,14 @@ export class AuthService {
         activeSessions >= this.configService.get().auth.max_sessions_per_user
       ) {
         throw new AuthenticationError(
-          'Maximum number of active sessions reached',
-          AuthErrorCodes.SESSION_LIMIT_EXCEEDED,
+          authErrorMessages[AUTH_ERROR_CODES.SESSION_LIMIT_EXCEEDED],
+          AUTH_ERROR_CODES.SESSION_LIMIT_EXCEEDED,
         );
       }
 
       const userResult = await this.userClient.getUserById(
         {
-          user_id: data.userId,
+          userId: data.userId,
         },
         data.traceId,
       );
@@ -106,21 +242,24 @@ export class AuthService {
         status: true,
         message: 'Session created successfully',
         sessionId: session.id,
+        error: null,
+        errorCode: null,
       };
     } catch (error) {
+      let errorCode = AUTH_ERROR_CODES.SESSION_CREATION_FAILED;
+      let errorMessage = error.message;
+
       if (error instanceof AuthenticationError) {
-        return {
-          status: false,
-          message: error.message,
-          sessionId: null,
-        };
+        errorCode = error.code as AUTH_ERROR_CODES;
+        errorMessage = null;
       }
 
       return {
         status: false,
-        message: 'Session creation failed',
+        message: error.message || authErrorMessages[errorCode],
         sessionId: null,
-        error: error.message,
+        error: errorMessage,
+        errorCode,
       };
     }
   }
@@ -156,9 +295,10 @@ export class AuthService {
     } catch (e) {
       return {
         status: false,
-        message: 'Tokens creation failed',
+        message: e.message,
         tokens: null,
         error: e.message,
+        errorCode: AUTH_ERROR_CODES.TOKEN_CREATION_FAILED,
       };
     }
   }
@@ -174,10 +314,10 @@ export class AuthService {
   ): Promise<ITerminateAllResponse> {
     try {
       if (!data.userId) {
-        return {
-          status: false,
-          message: 'No active sessions found',
-        };
+        throw new AuthenticationError(
+          authErrorMessages[AUTH_ERROR_CODES.SESSION_NOT_FOUND],
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
+        );
       }
 
       const sessions = await this.sessionRepo.find({
@@ -185,10 +325,10 @@ export class AuthService {
       });
 
       if (sessions.length == 0) {
-        return {
-          status: false,
-          message: 'No active sessions found',
-        };
+        throw new AuthenticationError(
+          authErrorMessages[AUTH_ERROR_CODES.SESSION_NOT_FOUND],
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
+        );
       }
 
       for (const session of sessions) {
@@ -204,11 +344,21 @@ export class AuthService {
         status: true,
         message: 'Sessions terminated',
       };
-    } catch (e) {
+    } catch (error) {
+      let errorCode = AUTH_ERROR_CODES.SESSIONS_TERMINATION_FAILED;
+      let errorMessage = error.message;
+
+      if (error instanceof AuthenticationError) {
+        errorCode = error.code as AUTH_ERROR_CODES;
+        errorMessage = null;
+      }
+
       return {
         status: false,
-        message: 'Sessions termination failed',
-        error: e.message,
+        message:
+          authErrorMessages[AUTH_ERROR_CODES.SESSIONS_TERMINATION_FAILED],
+        error: errorMessage,
+        errorCode: errorCode,
       };
     }
   }
@@ -223,11 +373,6 @@ export class AuthService {
     data: ITerminateSessionRequest,
   ): Promise<ITerminateSessionResponse> {
     try {
-      console.log({
-        id: data.sessionId,
-        userId: data.userId,
-        status: SessionStatus.ACTIVE,
-      });
       const session = await this.sessionRepo.findOne({
         where: {
           id: data.sessionId,
@@ -237,11 +382,10 @@ export class AuthService {
       });
 
       if (!session) {
-        return {
-          status: false,
-          message: 'Session not found',
-          session: null,
-        };
+        throw new AuthenticationError(
+          authErrorMessages[AUTH_ERROR_CODES.SESSION_NOT_FOUND],
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
+        );
       }
 
       await this.cacheManager.del(`auth:${session.id}`);
@@ -254,11 +398,20 @@ export class AuthService {
         message: 'Session terminated',
         session,
       };
-    } catch (e) {
+    } catch (error) {
+      let errorCode = AUTH_ERROR_CODES.SESSION_TERMINATION_FAILED;
+      let errorMessage = error.message;
+
+      if (error instanceof AuthenticationError) {
+        errorCode = error.code as AUTH_ERROR_CODES;
+        errorMessage = null;
+      }
+
       return {
         status: false,
-        message: 'Session termination failed',
-        error: e.message,
+        message: authErrorMessages[AUTH_ERROR_CODES.SESSION_TERMINATION_FAILED],
+        error: errorMessage,
+        errorCode: errorCode,
         session: null,
       };
     }
@@ -280,8 +433,8 @@ export class AuthService {
         tokenData = await this.jwtService.verifyAsync(data.token);
       } catch (error) {
         throw new AuthenticationError(
-          'Token verification failed',
-          AuthErrorCodes.INVALID_TOKEN,
+          authErrorMessages[AUTH_ERROR_CODES.INVALID_TOKEN],
+          AUTH_ERROR_CODES.INVALID_TOKEN,
           { originalError: error.message },
         );
       }
@@ -289,7 +442,7 @@ export class AuthService {
       if (!tokenData?.sessionId) {
         throw new AuthenticationError(
           'Invalid token format',
-          AuthErrorCodes.INVALID_TOKEN,
+          AUTH_ERROR_CODES.INVALID_TOKEN,
         );
       }
 
@@ -298,7 +451,7 @@ export class AuthService {
       if (!session) {
         throw new AuthenticationError(
           'Session not found or expired',
-          AuthErrorCodes.SESSION_NOT_FOUND,
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
         );
       }
 
@@ -306,6 +459,11 @@ export class AuthService {
         session.role,
         '0000',
       );
+
+      const serviceJwt = await this.serviceJwtUseCase.generateServiceJwt({
+        userId: session.userId,
+        serviceId: data.serviceId,
+      });
 
       return {
         status: true,
@@ -315,23 +473,25 @@ export class AuthService {
           role: session.role,
           permissions: permissionsResult.permissions,
         },
+        serviceJwt,
       };
     } catch (error) {
+      let errorCode = AUTH_ERROR_CODES.TOKEN_VERIFICATION_FAILED;
+      let errorMessage = error.message;
+
       if (error instanceof AuthenticationError) {
-        return {
-          status: false,
-          message: error.message,
-          user: null,
-          details: error.details,
-        };
+        errorCode = error.code as AUTH_ERROR_CODES;
+        errorMessage = null;
       }
 
       return {
         status: false,
-        message: 'Token verification failed',
+        message: error.message || AUTH_ERROR_CODES[errorCode],
         user: null,
-        error: AuthErrorCodes.INVALID_TOKEN,
-        details: { originalError: error.message },
+        error: errorMessage,
+        errorCode,
+        serviceJwt: null,
+        details: error.details,
       };
     }
   }
@@ -353,7 +513,7 @@ export class AuthService {
       } catch (error) {
         throw new AuthenticationError(
           'Token verification failed',
-          AuthErrorCodes.INVALID_TOKEN,
+          AUTH_ERROR_CODES.INVALID_TOKEN,
           { originalError: error.message },
         );
       }
@@ -361,7 +521,7 @@ export class AuthService {
       if (!tokenData?.sessionId) {
         throw new AuthenticationError(
           'Invalid token format',
-          AuthErrorCodes.INVALID_TOKEN,
+          AUTH_ERROR_CODES.INVALID_TOKEN,
         );
       }
 
@@ -370,7 +530,7 @@ export class AuthService {
       if (!session) {
         throw new AuthenticationError(
           'Session not found or expired',
-          AuthErrorCodes.SESSION_NOT_FOUND,
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
         );
       }
 
@@ -383,24 +543,25 @@ export class AuthService {
         status: true,
         message: 'Tokens refreshed successfully',
         tokens,
+        error: null,
+        errorCode: null,
       };
     } catch (error) {
+      let errorCode = AUTH_ERROR_CODES.TOKEN_REFRESH_FAILED;
+      let errorMessage = error.message;
+
       if (error instanceof AuthenticationError) {
-        return {
-          status: false,
-          message: error.message,
-          tokens: null,
-          error: error.code,
-          details: error.details,
-        };
+        errorCode = error.code as AUTH_ERROR_CODES;
+        errorMessage = null;
       }
 
       return {
         status: false,
-        message: 'Token refresh failed',
+        message: error.message || AUTH_ERROR_CODES[errorCode],
         tokens: null,
-        error: AuthErrorCodes.INVALID_TOKEN,
-        details: { originalError: error.message },
+        error: errorMessage,
+        errorCode,
+        details: error.details,
       };
     }
   }
@@ -422,12 +583,10 @@ export class AuthService {
       });
 
       if (activeSessionsCount < 1) {
-        return {
-          message: 'Active sessions not found',
-          status: false,
-          activeSessions: [],
-          count: 0,
-        };
+        throw new AuthenticationError(
+          'Active sessions not found',
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
+        );
       }
 
       const activeSessions = await this.sessionRepo.find({
@@ -440,13 +599,22 @@ export class AuthService {
         activeSessions,
         count: activeSessionsCount,
       };
-    } catch (e) {
+    } catch (error) {
+      let errorCode = AUTH_ERROR_CODES.ACTIVE_SESSIONS_FAILED;
+      let errorMessage = error.message;
+
+      if (error instanceof AuthenticationError) {
+        errorCode = error.code as AUTH_ERROR_CODES;
+        errorMessage = null;
+      }
+
       return {
-        error: e.message,
-        message: 'Active sessions not found',
+        error: errorMessage,
+        message: error.message,
         status: false,
         activeSessions: [],
         count: 0,
+        errorCode: errorCode,
       };
     }
   }
@@ -468,12 +636,10 @@ export class AuthService {
       });
 
       if (sessionsCount < 1) {
-        return {
-          message: 'Sessions not found',
-          status: true,
-          sessions: [],
-          count: 0,
-        };
+        throw new AuthenticationError(
+          'Sessions not found',
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
+        );
       }
 
       const sessions = await this.sessionRepo.find({
@@ -499,13 +665,22 @@ export class AuthService {
         sessions,
         count: sessionsCount,
       };
-    } catch (e) {
+    } catch (error) {
+      let errorCode = AUTH_ERROR_CODES.SESSIONS_HISTORY_FAILED;
+      let errorMessage = error.message;
+
+      if (error instanceof AuthenticationError) {
+        errorCode = error.code as AUTH_ERROR_CODES;
+        errorMessage = null;
+      }
+
       return {
-        error: e.message,
-        message: 'Active sessions not found',
+        error: errorMessage,
+        message: error.message,
         status: false,
         sessions: [],
         count: 0,
+        errorCode: errorCode,
       };
     }
   }
@@ -537,21 +712,22 @@ export class AuthService {
         status: true,
         sessions,
         count,
+        error: null,
+        errorCode: null,
       };
     } catch (e) {
       return {
         error: e.message,
-        message: 'Get sessions until date failed',
+        message: authErrorMessages[AUTH_ERROR_CODES.SESSIONS_UNTIL_DATE_FAILED],
         status: false,
         sessions: [],
         count: 0,
+        errorCode: AUTH_ERROR_CODES.SESSIONS_UNTIL_DATE_FAILED,
       };
     }
   }
 
-  public async deleteSessionsByIds(
-    data: IDeleteSessionRequest,
-  ): Promise<IResponse> {
+  public async deleteSessionsByIds(data: IDeleteSessionRequest): Promise<any> {
     try {
       const { ids } = data;
 
@@ -562,12 +738,15 @@ export class AuthService {
       return {
         message: 'Sessions deleted successfully',
         status: true,
+        error: null,
+        errorCode: null,
       };
     } catch (e) {
       return {
         error: e.message,
-        message: 'Sessions deleted failed',
+        message: authErrorMessages[AUTH_ERROR_CODES.SESSIONS_DELETE_FAILED],
         status: false,
+        errorCode: AUTH_ERROR_CODES.SESSIONS_DELETE_FAILED,
       };
     }
   }
@@ -600,7 +779,7 @@ export class AuthService {
         if (!sessionData.userId) {
           throw new AuthenticationError(
             'Invalid cached session data',
-            AuthErrorCodes.SESSION_NOT_FOUND,
+            AUTH_ERROR_CODES.SESSION_NOT_FOUND,
           );
         }
 
@@ -614,7 +793,7 @@ export class AuthService {
       if (!session) {
         throw new AuthenticationError(
           'Session not found or inactive',
-          AuthErrorCodes.SESSION_NOT_FOUND,
+          AUTH_ERROR_CODES.SESSION_NOT_FOUND,
         );
       }
 
@@ -644,7 +823,7 @@ export class AuthService {
 
       throw new AuthenticationError(
         'Failed to retrieve session',
-        AuthErrorCodes.SESSION_NOT_FOUND,
+        AUTH_ERROR_CODES.SESSION_NOT_FOUND,
         { originalError: error.message },
       );
     }

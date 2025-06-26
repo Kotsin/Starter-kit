@@ -22,11 +22,51 @@ import {
   ITokenVerifyResponse,
 } from '@crypton-nestjs-kit/common';
 
+import {
+  INativeAuthCredentials,
+  IOAuthAuthCredentials,
+} from './interfaces/auth-strategy.interface';
+import { ISessionData } from './interfaces/session.interface';
 import { AuthService } from './services/auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  /**
+   * Нативная аутентификация (email/password)
+   */
+  @MessagePattern(AuthClientPatterns.AUTHENTICATE_NATIVE)
+  public async authenticateNative(data: {
+    credentials: INativeAuthCredentials;
+    sessionData: {
+      userAgent?: string;
+      userIp?: string;
+      fingerprint?: string;
+      country?: string;
+      city?: string;
+      traceId?: string;
+    };
+  }) {
+    return await this.authService.authenticateAndCreateSession(
+      data.credentials,
+      data.sessionData,
+    );
+  }
+
+  /**
+   * OAuth аутентификация
+   */
+  @MessagePattern(AuthClientPatterns.AUTHENTICATE_SOCIAL)
+  public async authenticateOAuth(data: {
+    credentials: IOAuthAuthCredentials;
+    sessionData: ISessionData;
+  }) {
+    return await this.authService.authenticateAndCreateSession(
+      data.credentials,
+      data.sessionData,
+    );
+  }
 
   @MessagePattern(AuthClientPatterns.SESSION_CREATE)
   public async createSession(

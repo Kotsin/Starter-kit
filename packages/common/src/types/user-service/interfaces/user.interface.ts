@@ -2,19 +2,20 @@ import { UserStatus, UserType } from '../../../enums';
 
 export interface User {
   id: string;
-  full_name: string | null;
+  fullName: string | null;
   username: string | null;
-  referral_code: number;
+  referralCode: number;
   status: UserStatus;
   type: UserType;
   loginMethods?: any;
   role?: any;
+  password?: string;
   twoFaPermissions?: any;
-  extra_data?: any;
-  last_login_at: Date | null;
-  created_at: Date;
-  updated_at: Date;
-  deleted_at: Date | null;
+  extraData?: any;
+  lastLoginAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
 }
 
 export interface ICreateExperienceAccrualHistoryRequest {

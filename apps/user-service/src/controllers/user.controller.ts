@@ -1,6 +1,7 @@
 import { Controller, UseInterceptors } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
+  FunctionType,
   IConfirmRegistrationRequest,
   ICreateConfirmationCodesRequest,
   ICreateConfirmationCodesResponse,
@@ -24,16 +25,19 @@ import { UserService } from '../services/user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @FunctionType('READ')
   @MessagePattern(UserClientPatterns.GET_ME)
   public async getMe(request: IGetMeRequest): Promise<IGetMeResponse> {
     return await this.userService.getMe(request);
   }
 
+  @FunctionType('READ')
   @MessagePattern(UserClientPatterns.GET_CONFIRMATION_METHODS)
   public async getUserConfirmationMethods(request: any): Promise<any> {
     return await this.userService.getUserConfirmationMethods(request);
   }
 
+  @FunctionType('READ')
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_LIST)
   public async getPermissionList(): Promise<any> {
     return await this.userService.getPermissionList();
@@ -60,8 +64,6 @@ export class UserController {
   public async createConfirmationCodes(
     data: ICreateConfirmationCodesRequest,
   ): Promise<ICreateConfirmationCodesResponse> {
-    console.log(data);
-
     return await this.userService.createConfirmationCodes(
       data.userId,
       data.permissionId,
@@ -83,6 +85,7 @@ export class UserController {
     return await this.userService.registrationConfirm(data);
   }
 
+  @FunctionType('READ')
   @MessagePattern(UserClientPatterns.GET_USER_BY_ID)
   public async getUserById(
     data: IGetUserByIdRequest,
@@ -90,6 +93,7 @@ export class UserController {
     return await this.userService.getUserById(data);
   }
 
+  @FunctionType('READ')
   @MessagePattern(UserClientPatterns.GET_USER_BY_LOGIN)
   public async getUserByLogin(
     data: IGetUserByLoginRequest,
@@ -97,6 +101,7 @@ export class UserController {
     return await this.userService.getUserByLogin(data);
   }
 
+  @FunctionType('READ')
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_ROLE)
   public async getPermissionsByRole(roleId: string): Promise<any> {
     return await this.userService.getPermissionsByRole(roleId);

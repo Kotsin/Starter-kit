@@ -20,6 +20,10 @@ export const DEFAULT_CONFIG: ConfigData = {
     access_token_expires_in: 15 * 60 * 1000,
     refresh_token_expires_in: 60 * 60 * 1000,
     token_secret: 'secret',
+    service_secrets: {
+      user_service: 'user-service-secret',
+      default: 'default-service-secret',
+    },
     session_cache_ttl: 6 * 60 * 60 * 1000,
     max_sessions_per_user: 5,
     rate_limit: {

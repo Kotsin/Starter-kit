@@ -1,6 +1,7 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ClientAuthModule,
@@ -10,6 +11,7 @@ import {
   PermissionEntity,
   RequireConfirmationInterceptor,
   RoleEntity,
+  ServiceJwtInterceptor,
   TwoFactorPermissionsEntity,
   UserClient,
   UserEntity,
@@ -67,6 +69,15 @@ import { UserService } from './services/user.service';
         } as RedisClientOptions;
       },
     }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        return {
+          secret: configService.get().auth.service_secrets.user_service,
+        };
+      },
+      inject: [ConfigService],
+    }),
   ],
   controllers: [UserController],
   providers: [
@@ -77,11 +88,15 @@ import { UserService } from './services/user.service';
     },
     {
       provide: APP_INTERCEPTOR,
-      useFactory: (reflector: Reflector, userClient: UserClient) => {
-        return new RequireConfirmationInterceptor(reflector, userClient);
-      },
-      inject: [Reflector, UserClient],
+      useClass: ServiceJwtInterceptor,
     },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useFactory: (reflector: Reflector, userClient: UserClient) => {
+    //     return new RequireConfirmationInterceptor(reflector, userClient);
+    //   },
+    //   inject: [Reflector, UserClient],
+    // },
   ],
 })
 export class UserModule {}

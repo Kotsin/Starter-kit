@@ -46,6 +46,10 @@ export class ConfigService {
           10,
         ),
         token_secret: env.AUTH_TOKEN_SECRET || 'default-secret-key',
+        service_secrets: {
+          user_service: env.USER_SERVICE_JWT_SECRET || 'user-service-secret',
+          default: env.DEFAULT_SERVICE_JWT_SECRET || 'default-service-secret',
+        },
         session_cache_ttl: parseInt(
           env.AUTH_SESSION_CACHE_TTL || '3600000',
           10,

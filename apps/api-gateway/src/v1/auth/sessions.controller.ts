@@ -17,6 +17,7 @@ import { AuthClient } from '@crypton-nestjs-kit/common';
 
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
+import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { RolesGuard } from '../../guards/role.guard';
 
@@ -47,10 +48,16 @@ export class SessionsController {
   async getActiveSessions(
     @CorrelationIdFromRequest() traceId: string,
     @UserIdFromRequest() userId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<SessionResponseDto> {
-    const sessions = await this.authClient.getActiveSessions(traceId, {
-      userId,
-    });
+    console.log('asdasda');
+    const sessions = await this.authClient.getActiveSessions(
+      traceId,
+      {
+        userId,
+      },
+      serviceToken,
+    );
 
     return {
       sessions: sessions.activeSessions,

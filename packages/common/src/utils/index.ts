@@ -1,5 +1,6 @@
 export * from './createRmqMessage';
 export * from './doWithCatch';
+export * from './function-type.decorator';
 export * from './generateRandomNumber';
 export * from './getTimePeriod';
 export * from './getUnixTime';
@@ -8,4 +9,5 @@ export * from './interpolateSql';
 export * from './redisLocks';
 export * from './require-confirmation.decorator';
 export * from './require-confirmation.interceptor';
+export * from './service-jwt.interceptor';
 export * from './timeDelay';
