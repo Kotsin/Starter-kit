@@ -26,15 +26,16 @@ import { RedisClientOptions } from 'redis';
 
 import { AuthGuard } from './guards/authorization.guard';
 import { BruteForceGuard } from './guards/bruteForce.guard';
+import { CaptchaGuard } from './guards/captcha.guard';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
 import { BaseCodeBruteForceGuard } from './guards/twoFA.guard';
 import { AuthController } from './v1/auth/auth.controller';
+import { CaptchaService } from './v1/auth/services/captcha.service';
 import { SessionsController } from './v1/auth/sessions.controller';
 import { UserController } from './v1/user/user.controller';
 import { GatewayController } from './gateway.controller';
 import { TransformResponseInterceptor } from './interceptors';
-import { CaptchaService } from './v1/auth/services/captcha.service';
-import { CaptchaGuard } from './guards/captcha.guard';
+import { ApiKeyController } from './v1';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { CaptchaGuard } from './guards/captcha.guard';
   ],
   controllers: [
     AuthController,
+    ApiKeyController,
     SessionsController,
     GatewayController,
     UserController,

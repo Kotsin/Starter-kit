@@ -24,6 +24,7 @@ export class CaptchaService {
       return response.data.success;
     } catch (error) {
       console.error('Captcha verification failed:', error);
+
       return false;
     }
   }

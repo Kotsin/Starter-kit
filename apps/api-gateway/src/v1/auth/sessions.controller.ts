@@ -27,6 +27,8 @@ import {
   TerminateSessionDto,
 } from './dto/session.dto';
 
+// TODO: Структурировать и привести к общему виду сваггер документацию
+
 @ApiTags('Sessions')
 @Controller('v1/auth/sessions')
 @UseGuards(RolesGuard)
@@ -50,14 +52,9 @@ export class SessionsController {
     @UserIdFromRequest() userId: string,
     @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<SessionResponseDto> {
-    console.log('asdasda');
-    const sessions = await this.authClient.getActiveSessions(
-      traceId,
-      {
-        userId,
-      },
-      serviceToken,
-    );
+    const sessions = await this.authClient.getActiveSessions(traceId, {
+      userId,
+    });
 
     return {
       sessions: sessions.activeSessions,

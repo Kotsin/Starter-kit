@@ -39,6 +39,7 @@ import {
   IRegistrationResponse,
 } from './interfaces/auth.interfaces';
 
+// TODO: Структурировать и привести к общему виду сваггер документацию
 /**
  * Authentication and Authorization Controller
  *
@@ -170,6 +171,8 @@ export class AuthController {
       message: 'Account successfully confirmed',
     };
   }
+
+  //TODO ДОбавить универсальный api для запроса 2fa кодов для методов требующих 2fa(Если включены пользователем)
 
   /**
    * Authenticate user
