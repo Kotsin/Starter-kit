@@ -34,6 +34,7 @@ import { SessionsController } from './v1/auth/sessions.controller';
 import { UserController } from './v1/user/user.controller';
 import { GatewayController } from './gateway.controller';
 import { TransformResponseInterceptor } from './interceptors';
+import { ApiKeyController } from './v1';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { TransformResponseInterceptor } from './interceptors';
   ],
   controllers: [
     AuthController,
+    ApiKeyController,
     SessionsController,
     GatewayController,
     UserController,

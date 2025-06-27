@@ -325,8 +325,6 @@ export class UserService implements OnModuleInit {
         (method) => method.confirmationMethod.login,
       );
 
-      console.log(confirmationMethods);
-
       return {
         status: true,
         message: 'Confirmation codes successfully sent',

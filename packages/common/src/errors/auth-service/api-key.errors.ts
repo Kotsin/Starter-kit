@@ -1,0 +1,15 @@
+export enum API_KEY_ERROR_CODES {
+  NOT_FOUND = 'API_KEY_NOT_FOUND',
+  DUPLICATE = 'API_KEY_DUPLICATE',
+  INVALID_TYPE = 'API_KEY_INVALID_TYPE',
+  FORBIDDEN = 'API_KEY_FORBIDDEN',
+  ENCRYPTION_ERROR = 'API_KEY_ENCRYPTION_ERROR',
+}
+
+export const apiKeyErrorMessages = {
+  [API_KEY_ERROR_CODES.NOT_FOUND]: 'API key not found',
+  [API_KEY_ERROR_CODES.DUPLICATE]: 'API key already exists',
+  [API_KEY_ERROR_CODES.INVALID_TYPE]: 'Invalid API key type',
+  [API_KEY_ERROR_CODES.FORBIDDEN]: 'Access denied for this API key',
+  [API_KEY_ERROR_CODES.ENCRYPTION_ERROR]: 'Encryption error',
+};

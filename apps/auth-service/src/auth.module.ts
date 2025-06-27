@@ -14,21 +14,24 @@ import { AppLoggerModule, LoggingInterceptor } from '@merchant-outline/logger';
 import { redisStore } from 'cache-manager-redis-yet';
 import { RedisClientOptions } from 'redis';
 
-import { AuthService } from './services/auth.service';
-import { AuthStrategyFactory } from './services/auth-strategy-factory.service';
+import { ApiKeyController } from './controllers/api-key.controller';
+import { AuthController } from './controllers/auth.controller';
+import { ApiKeyEntity } from './entity/api-key.entity';
+import { AuthService } from './services/auth/auth.service';
+import { AuthStrategyFactory } from './services/auth/auth-strategy-factory.service';
 // Стратегии
-import { NativeStrategy } from './strategies/native.strategy';
+import { NativeStrategy } from './services/auth/strategies/native.strategy';
 import { ServiceJwtUseCase } from './use-cases/service-jwt.use-case';
-import { AuthController } from './auth.controller';
+import { ApiKeyService } from './services/api-key/api-key.service';
 
 @Module({
   imports: [
     ConfigModule,
     AppLoggerModule,
     ClientUserModule.forRoot(loadUserClientOptions()),
-    TypeOrmModule.forFeature([SessionEntity]),
+    TypeOrmModule.forFeature([SessionEntity, ApiKeyEntity]),
     DBModule.forRoot({
-      entities: [SessionEntity],
+      entities: [SessionEntity, ApiKeyEntity],
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -54,10 +57,11 @@ import { AuthController } from './auth.controller';
       },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, ApiKeyController],
   providers: [
     AuthStrategyFactory,
     AuthService,
+    ApiKeyService,
     // Стратегии
     NativeStrategy,
     // Use cases

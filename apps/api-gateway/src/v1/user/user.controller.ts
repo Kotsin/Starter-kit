@@ -36,6 +36,8 @@ import {
   UpdatePermissionDto,
 } from './dto/request/users.request.dto';
 
+// TODO: Структурировать и привести к общему виду сваггер документацию
+
 @ApiTags('User')
 @Controller('v1/users')
 @UseGuards(RolesGuard)

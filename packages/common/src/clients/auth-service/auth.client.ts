@@ -3,6 +3,7 @@ import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 import {
+  CreateApiKeyDto,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
   ISessionCreateRequest,
@@ -238,6 +239,27 @@ export class AuthClient {
       ),
     );
   }
+
+  async apiKeyCreate(
+    request: CreateApiKeyDto,
+    traceId: string,
+  ): Promise<ISessionCreateResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_CREATE,
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
+
+  async apiKeyList(traceId: string): Promise<ISessionCreateResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_LIST,
+        await createRmqMessage(traceId),
+      ),
+    );
+  }
 }
 
 export enum AuthClientPatterns {
@@ -254,4 +276,7 @@ export enum AuthClientPatterns {
   GET_SESSIONS_UNTIL_DATE = 'get_sessions_until_date',
   DELETE_SESSIONS_BY_IDS = 'delete_sessions_by_ids',
   GET_SESSIONS_COUNT = 'get_sessions_count',
+  API_KEY_CREATE = 'api_key_create',
+  API_KEY_DELETE = 'api_key_delete',
+  API_KEY_LIST = 'api_key_list',
 }
