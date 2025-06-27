@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ServiceEntity } from '../entity/service.entity';
 import {
   IGetServiceRequest,
   IGetServiceResponse,
   IRegisterServiceRequest,
   IRegisterServiceResponse,
+  ServiceEntity,
   ServiceStatus,
-} from '@crypton-nestjs-kit/common';
+} from '@merchant-outline/common';
 
 @Injectable()
 export class CoordinatorService {

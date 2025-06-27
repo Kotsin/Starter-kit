@@ -3,7 +3,7 @@ import {
   ApiProperty,
   ApiResponseOptions,
 } from '@nestjs/swagger';
-import { IUser } from '@crypton-nestjs-kit/common';
+import { IUser } from '@merchant-outline/common';
 import {
   IsNotEmpty,
   IsNumber,

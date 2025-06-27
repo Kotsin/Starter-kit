@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserType } from '@crypton-nestjs-kit/common';
+import { UserType } from '@merchant-outline/common';
 
 export class UserDto {
   @ApiProperty()

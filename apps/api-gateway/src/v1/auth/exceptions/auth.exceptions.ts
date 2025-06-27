@@ -58,4 +58,4 @@ export class CaptchaVerificationFailedException extends HttpException {
       HttpStatus.BAD_REQUEST,
     );
   }
-} 
+}

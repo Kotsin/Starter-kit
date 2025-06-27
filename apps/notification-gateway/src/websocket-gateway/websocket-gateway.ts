@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { IOEmitter } from '@crypton-nestjs-kit/io-emitter';
+import { IOEmitter } from '@merchant-outline/io-emitter';
 import {
   ConnectedSocket,
   MessageBody,

@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import {
   ISessionCreateRequest,
   ITokenCreateRequest,
-} from '@crypton-nestjs-kit/common';
-import { ConfigService } from '@crypton-nestjs-kit/config';
+} from '@merchant-outline/common';
+import { ConfigService } from '@merchant-outline/config';
 
 import { AUTH_ERROR_CODES, authErrorMessages } from '../errors';
 import {

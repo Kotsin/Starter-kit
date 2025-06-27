@@ -22,12 +22,13 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  SessionEntity,
+  SessionStatus,
   UserClient,
-} from '@crypton-nestjs-kit/common';
-import { ConfigService } from '@crypton-nestjs-kit/config';
+} from '@merchant-outline/common';
+import { ConfigService } from '@merchant-outline/config';
 import { In, LessThan, Repository } from 'typeorm';
 
-import { SessionEntity, SessionStatus } from '../entity/session.entity';
 import { AUTH_ERROR_CODES, authErrorMessages } from '../errors';
 import {
   AuthCredentials,

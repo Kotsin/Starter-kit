@@ -1,6 +1,8 @@
 {
-  "name": "@crypton-nestjs-kit/logger",
+  "name": "@merchant-outline/logger",
   "version": "1.0.0",
+  "author": "Crypton Studio <info@crypton.studio>",
+  "license": "ISC",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -13,7 +15,8 @@
     "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "test": "npm run test:ci",
-    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests"
+    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
+    "lint": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix"
   },
   "engines": {
     "node": ">=20.x",
@@ -24,8 +27,8 @@
     "npm": ">=10.2.x"
   },
   "dependencies": {
-    "@crypton-nestjs-kit/config": "workspace:*",
-    "@crypton-nestjs-kit/common": "workspace:*",
+    "@merchant-outline/config": "workspace:*",
+    "@merchant-outline/common": "workspace:*",
     "@types/luxon": "^3.4.2",
     "luxon": "^3.4.4",
     "moment": "^2.30.1",

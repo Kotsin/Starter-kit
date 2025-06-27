@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
-import { ConfigDatabase } from '@crypton-nestjs-kit/config/build/config.interface';
+import { ConfigModule, ConfigService } from '@merchant-outline/config';
+import { ConfigDatabase } from '@merchant-outline/config/build/config.interface';
 
 import { DbConfig } from './db.interface';
 
@@ -52,6 +52,7 @@ export class DBModule {
     };
 
     if (dbData.replication) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       db['replication'] = {
         master: db,

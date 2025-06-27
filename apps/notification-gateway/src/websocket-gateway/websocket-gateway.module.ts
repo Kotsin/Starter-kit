@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { IOEmitterModule } from '@crypton-nestjs-kit/io-emitter';
+import { IOEmitterModule } from '@merchant-outline/io-emitter';
 import { WebsocketGateway } from './websocket-gateway';
-import { ConfigModule } from '@crypton-nestjs-kit/config';
+import { ConfigModule } from '@merchant-outline/config';
 
 @Module({
   imports: [ConfigModule, IOEmitterModule],

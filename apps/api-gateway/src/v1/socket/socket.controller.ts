@@ -5,9 +5,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CoordinatorClient, ServiceType } from '@crypton-nestjs-kit/common';
+import { CoordinatorClient, ServiceType } from '@merchant-outline/common';
 
 import { Authorization } from '../../decorators/authorization.decorator';
+
 import { GetSocketConnectionResponseDto } from './dto/socket.dto';
 
 @Controller('v1/sockets')

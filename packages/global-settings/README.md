@@ -1,4 +1,3 @@
-
 ### Документация по работе с `SettingService`
 
 `SettingService` обновляет переменные каждые 5 минут, извлекая актуальные значения из таблицы `Settings` в базе данных PostgreSQL.
@@ -23,7 +22,7 @@
 1. Установите пакет:
 
    ```
-   pnpm i @crypton-nestjs-kit/settings
+   pnpm i @merchant-outline/settings
    ```
 
 2. Добавьте `SettingModule` в `imports` корневого модуля.
@@ -35,8 +34,8 @@
 ```ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DBModule } from '@crypton-nestjs-kit/database';
-import { SettingModule, SettingsEntity } from '@crypton-nestjs-kit/settings';
+import { DBModule } from '@merchant-outline/database';
+import { SettingModule, SettingsEntity } from '@merchant-outline/settings';
 
 @Module({
   imports: [
@@ -59,7 +58,7 @@ export class SomeModule {}
 1. Импортируйте `SettingService`:
 
    ```ts
-   import { SettingService } from '@crypton-nestjs-kit/settings';
+   import { SettingService } from '@merchant-outline/settings';
    ```
 
 2. Объявите `settingsService` в классе:
@@ -86,7 +85,7 @@ export class SomeModule {}
 
 ```ts
 import { Injectable } from '@nestjs/common';
-import { SettingService } from '@crypton-nestjs-kit/settings';
+import { SettingService } from '@merchant-outline/settings';
 
 @Injectable()
 export class SomeService {

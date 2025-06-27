@@ -12,6 +12,7 @@ export class LoginValidationPipe implements PipeTransform {
     if (metadata.type !== 'body') {
       return value;
     }
+
     if (value.login) {
       if (isEmail(value.login)) {
         value.loginType = 'email';

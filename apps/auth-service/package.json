@@ -1,9 +1,9 @@
 {
-  "name": "@crypton-nestjs-kit/auth-service",
+  "name": "@merchant-outline/auth-service",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "license": "MIT",
+  "author": "Crypton Studio <info@crypton.studio>",
+  "license": "ISC",
   "scripts": {
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -18,10 +18,10 @@
     "test": "jest --config ./test/jest-e2e.json --detectOpenHandles"
   },
   "dependencies": {
-    "@crypton-nestjs-kit/common": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/config": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/database": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/logger": "workspace:^1.0.0",
+    "@merchant-outline/common": "workspace:^1.0.0",
+    "@merchant-outline/config": "workspace:^1.0.0",
+    "@merchant-outline/database": "workspace:^1.0.0",
+    "@merchant-outline/logger": "workspace:^1.0.0",
     "@nestjs/cache-manager": "^2.2.1",
     "@nestjs/common": "10.4.15",
     "@nestjs/config": "3.2.2",

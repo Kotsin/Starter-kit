@@ -10,31 +10,30 @@ import {
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
 import {
-  AuthClient,
   ClientAuthModule,
   ClientUserModule,
   GlobalExceptionFilter,
   loadAuthClientOptions,
   loadUserClientOptions,
   UserClient,
-} from '@crypton-nestjs-kit/common';
-import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
-import { AppLoggerModule } from '@crypton-nestjs-kit/logger';
+} from '@merchant-outline/common';
+import { ConfigModule, ConfigService } from '@merchant-outline/config';
+import { AppLoggerModule } from '@merchant-outline/logger';
 import { redisStore } from 'cache-manager-redis-yet';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { RedisClientOptions } from 'redis';
 
 import { AuthGuard } from './guards/authorization.guard';
 import { BruteForceGuard } from './guards/bruteForce.guard';
+import { CaptchaGuard } from './guards/captcha.guard';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
 import { BaseCodeBruteForceGuard } from './guards/twoFA.guard';
 import { AuthController } from './v1/auth/auth.controller';
+import { CaptchaService } from './v1/auth/services/captcha.service';
 import { SessionsController } from './v1/auth/sessions.controller';
 import { UserController } from './v1/user/user.controller';
 import { GatewayController } from './gateway.controller';
 import { TransformResponseInterceptor } from './interceptors';
-import { CaptchaService } from './v1/auth/services/captcha.service';
-import { CaptchaGuard } from './guards/captcha.guard';
 
 @Module({
   imports: [
@@ -115,7 +114,7 @@ export class GatewayModule implements OnModuleInit {
     private readonly userClient: UserClient,
   ) {}
 
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     try {
       const { permissions } = await this.userClient.getPermissionList(
         '5555555',

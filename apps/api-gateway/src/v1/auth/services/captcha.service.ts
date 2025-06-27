@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@crypton-nestjs-kit/config';
+import { ConfigService } from '@merchant-outline/config';
 import axios from 'axios';
 
 @Injectable()

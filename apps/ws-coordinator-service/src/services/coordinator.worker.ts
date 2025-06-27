@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
 import { CoordinatorService } from './coordinator.service';
-import { ServiceStatus } from '@crypton-nestjs-kit/common';
+import { ServiceStatus } from '@merchant-outline/common';
 
 @Injectable()
 export class CoordinatorWorker implements OnModuleInit {

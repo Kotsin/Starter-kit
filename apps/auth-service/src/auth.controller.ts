@@ -20,7 +20,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
-} from '@crypton-nestjs-kit/common';
+} from '@merchant-outline/common';
 
 import {
   INativeAuthCredentials,

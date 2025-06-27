@@ -2,11 +2,10 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
   BatchOperationStatus,
-  MarketplaceClient,
   UserOperationTypeEnum,
-} from '@crypton-nestjs-kit/common';
-import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
-import { SettingService } from '@crypton-nestjs-kit/settings';
+} from '@merchant-outline/common';
+import { CustomLoggerService } from '@merchant-outline/logger';
+import { SettingService } from '@merchant-outline/settings';
 import { DataSource } from 'typeorm';
 
 import {
@@ -29,7 +28,6 @@ export class BatchWorker implements OnModuleInit {
     @InjectDataSource()
     private readonly dataSource: DataSource,
     private readonly settingsService: SettingService,
-    private readonly marketplaceClient: MarketplaceClient,
   ) {
     this.logger.setContext(BatchWorker.name);
   }
@@ -218,24 +216,14 @@ export class BatchWorker implements OnModuleInit {
       )
         return;
 
-      const data = operations[operation_type];
+      // const data = operations[operation_type];
 
       switch (operation_type) {
-        case UserOperationTypeEnum.MAKE_TRADEABLE:
-          this.marketplaceClient.finishMakeTradeable(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_CANCEL:
-          this.marketplaceClient.finishCancel(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_DEAL:
-          this.marketplaceClient.finishDeal(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_LISTING:
-          this.marketplaceClient.finishCreateOffer(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_UPDATE:
-          this.marketplaceClient.finishUpdate(data);
-          break;
+        // send to service finish operation request by operation type, example:
+        // case UserOperationTypeEnum.MAKE_TRADEABLE:
+        //   this.marketplaceClient.finishMakeTradeable(data);
+        //   break;
+
         default:
           this.logger.error(
             `Unknown operation type ${operation_type} in batch`,

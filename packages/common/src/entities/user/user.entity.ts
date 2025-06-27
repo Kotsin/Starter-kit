@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 
 import { UserStatus, UserType } from '../../enums';
+
 import { TwoFactorPermissionsEntity } from './2fa-permissions.entity';
 import { UserLoginMethodsEntity } from './user-login-method.entity';
 import { UserRoleEntity } from './user-role.entity';

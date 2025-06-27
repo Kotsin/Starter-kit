@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { UserClient } from '@crypton-nestjs-kit/common';
+import { UserClient } from '@merchant-outline/common';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 
 import { AUTH_ERROR_CODES, authErrorMessages } from '../errors';

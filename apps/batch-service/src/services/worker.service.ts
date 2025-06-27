@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BatchOperationStatus } from '@crypton-nestjs-kit/common';
-import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
+import {
+  BatchOperationStatus,
+  OperationEntity,
+} from '@merchant-outline/common';
+import { CustomLoggerService } from '@merchant-outline/logger';
 import { In, Repository } from 'typeorm';
 
-import { OperationEntity } from '../entities/operation.entity';
 import {
   ProcessOperations,
   UpdateBatchOperationStatus,

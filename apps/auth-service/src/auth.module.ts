@@ -1,23 +1,19 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ClientUserModule,
   loadUserClientOptions,
-  ServiceJwtInterceptor,
-} from '@crypton-nestjs-kit/common';
-import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
-import { DBModule } from '@crypton-nestjs-kit/database';
-import {
-  AppLoggerModule,
-  LoggingInterceptor,
-} from '@crypton-nestjs-kit/logger';
+  SessionEntity,
+} from '@merchant-outline/common';
+import { ConfigModule, ConfigService } from '@merchant-outline/config';
+import { DBModule } from '@merchant-outline/database';
+import { AppLoggerModule, LoggingInterceptor } from '@merchant-outline/logger';
 import { redisStore } from 'cache-manager-redis-yet';
 import { RedisClientOptions } from 'redis';
 
-import { SessionEntity } from './entity/session.entity';
 import { AuthService } from './services/auth.service';
 import { AuthStrategyFactory } from './services/auth-strategy-factory.service';
 // Стратегии

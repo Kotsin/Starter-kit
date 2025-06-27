@@ -1,4 +1,3 @@
-import { ServiceStatus, ServiceType } from '@crypton-nestjs-kit/common';
 import {
   BaseEntity,
   Column,
@@ -8,26 +7,28 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { ServiceStatus, ServiceType } from '../../types';
+
 @Entity('Service')
 export class ServiceEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  public id: string;
+  public id!: string;
 
   @Column({ type: 'text', unique: true })
-  public url: string;
+  public url!: string;
 
   @Column({ enum: ServiceType })
-  public type: ServiceType;
+  public type!: ServiceType;
 
   @Column({ default: 0 })
-  public load: number;
+  public load!: number;
 
   @Column({ enum: ServiceStatus })
-  public status: ServiceStatus;
+  public status!: ServiceStatus;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  public last_updated: Date;
+  public last_updated!: Date;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  public created_at: Date;
+  public created_at!: Date;
 }

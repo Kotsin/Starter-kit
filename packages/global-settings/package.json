@@ -1,6 +1,8 @@
 {
-  "name": "@crypton-nestjs-kit/settings",
+  "name": "@merchant-outline/settings",
   "version": "1.0.0",
+  "author": "Crypton Studio <info@crypton.studio>",
+  "license": "ISC",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -11,7 +13,8 @@
     "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "test": "npm run test:ci",
-    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests"
+    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
+    "lint": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix"
   },
   "engines": {
     "node": ">=20.x",
@@ -39,9 +42,9 @@
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
-    "@crypton-nestjs-kit/common": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/config": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/database": "workspace:^1.0.0",
+    "@merchant-outline/common": "workspace:^1.0.0",
+    "@merchant-outline/config": "workspace:^1.0.0",
+    "@merchant-outline/database": "workspace:^1.0.0",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.18.2",

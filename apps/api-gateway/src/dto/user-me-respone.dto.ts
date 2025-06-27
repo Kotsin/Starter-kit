@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserStatus } from '@crypton-nestjs-kit/common';
+import { UserStatus } from '@merchant-outline/common';
 
 import { BaseDto } from './response.dto';
 

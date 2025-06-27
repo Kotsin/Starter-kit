@@ -1,9 +1,9 @@
 {
-  "name": "@crypton-nestjs-kit/notification-gateway",
+  "name": "@merchant-outline/notification-gateway",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "license": "MIT",
+  "author": "Crypton Studio <info@crypton.studio>",
+  "license": "ISC",
   "scripts": {
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -27,16 +27,18 @@
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/websockets": "10.4.15",
     "@socket.io/redis-adapter": "^8.2.1",
-    "@crypton-nestjs-kit/common": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/config": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/io-emitter": "workspace:^1.0.0",
-    "@crypton-nestjs-kit/logger": "workspace:^1.0.0",
+    "@merchant-outline/common": "workspace:^1.0.0",
+    "@merchant-outline/config": "workspace:^1.0.0",
+    "@merchant-outline/io-emitter": "workspace:^1.0.0",
+    "@merchant-outline/logger": "workspace:^1.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
     "redis": "^4.6.13",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "socket.io": "^4.8.0"
+    "socket.io": "^4.8.0",
+    "uuid": "^9.0.1",
+    "uuidv4": "^6.2.13"
   }
 }

@@ -6,7 +6,7 @@ import {
   ICreateBatchOperationResponse,
   IGetBatchOperationRequest,
   IGetBatchOperationResponse,
-} from '@crypton-nestjs-kit/common';
+} from '@merchant-outline/common';
 
 import { BatchService } from '../services/batch.service';
 

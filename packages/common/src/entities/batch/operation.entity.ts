@@ -1,4 +1,3 @@
-import { BatchOperationStatus, UserOperationTypeEnum } from '@crypton-nestjs-kit/common';
 import {
   BaseEntity,
   Column,
@@ -7,6 +6,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { UserOperationTypeEnum } from '../../enums';
+import { BatchOperationStatus } from '../../types';
 
 @Entity('BatchOperation')
 export class OperationEntity extends BaseEntity {

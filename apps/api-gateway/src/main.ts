@@ -3,8 +3,8 @@ require('dotenv').config();
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ConfigService } from '@crypton-nestjs-kit/config';
-import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
+import { ConfigService } from '@merchant-outline/config';
+import { CustomLoggerService } from '@merchant-outline/logger';
 
 import { GatewayModule } from './gateway.module';
 

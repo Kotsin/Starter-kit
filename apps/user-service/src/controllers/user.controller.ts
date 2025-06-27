@@ -17,7 +17,7 @@ import {
   RequireConfirmation,
   RequireConfirmationInterceptor,
   UserClientPatterns,
-} from '@crypton-nestjs-kit/common';
+} from '@merchant-outline/common';
 
 import { UserService } from '../services/user.service';
 

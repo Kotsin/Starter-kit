@@ -1,6 +1,8 @@
 {
-  "name": "@crypton-nestjs-kit/config",
+  "name": "@merchant-outline/config",
   "version": "1.0.0",
+  "author": "Crypton Studio <info@crypton.studio>",
+  "license": "ISC",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -11,7 +13,8 @@
     "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "test": "npm run test:ci",
-    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests"
+    "test:ci": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
+    "lint": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix"
   },
   "engines": {
     "node": ">=18.x",

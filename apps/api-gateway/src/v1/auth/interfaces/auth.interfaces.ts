@@ -36,4 +36,4 @@ export interface ISessionInfo {
 
 export interface ISessionResponse {
   sessions: ISessionInfo[];
-} 
+}

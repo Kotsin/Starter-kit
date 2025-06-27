@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserClient } from '@crypton-nestjs-kit/common';
+import { UserClient } from '@merchant-outline/common';
 import * as bcrypt from 'bcrypt';
 
 import { AUTH_ERROR_CODES, authErrorMessages } from '../errors';

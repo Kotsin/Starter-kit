@@ -2,7 +2,7 @@ require('dotenv').config();
 
 import { NestFactory } from '@nestjs/core';
 import { RmqOptions } from '@nestjs/microservices';
-import { ConfigService } from '@crypton-nestjs-kit/config';
+import { ConfigService } from '@merchant-outline/config';
 
 import { BatchModule } from './batch.module';
 

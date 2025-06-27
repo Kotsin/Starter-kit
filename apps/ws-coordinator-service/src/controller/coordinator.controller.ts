@@ -8,7 +8,7 @@ import {
   IGetServiceResponse,
   IRegisterServiceRequest,
   IRegisterServiceResponse,
-} from '@crypton-nestjs-kit/common';
+} from '@merchant-outline/common';
 
 @Controller('coordinator')
 export class CoordinatorController {

@@ -1,7 +1,7 @@
 import { Controller, Get, OnModuleInit } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { CoordinatorClient, ServiceType } from '@crypton-nestjs-kit/common';
-import { ConfigService } from '@crypton-nestjs-kit/config';
+import { CoordinatorClient, ServiceType } from '@merchant-outline/common';
+import { ConfigService } from '@merchant-outline/config';
 import { WebsocketGateway } from './websocket-gateway';
 
 @Controller('/health')

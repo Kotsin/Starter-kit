@@ -9,7 +9,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthClient, UserClient } from '@crypton-nestjs-kit/common';
+import { AuthClient, UserClient } from '@merchant-outline/common';
 import { Request } from 'express';
 
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
