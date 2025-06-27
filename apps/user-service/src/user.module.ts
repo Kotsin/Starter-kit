@@ -86,10 +86,10 @@ import { UserService } from './services/user.service';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ServiceJwtInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: ServiceJwtInterceptor,
+    // },
     // {
     //   provide: APP_INTERCEPTOR,
     //   useFactory: (reflector: Reflector, userClient: UserClient) => {

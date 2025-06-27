@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   API_KEY_ERROR_CODES,
+  ApiKeyValidateDto,
   AuthClientPatterns,
   CreateApiKeyDto,
   UpdateApiKeyDto,
@@ -14,7 +15,6 @@ export class ApiKeyController {
   constructor(private readonly apiKeyService: ApiKeyService) {}
 
   @MessagePattern(AuthClientPatterns.API_KEY_CREATE)
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async create(@Payload() dto: CreateApiKeyDto) {
     try {
       const result = await this.apiKeyService.createApiKey(dto);
@@ -99,6 +99,33 @@ export class ApiKeyController {
         status: false,
         message: error.message,
         errorCode: API_KEY_ERROR_CODES.NOT_FOUND,
+        error: error.message,
+      };
+    }
+  }
+
+  @MessagePattern(AuthClientPatterns.API_KEY_VALIDATE)
+  async validate(@Payload() data: ApiKeyValidateDto): Promise<{
+    status: boolean;
+    message: string;
+    errorCode?: string;
+    error?: string;
+  }> {
+    try {
+      const isValid = await this.apiKeyService.validateApiKey(
+        data.rawKey,
+        data.ip,
+      );
+
+      return {
+        status: isValid,
+        message: isValid ? 'API key is valid' : 'API key is invalid',
+      };
+    } catch (error) {
+      return {
+        status: false,
+        message: error.message,
+        errorCode: API_KEY_ERROR_CODES.FORBIDDEN,
         error: error.message,
       };
     }

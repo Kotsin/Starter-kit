@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -15,6 +16,8 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
+  ApiHeader,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiProperty,
@@ -25,9 +28,12 @@ import {
 } from '@nestjs/swagger';
 import { AuthClient } from '@crypton-nestjs-kit/common';
 
+import { ApiKey } from '../../decorators/api-key.decorator';
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
+import { UsersMeResponseDto } from '../../dto/user-me-respone.dto';
+import { ApiKeyGuard } from '../../guards/api-key.guard';
 
 import {
   ApiKeyResponseDto,
@@ -75,6 +81,8 @@ export class ApiKeyController {
       traceId,
     );
 
+    console.log('result', result);
+
     if (!result.status) {
       throw new HttpException(result, HttpStatus.BAD_REQUEST);
     }
@@ -100,15 +108,14 @@ export class ApiKeyController {
       items: { $ref: getSchemaPath(ApiKeyResponseDto) },
     },
   })
-  async list() {
-    // const result = await this.authServiceClient
-    //   .send('api-key.list', {})
-    //   .toPromise();
-    // if (!result.status) {
-    //   throw new HttpException(result, HttpStatus.BAD_REQUEST);
-    // }
-    //
-    // return result.data;
+  async list(@CorrelationIdFromRequest() traceId: string) {
+    const result = await this.authClient.apiKeyList(traceId);
+
+    if (!result.status) {
+      throw new HttpException(result, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
   }
 
   /**
@@ -200,5 +207,24 @@ export class ApiKeyController {
     // }
     //
     // return { message: result.message };
+  }
+
+  @ApiOperation({ summary: 'Get info about user' })
+  @ApiKey('123213')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API Key. Необходим для доступа к этому эндпоинту',
+    required: true,
+  })
+  @ApiOkResponse({
+    description: 'User info',
+    type: UsersMeResponseDto,
+  })
+  @UseGuards(ApiKeyGuard)
+  @Get('api-key/test')
+  async apiKeyTest(): Promise<any> {
+    console.log('skjvnssdklfnjknaasdjksadnkj');
+
+    return true;
   }
 }

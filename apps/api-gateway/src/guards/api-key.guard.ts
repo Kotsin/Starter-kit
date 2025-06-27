@@ -5,6 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { AuthClient } from '@crypton-nestjs-kit/common';
 import { ConfigService } from '@crypton-nestjs-kit/config';
 
 import { API_KEY_METADATA } from '../decorators/api-key.decorator';
@@ -12,29 +13,35 @@ import { API_KEY_METADATA } from '../decorators/api-key.decorator';
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   constructor(
-    private readonly configService: ConfigService,
     private readonly reflector: Reflector,
+    private readonly authClient: AuthClient,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+
+    console.log(request.headers);
     const providedApiKey =
       request.headers['x-api-key'] ||
       request.headers['api-key'] ||
       request.query.apiKey;
 
-    const requiredKey = this.reflector.get<string>(
-      API_KEY_METADATA,
-      context.getHandler(),
+    const correlationId = request.headers['correlationId'];
+    const ip =
+      request.headers['x-forwarded-for'] || request.headers.host || request.ip;
+
+    console.log('{ rawKey: providedApiKey, ip }', {
+      rawKey: providedApiKey,
+      ip,
+    });
+    const validatedData = await this.authClient.apiKeyValidate(
+      { rawKey: providedApiKey, ip },
+      correlationId,
     );
 
-    if (!requiredKey) {
-      return true;
-    }
+    console.log('validatedData', validatedData);
 
-    const validApiKey = this.configService.get().secretKeys[requiredKey];
-
-    if (!providedApiKey || providedApiKey !== validApiKey) {
+    if (!validatedData.status) {
       throw new ForbiddenException('Invalid API Key');
     }
 

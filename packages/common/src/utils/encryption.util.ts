@@ -1,8 +1,8 @@
 import * as crypto from 'crypto';
 
 const ENCRYPTION_KEY =
-  process.env.API_KEY_ENCRYPTION_SECRET ||
-  'default_secret_32bytes!default_secret_32bytes!'; // 32 bytes
+  process.env.API_KEY_ENCRYPTION_SECRET || 'default_secret_32bytes!default_s';
+
 const IV_LENGTH = 16;
 
 export function encrypt(text: string): string {

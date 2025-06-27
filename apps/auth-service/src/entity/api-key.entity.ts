@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('api_keys')
+@Entity('ApiKeys')
 export class ApiKeyEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

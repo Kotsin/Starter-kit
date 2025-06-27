@@ -22,6 +22,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  ApiKeyValidateDto,
 } from '../../types';
 import { createRmqMessage } from '../../utils';
 
@@ -260,6 +261,18 @@ export class AuthClient {
       ),
     );
   }
+
+  async apiKeyValidate(
+    request: ApiKeyValidateDto,
+    traceId: string,
+  ): Promise<{ status: boolean; message: string }> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_VALIDATE,
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
 }
 
 export enum AuthClientPatterns {
@@ -279,4 +292,5 @@ export enum AuthClientPatterns {
   API_KEY_CREATE = 'api_key_create',
   API_KEY_DELETE = 'api_key_delete',
   API_KEY_LIST = 'api_key_list',
+  API_KEY_VALIDATE = 'api-key.validate',
 }

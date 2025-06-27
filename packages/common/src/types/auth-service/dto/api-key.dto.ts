@@ -64,3 +64,11 @@ export class ApiKeyResponseDto {
   @IsString()
   updatedAt!: string;
 }
+
+export class ApiKeyValidateDto {
+  @IsString()
+  rawKey!: string;
+
+  @IsString()
+  ip!: string;
+}

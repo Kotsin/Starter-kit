@@ -2,6 +2,7 @@ import { Cache } from '@nestjs/cache-manager';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiHeader,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -15,12 +16,14 @@ import {
 import { RedisStore } from 'cache-manager-redis-yet';
 import { RedisClientType } from 'redis';
 
+import { ApiKey } from '../../decorators/api-key.decorator';
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
 import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
 import { UsersMeResponseDto } from '../../dto/user-me-respone.dto';
+import { ApiKeyGuard } from '../../guards/api-key.guard';
 import { RolesGuard } from '../../guards/role.guard';
 
 import {
@@ -194,6 +197,7 @@ export class UserController {
     description: 'User info',
     type: UsersMeResponseDto,
   })
+  @UseGuards(ApiKeyGuard)
   @Authorization(true)
   @Get('me')
   async getMe(
@@ -201,7 +205,7 @@ export class UserController {
     @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
     @ServiceTokenFromRequest() serviceToken: string,
-  ): Promise<any> {
+  ) {
     const userData = await this.userClient.getMe(
       {
         userId,
