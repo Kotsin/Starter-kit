@@ -3,9 +3,13 @@ import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 import {
+  ApiKeyValidateDto,
   CreateApiKeyDto,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
+  IApiKeyCreateResponse,
+  IApiKeyListResponse,
+  IApiKeyRemoveResponse,
   ISessionCreateRequest,
   ISessionCreateResponse,
   ISessionsHistoryRequest,
@@ -22,7 +26,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
-  ApiKeyValidateDto,
+  UpdateApiKeyDto,
 } from '../../types';
 import { createRmqMessage } from '../../utils';
 
@@ -244,7 +248,7 @@ export class AuthClient {
   async apiKeyCreate(
     request: CreateApiKeyDto,
     traceId: string,
-  ): Promise<ISessionCreateResponse> {
+  ): Promise<IApiKeyCreateResponse> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.API_KEY_CREATE,
@@ -253,7 +257,31 @@ export class AuthClient {
     );
   }
 
-  async apiKeyList(traceId: string): Promise<ISessionCreateResponse> {
+  async apiKeyUpdate(
+    request: { id: string; dto: UpdateApiKeyDto },
+    traceId: string,
+  ): Promise<IApiKeyCreateResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_UPDATE,
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
+
+  async apiKeyRemove(
+    id: string,
+    traceId: string,
+  ): Promise<IApiKeyRemoveResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_DELETE,
+        await createRmqMessage(traceId, id),
+      ),
+    );
+  }
+
+  async apiKeyList(traceId: string): Promise<IApiKeyListResponse> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.API_KEY_LIST,
@@ -290,6 +318,7 @@ export enum AuthClientPatterns {
   DELETE_SESSIONS_BY_IDS = 'delete_sessions_by_ids',
   GET_SESSIONS_COUNT = 'get_sessions_count',
   API_KEY_CREATE = 'api_key_create',
+  API_KEY_UPDATE = 'api_key_update',
   API_KEY_DELETE = 'api_key_delete',
   API_KEY_LIST = 'api_key_list',
   API_KEY_VALIDATE = 'api-key.validate',

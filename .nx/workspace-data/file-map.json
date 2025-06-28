@@ -38,72 +38,72 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".eslintrc",
-        "hash": "6564936168741561034"
-      },
-      {
-        "file": "nx.json",
-        "hash": "17754476680881658738"
+        "file": "docker-compose.yml",
+        "hash": "3809531596788652401"
       },
       {
         "file": ".prettierignore",
         "hash": "10293546368267736695"
       },
       {
-        "file": "commitlint.config.js",
-        "hash": "15089399635272455297"
-      },
-      {
-        "file": "pnpm-lock.yaml",
-        "hash": "4530923817485318655"
-      },
-      {
-        "file": ".husky/pre-commit",
-        "hash": "1038190505859968275"
-      },
-      {
-        "file": "README.md",
-        "hash": "663114657474130960"
-      },
-      {
-        "file": "compodoc.json",
-        "hash": "1795656203220061925"
-      },
-      {
-        "file": "package.json",
-        "hash": "3948271154729596665"
-      },
-      {
-        "file": "docs/.gitkeep",
-        "hash": "3244421341483603138"
+        "file": ".gitignore",
+        "hash": "6083886884481296167"
       },
       {
         "file": ".prettierrc",
         "hash": "174943607064940844"
       },
       {
-        "file": ".eslintignore",
-        "hash": "4660892077869316414"
+        "file": "docs/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": ".husky/pre-commit",
+        "hash": "1038190505859968275"
       },
       {
         "file": ".env.example",
         "hash": "13047457774715171156"
       },
       {
+        "file": ".eslintignore",
+        "hash": "4660892077869316414"
+      },
+      {
+        "file": "README.md",
+        "hash": "663114657474130960"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "4530923817485318655"
+      },
+      {
+        "file": "nx.json",
+        "hash": "17754476680881658738"
+      },
+      {
         "file": "pnpm-workspace.yaml",
         "hash": "1703770017953262486"
       },
       {
-        "file": "docker-compose.yml",
-        "hash": "3809531596788652401"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "6083886884481296167"
+        "file": "compodoc.json",
+        "hash": "1795656203220061925"
       },
       {
         "file": "tsconfig.json",
         "hash": "1698454359300394519"
+      },
+      {
+        "file": "commitlint.config.js",
+        "hash": "15089399635272455297"
+      },
+      {
+        "file": ".eslintrc",
+        "hash": "6564936168741561034"
+      },
+      {
+        "file": "package.json",
+        "hash": "3948271154729596665"
       }
     ],
     "projectFileMap": {
@@ -558,7 +558,7 @@
         },
         {
           "file": "apps/auth-service/src/controllers/api-key.controller.ts",
-          "hash": "2870058744895091924"
+          "hash": "13501812141428613040"
         },
         {
           "file": "apps/auth-service/src/controllers/auth.controller.ts",
@@ -566,7 +566,7 @@
         },
         {
           "file": "apps/auth-service/src/entity/api-key.entity.ts",
-          "hash": "7561450281373846314"
+          "hash": "17397594871986988272"
         },
         {
           "file": "apps/auth-service/src/entity/session.entity.ts",
@@ -578,7 +578,7 @@
         },
         {
           "file": "apps/auth-service/src/services/api-key/api-key.service.ts",
-          "hash": "7601030634319876072"
+          "hash": "5019797248611360629"
         },
         {
           "file": "apps/auth-service/src/services/auth/auth-strategy-factory.service.ts",
@@ -750,7 +750,7 @@
         },
         {
           "file": "packages/common/src/clients/auth-service/auth.client.ts",
-          "hash": "7441068308110621837"
+          "hash": "9873507959293151728"
         },
         {
           "file": "packages/common/src/clients/auth-service/index.ts",
@@ -898,7 +898,7 @@
         },
         {
           "file": "packages/common/src/types/auth-service/api-key.interface.ts",
-          "hash": "2792030217792709448"
+          "hash": "11445018786527015833"
         },
         {
           "file": "packages/common/src/types/auth-service/auth-strategy.interface.ts",
@@ -906,7 +906,7 @@
         },
         {
           "file": "packages/common/src/types/auth-service/dto/api-key.dto.ts",
-          "hash": "11354049825945856970"
+          "hash": "15370259615181445178"
         },
         {
           "file": "packages/common/src/types/auth-service/index.ts",
@@ -1319,11 +1319,11 @@
         },
         {
           "file": "apps/api-gateway/src/v1/api-key/api-key.controller.ts",
-          "hash": "12862416317730231880"
+          "hash": "10700893757658968399"
         },
         {
           "file": "apps/api-gateway/src/v1/api-key/api-key.dto.ts",
-          "hash": "10984082624657359683"
+          "hash": "12889051333790957268"
         },
         {
           "file": "apps/api-gateway/src/v1/api-key/index.ts",

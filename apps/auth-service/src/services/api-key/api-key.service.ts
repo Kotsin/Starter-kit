@@ -30,7 +30,7 @@ export class ApiKeyService {
     private readonly cacheManager: Cache,
   ) {}
 
-  async createApiKey(dto: CreateApiKeyDto): Promise<IDecryptedApiKey> {
+  async createApiKey(dto: CreateApiKeyDto): Promise<IApiKey> {
     const rawKey = crypto.randomBytes(32).toString('hex');
     const encryptedKey = encrypt(rawKey);
     const encryptedAllowedIps = dto.allowedIps?.map((ip) => encrypt(ip)) || [];
@@ -59,13 +59,13 @@ export class ApiKeyService {
 
     return {
       id: apiKey.id,
-      rawKey,
+      key: rawKey,
       type: apiKey.type as ApiKeyType,
       allowedIps: dto.allowedIps || [],
       permissions: dto.permissions || [],
       isActive: apiKey.isActive,
+      expiredAt: expiredAt.toISOString(),
       createdAt: apiKey.createdAt.toISOString(),
-      updatedAt: apiKey.updatedAt.toISOString(),
     };
   }
 
@@ -93,7 +93,6 @@ export class ApiKeyService {
 
     const fieldMap: Record<string, (value: any) => any> = {
       allowedIps: (ips: string[]) => ips.map((ip) => encrypt(ip)),
-      // можно добавить другие поля с кастомной обработкой
     };
 
     Object.entries(dto).forEach(([key, value]) => {
@@ -108,16 +107,16 @@ export class ApiKeyService {
     });
 
     await this.apiKeyRepo.save(apiKey);
-    // Инвалидация кэша по id и списку
     await this.cacheManager.set(
       `${API_KEY_VALIDATE_CACHE_PREFIX}:${decrypt(apiKey.encryptedKey).slice(
         0,
         API_KEY_CACHE_SLICE_LENGTH,
       )}`,
       {
-        allowedIps: apiKey.encryptedAllowedIps,
+        encryptedAllowedIps: apiKey.encryptedAllowedIps,
         permissions: dto.permissions,
         isActive: apiKey.isActive,
+        expiredAt: apiKey.expiredAt?.toISOString(),
       },
       API_KEY_TTL,
     );
@@ -137,7 +136,10 @@ export class ApiKeyService {
   async deleteApiKey(
     id: string,
   ): Promise<{ status: boolean; message: string }> {
+    console.log('asdasd', id);
     const apiKey = await this.apiKeyRepo.findOne({ where: { id } });
+
+    console.log(apiKey);
 
     if (!apiKey) {
       throw new Error(apiKeyErrorMessages[API_KEY_ERROR_CODES.NOT_FOUND]);
@@ -177,7 +179,6 @@ export class ApiKeyService {
   }
 
   async validateApiKey(rawKey: string, ip: string): Promise<boolean> {
-    const encryptedRawKey = encrypt(rawKey);
     const cacheKey = `${API_KEY_VALIDATE_CACHE_PREFIX}:${rawKey.slice(
       0,
       API_KEY_CACHE_SLICE_LENGTH,
@@ -191,7 +192,6 @@ export class ApiKeyService {
     }>(cacheKey);
 
     if (!keyData) {
-      // Получаем все ключи и ищем подходящий
       const apiKeys = await this.apiKeyRepo.find();
       const apiKey = apiKeys.find(
         (key) => decrypt(key.encryptedKey) === rawKey,

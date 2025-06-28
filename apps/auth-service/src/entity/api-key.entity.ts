@@ -14,6 +14,9 @@ export class ApiKeyEntity {
   @Column({ unique: true })
   encryptedKey: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  public userId!: string;
+
   @Column()
   type: string; // enum: 'read', 'write', 'admin', etc.
 
