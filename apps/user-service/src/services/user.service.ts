@@ -595,17 +595,49 @@ export class UserService implements OnModuleInit {
     }
   }
 
-  private async resetConfirmationCode(
-    login: string,
-    userId: string,
+  async resetConfirmationCode(
+    login?: string,
+    userId?: string,
+    id?: string,
   ): Promise<any> {
-    const { affected } = await this.userLoginMethods.update(
-      { login, user_id: userId },
-      { code: null, code_lifetime: null },
-    );
+    try {
+      const where: { userId?: string; login?: string; id?: string } = {};
 
-    if (affected == 0) {
-      throw new Error('Code reset failed');
+      if (!id) {
+        if (userId) where.userId = userId;
+
+        if (login) where.login = login;
+      }
+
+      where.id = id;
+
+      if (!where) {
+        throw new Error('Code reset failed');
+      }
+
+      const loginMethod = await this.userLoginMethods.findOne({ where });
+
+      if (!loginMethod) {
+        throw new Error('Code reset failed');
+      }
+
+      const { affected } = await this.userLoginMethods.update(
+        { id: loginMethod.id },
+        {
+          code: null,
+          code_lifetime: null,
+        },
+      );
+
+      if (affected == 0) {
+        throw new Error('Code reset failed');
+      }
+
+      await this.cacheManager.del(`getUserById:${loginMethod.user_id}`);
+
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 

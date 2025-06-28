@@ -22,13 +22,20 @@ export class ServiceJwtUseCase {
     userId?: string;
     permissions?: string[];
     expiresIn?: string | number;
+    authType: string;
   }): Promise<string> {
     const { serviceId, userId, permissions, expiresIn = '1m' } = options;
 
     const secret = this.getServiceSecret(serviceId);
 
     return this.jwtService.sign(
-      { ...options.payload, userId, permissions, type: 'service' },
+      {
+        ...options.payload,
+        userId,
+        permissions,
+        type: 'service',
+        authType: options.authType,
+      },
       {
         secret,
         expiresIn,

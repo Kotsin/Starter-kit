@@ -191,18 +191,16 @@ export class UserController {
     };
   }
 
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get info about user' })
   @ApiOkResponse({
     description: 'User info',
     type: UsersMeResponseDto,
   })
-  @UseGuards(ApiKeyGuard)
+  @ApiBearerAuth()
   @Authorization(true)
   @Get('me')
   async getMe(
     @UserIdFromRequest() userId: string,
-    @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
     @ServiceTokenFromRequest() serviceToken: string,
   ) {

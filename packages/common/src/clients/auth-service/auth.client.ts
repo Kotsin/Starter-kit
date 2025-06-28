@@ -10,6 +10,7 @@ import {
   IApiKeyCreateResponse,
   IApiKeyListResponse,
   IApiKeyRemoveResponse,
+  INativeLogin,
   ISessionCreateRequest,
   ISessionCreateResponse,
   ISessionsHistoryRequest,
@@ -57,9 +58,9 @@ export class AuthClient {
   ) {}
 
   async authenticateNative(
-    request: any,
+    request: INativeLogin,
     traceId: string,
-  ): Promise<ISessionCreateResponse> {
+  ): Promise<any> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.AUTHENTICATE_NATIVE,
@@ -146,13 +147,18 @@ export class AuthClient {
    * Refreshes the provided refresh token and returns a new access token.
    *
    * @param {ITokenRefreshRequest} request
+   * @param traceId
    * @return {Promise<ITokenRefreshResponse>} An object with the following properties:
    */
   async refreshToken(
     request: ITokenRefreshRequest,
+    traceId: string,
   ): Promise<ITokenRefreshResponse> {
     return await firstValueFrom(
-      this.authClientProxy.send(AuthClientPatterns.REFRESH_TOKEN, request),
+      this.authClientProxy.send(
+        AuthClientPatterns.REFRESH_TOKEN,
+        await createRmqMessage(traceId, request),
+      ),
     );
   }
 

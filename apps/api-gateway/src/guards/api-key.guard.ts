@@ -19,8 +19,6 @@ export class ApiKeyGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-
-    console.log(request.headers);
     const providedApiKey =
       request.headers['x-api-key'] ||
       request.headers['api-key'] ||
@@ -30,10 +28,6 @@ export class ApiKeyGuard implements CanActivate {
     const ip =
       request.headers['x-forwarded-for'] || request.headers.host || request.ip;
 
-    console.log('{ rawKey: providedApiKey, ip }', {
-      rawKey: providedApiKey,
-      ip,
-    });
     const validatedData = await this.authClient.apiKeyValidate(
       { rawKey: providedApiKey, ip },
       correlationId,

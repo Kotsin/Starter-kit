@@ -1,5 +1,6 @@
 import { TimePeriod } from '../../../utils';
 import { IRequest } from '../../entity-response.types';
+import { INativeAuthCredentials } from '../auth-strategy.interface';
 
 export interface IGetInactiveUsersRequest {
   readonly users: { id: string; tgId: string; lang: string }[];
@@ -63,6 +64,18 @@ export interface ISessionUntilDateRequest extends IRequest {
 
 export interface ISessionCountRequest extends IRequest {
   period: TimePeriod;
+}
+
+export interface INativeLogin {
+  credentials: INativeAuthCredentials;
+  sessionData: {
+    userAgent?: string;
+    userIp?: string;
+    fingerprint?: string;
+    country?: string;
+    city?: string;
+  };
+  traceId?: string;
 }
 
 export interface IDeleteSessionRequest extends IRequest {

@@ -1,12 +1,14 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ClientUserModule,
   loadUserClientOptions,
+  RequireConfirmationInterceptor,
   ServiceJwtInterceptor,
+  UserClient,
 } from '@crypton-nestjs-kit/common';
 import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
 import { DBModule } from '@crypton-nestjs-kit/database';
@@ -66,13 +68,20 @@ import { ServiceJwtUseCase } from './use-cases/service-jwt.use-case';
     AuthStrategyFactory,
     AuthService,
     ApiKeyService,
-    // Стратегии
+    // Strategy's
     NativeStrategy,
     // Use cases
     ServiceJwtUseCase,
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: (reflector: Reflector, userClient: UserClient) => {
+        return new RequireConfirmationInterceptor(reflector, userClient);
+      },
+      inject: [Reflector, UserClient],
     },
   ],
 })

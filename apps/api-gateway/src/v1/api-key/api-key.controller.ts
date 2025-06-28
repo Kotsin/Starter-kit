@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -24,17 +25,19 @@ import {
 } from '@nestjs/swagger';
 import {
   AuthClient,
+  CustomError,
+  ExtendedHttpStatus,
   IApiKeyCreateResponse,
   IApiKeyListResponse,
   IApiKeyRemoveResponse,
   IApiKeyUpdateResponse,
+  UserClient,
 } from '@crypton-nestjs-kit/common';
 
-import { ApiKey } from '../../decorators/api-key.decorator';
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
-import { UsersMeResponseDto } from '../../dto/user-me-respone.dto';
+import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
 import { ApiKeyGuard } from '../../guards/api-key.guard';
 
 import {
@@ -48,7 +51,45 @@ import {
 @ApiExtraModels(ApiKeyResponseDto)
 @Controller('v1/api-keys')
 export class ApiKeyController {
-  constructor(private readonly authClient: AuthClient) {}
+  constructor(
+    private readonly authClient: AuthClient,
+    private readonly userClient: UserClient,
+  ) {}
+
+  @Get('allowedPermissions')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Getting all of allowed permissions' })
+  @ApiOkResponse({
+    description: 'All allowed permissions list',
+  })
+  @Authorization(true)
+  async getAllowedPermissions(
+    @UserRoleFromRequest() roleId: string,
+    @CorrelationIdFromRequest() traceId: string,
+  ): Promise<any> {
+    const data = await this.userClient.getPermissionsByRole(roleId, traceId);
+
+    if (!data.status) {
+      throw new CustomError(
+        ExtendedHttpStatus.FORBIDDEN,
+        'Permissions not found',
+      );
+    }
+
+    return data;
+  }
+
+  @ApiOperation({ summary: 'Api key test endpoint' })
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API Key. Необходим для доступа к этому эндпоинту',
+    required: true,
+  })
+  @UseGuards(ApiKeyGuard)
+  @Get('test')
+  async apiKeyTest(): Promise<boolean> {
+    return true;
+  }
 
   /**
    * Create a new API key
@@ -145,6 +186,7 @@ export class ApiKeyController {
   @ApiBearerAuth()
   @Authorization(true)
   async getById(@Param('id') id: string) {
+    console.log('asdasdasdasd1123435', id);
     // const result = await this.authServiceClient
     //   .send('api-key.get', id)
     //   .toPromise();
@@ -235,24 +277,5 @@ export class ApiKeyController {
     }
 
     return result;
-  }
-
-  @ApiOperation({ summary: 'Get info about user' })
-  @ApiKey('123213')
-  @ApiHeader({
-    name: 'x-api-key',
-    description: 'API Key. Необходим для доступа к этому эндпоинту',
-    required: true,
-  })
-  @ApiOkResponse({
-    description: 'User info',
-    type: UsersMeResponseDto,
-  })
-  @UseGuards(ApiKeyGuard)
-  @Get('api-key/test')
-  async apiKeyTest(): Promise<any> {
-    console.log('skjvnssdklfnjknaasdjksadnkj');
-
-    return true;
   }
 }

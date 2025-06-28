@@ -27,6 +27,8 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
 
+    console.log(request.headers);
+
     if (!request.headers.authorization) {
       throw new UnauthorizedException({
         message: 'Unauthorized',
@@ -50,6 +52,8 @@ export class AuthGuard implements CanActivate {
       true,
     );
 
+    console.log('tokenInfo', tokenInfo);
+
     if (!tokenInfo.status) {
       throw new UnauthorizedException({
         message: tokenInfo.message,
@@ -59,6 +63,7 @@ export class AuthGuard implements CanActivate {
     }
 
     request.user = tokenInfo.user;
+    request.sessionId = tokenInfo.sessionId;
     request.serviceToken = tokenInfo.serviceJwt;
 
     return true;

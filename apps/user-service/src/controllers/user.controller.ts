@@ -44,8 +44,19 @@ export class UserController {
   }
 
   @MessagePattern(UserClientPatterns.REGISTER_PERMISSIONS)
-  public async registerPermissionsTestTest(@Payload() data: any): Promise<any> {
+  public async registerPermissions(@Payload() data: any): Promise<any> {
     return await this.userService.registerPermissions(data);
+  }
+
+  @MessagePattern(UserClientPatterns.RESET_CONFIRMATION_CODE)
+  public async resetConfirmationCode(
+    @Payload() data: { login?: string; userId?: string; id?: string },
+  ): Promise<boolean> {
+    return await this.userService.resetConfirmationCode(
+      data.login,
+      data.userId,
+      data.id,
+    );
   }
 
   @MessagePattern(UserClientPatterns.UPDATE_2FA_PERMISSIONS)

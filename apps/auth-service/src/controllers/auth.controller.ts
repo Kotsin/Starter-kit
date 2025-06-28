@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   AuthClientPatterns,
   IActiveSessionsRequest,
@@ -23,6 +23,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  RequireConfirmation,
 } from '@crypton-nestjs-kit/common';
 
 import { AuthService } from '../services/auth/auth.service';
@@ -34,6 +35,7 @@ export class AuthController {
   /**
    * Нативная аутентификация (email/password)
    */
+  @RequireConfirmation('6d41d076-ea0c-4c71-ad34-ae957435ea46')
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_NATIVE)
   public async authenticateNative(data: {
     credentials: INativeAuthCredentials;
@@ -43,13 +45,17 @@ export class AuthController {
       fingerprint?: string;
       country?: string;
       city?: string;
-      traceId?: string;
     };
+    traceId?: string;
   }) {
-    return await this.authService.authenticateAndCreateSession(
-      data.credentials,
-      data.sessionData,
-    );
+    try {
+      return await this.authService.authenticateAndCreateSession(
+        data.credentials,
+        data.sessionData,
+      );
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 
   /**

@@ -141,6 +141,15 @@ export class AuthDtoRequest extends RegisterDtoRequest {
   readonly captcha!: CaptchaDto;
 }
 
+export class RefreshTokenDtoRequest {
+  @ApiProperty({
+    description: 'Refresh token data',
+    example: 'token',
+  })
+  @IsString()
+  readonly refreshToken!: string;
+}
+
 export class SigninSolanaDtoRequest {
   @ApiProperty({
     description:
