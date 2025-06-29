@@ -4,6 +4,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
+  ApiKeyEntity,
   ClientUserModule,
   loadUserClientOptions,
   SessionEntity,
@@ -16,13 +17,12 @@ import { RedisClientOptions } from 'redis';
 
 import { ApiKeyController } from './controllers/api-key.controller';
 import { AuthController } from './controllers/auth.controller';
-import { ApiKeyEntity } from './entity/api-key.entity';
+import { ApiKeyService } from './services/api-key/api-key.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthStrategyFactory } from './services/auth/auth-strategy-factory.service';
 // Стратегии
 import { NativeStrategy } from './services/auth/strategies/native.strategy';
 import { ServiceJwtUseCase } from './use-cases/service-jwt.use-case';
-import { ApiKeyService } from './services/api-key/api-key.service';
 
 @Module({
   imports: [

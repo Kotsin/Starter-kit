@@ -56,13 +56,13 @@ export class WebsocketGateway {
   @UseGuards(JwtSocketGuard)
   @SubscribeMessage(IOEmitter.Events.MARKETPLACE)
   handleMarketplace(@ConnectedSocket() socket: Socket) {
-    socket.join(this.#ioEmitter.buildMarketplaceRoom(socket.user_id));
+    socket.join(this.#ioEmitter.buildMarketplaceRoom(socket.userId));
   }
 
   @UseGuards(JwtSocketGuard)
   @SubscribeMessage(IOEmitter.Events.MARKETPLACE_LEAVE)
   handleMarketplaceLeave(@ConnectedSocket() socket: Socket) {
-    socket.leave(this.#ioEmitter.buildMarketplaceRoom(socket.user_id));
+    socket.leave(this.#ioEmitter.buildMarketplaceRoom(socket.userId));
   }
 
   getConnectionsCount(): number {

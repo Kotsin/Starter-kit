@@ -21,7 +21,6 @@ import { WorkerService } from './services/worker.service';
     AppLoggerModule,
     SettingModule,
     DBModule.forRoot({ entities: [SettingsEntity] }),
-    TypeOrmModule.forFeature([SettingsEntity]),
     TypeOrmModule.forRootAsync({
       name: BATCH_CONNECTION_NAME,
       imports: [ConfigModule],

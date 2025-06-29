@@ -13,13 +13,13 @@ export class TransformResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         const response = context.switchToHttp().getResponse();
-        const status_code = response.statusCode;
+        const statusCode = response.statusCode;
 
         return {
           timestamp: new Date().getTime(),
           path: response.req.url,
           method: response.req.method,
-          statusCode: status_code,
+          statusCode,
           success: true,
           ...data,
         };

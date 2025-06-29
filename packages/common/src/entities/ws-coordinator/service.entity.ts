@@ -17,18 +17,26 @@ export class ServiceEntity extends BaseEntity {
   @Column({ type: 'text', unique: true })
   public url!: string;
 
-  @Column({ enum: ServiceType })
+  @Column({ type: 'enum', enum: ServiceType })
   public type!: ServiceType;
 
-  @Column({ default: 0 })
+  @Column({ type: 'numeric', default: 0 })
   public load!: number;
 
-  @Column({ enum: ServiceStatus })
+  @Column({ type: 'enum', enum: ServiceStatus })
   public status!: ServiceStatus;
 
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  public last_updated!: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'last_updated',
+  })
+  public lastUpdated!: Date;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  public created_at!: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
+  public createdAt!: Date;
 }

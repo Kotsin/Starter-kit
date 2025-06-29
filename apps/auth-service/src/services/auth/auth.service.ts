@@ -36,7 +36,6 @@ import {
 import { ConfigService } from '@merchant-outline/config';
 import { In, LessThan, Repository } from 'typeorm';
 
-import { SessionEntity, SessionStatus } from '../../entity/session.entity';
 import { ServiceJwtUseCase } from '../../use-cases/service-jwt.use-case';
 
 import { AuthStrategyFactory } from './auth-strategy-factory.service';

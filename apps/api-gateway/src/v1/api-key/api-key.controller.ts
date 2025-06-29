@@ -23,7 +23,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { AuthClient } from '@crypton-nestjs-kit/common';
+import { AuthClient } from '@merchant-outline/common';
 
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';

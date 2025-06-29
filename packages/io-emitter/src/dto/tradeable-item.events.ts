@@ -3,23 +3,23 @@ import { IOEmitter } from '../io-emitter';
 
 export class TradeableItemOfferWSEventDto {
   @ApiProperty({ description: 'Tradeable item type id', type: () => String })
-  readonly tradeable_item_type_id!: string;
+  readonly tradeableItemTypeId!: string;
 }
 
 export class TradeableItemCirculationWSEventDto {
   @ApiProperty({ description: 'Tradeable item type id', type: () => String })
-  readonly tradeable_item_type_id!: string;
+  readonly tradeableItemTypeId!: string;
 
   @ApiProperty({ description: 'Listed total', type: () => Number })
-  readonly listed_total!: number;
+  readonly listedTotal!: number;
 
   @ApiProperty({ description: 'In circulation', type: () => Number })
-  readonly in_circulation!: number;
+  readonly inCirculation!: number;
 }
 
 export class TradeableItemHistoryWSEventDto {
   @ApiProperty({ description: 'Tradeable item type id', type: () => String })
-  readonly tradeable_item_type_id!: string;
+  readonly tradeableItemTypeId!: string;
 
   @ApiProperty({ description: 'Amount', type: () => Number })
   readonly amount!: number;
@@ -28,21 +28,21 @@ export class TradeableItemHistoryWSEventDto {
   readonly price!: number;
 
   @ApiProperty({ description: 'Updated at', type: () => Date })
-  readonly updated_at!: Date;
+  readonly updatedAt!: Date;
 
   @ApiProperty({ description: 'Buyer username', type: () => String })
-  readonly buyer_username!: string;
+  readonly buyerUsername!: string;
 
   @ApiProperty({ description: 'Buyer full name', type: () => String })
-  readonly buyer_full_name!: string;
+  readonly buyerFullName!: string;
 }
 
 export class TradeableItemPriceLevelsWSEventDto {
   @ApiProperty({ description: 'Tradeable item type id', type: () => String })
-  readonly tradeable_item_type_id!: string;
+  readonly tradeableItemTypeId!: string;
 
   @ApiProperty({ description: 'Price levels', type: () => Object })
-  readonly price_levels!: any;
+  readonly priceLevels!: any;
 }
 
 @ApiExtraModels(

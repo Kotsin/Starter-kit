@@ -24,20 +24,20 @@ export class IOEmitterRedis extends IOEmitter {
   override emitMarketplace<T extends keyof IOEmitter.MarketplaceData>(
     event: IOEmitter.MarketplaceEvent<T>,
   ) {
-    const user_id = event.data.user_id;
+    const userId = event.data.userId;
 
     return this.#IOEmitter
-      .to(super.buildMarketplaceRoom(user_id))
+      .to(super.buildMarketplaceRoom(userId))
       .emit(IOEmitter.Events.MARKETPLACE, event);
   }
 
   override emitTradeableItem<T extends keyof IOEmitter.TradeableItemEventData>(
     event: IOEmitter.TradeableItemEvent<T>,
   ) {
-    const tradeable_item_type_id = event.data.tradeable_item_type_id!;
+    const tradeableItemId = (event.data as any).tradeableItemTypeId!;
 
     return this.#IOEmitter
-      .to(super.buildTradableItemRoom(tradeable_item_type_id))
+      .to(super.buildTradableItemRoom(tradeableItemId))
       .emit(IOEmitter.Events.TRADEABLE_ITEM, event);
   }
 }

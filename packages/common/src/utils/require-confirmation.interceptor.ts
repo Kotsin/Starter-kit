@@ -83,7 +83,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
       if (
         entry.code !== expectedCode ||
-        new Date(entry.code_lifetime) < new Date()
+        new Date(entry.codeLifetime) < new Date()
       ) {
         throw new UnauthorizedException(`Invalid or expired ${method} code`);
       }

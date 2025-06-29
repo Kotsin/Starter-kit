@@ -8,13 +8,13 @@ class UserData {
   readonly id: string;
 
   @ApiProperty()
-  readonly full_name: string;
+  readonly fullName: string;
 
   @ApiProperty()
   readonly username: string;
 
   @ApiProperty()
-  readonly referral_code: number;
+  readonly referralCode: number;
 
   @ApiProperty({ enum: UserStatus })
   readonly status: UserStatus;
@@ -23,16 +23,16 @@ class UserData {
   readonly type: string;
 
   @ApiProperty()
-  readonly extra_data: any;
+  readonly extraData: any;
 
   @ApiProperty()
-  readonly created_at: Date;
+  readonly createdAt: Date;
 
   @ApiProperty()
-  readonly updated_at: Date;
+  readonly updatedAt: Date;
 
   @ApiProperty()
-  readonly deleted_at: Date;
+  readonly deletedAt: Date;
 }
 
 export class UsersMeResponseDto extends BaseDto {

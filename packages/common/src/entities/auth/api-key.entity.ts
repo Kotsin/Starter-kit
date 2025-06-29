@@ -9,29 +9,37 @@ import {
 @Entity('api_keys')
 export class ApiKeyEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id!: string;
 
-  @Column({ unique: true })
-  encryptedKey: string;
+  @Column({ type: 'varchar', unique: true, name: 'encrypted_key' })
+  public encryptedKey!: string;
 
-  @Column()
-  type: string; // enum: 'read', 'write', 'admin', etc.
+  @Column({ type: 'varchar' })
+  public type!: string; // enum: 'read', 'write', 'admin', etc.
+
+  @Column('simple-array', { nullable: true, name: 'encrypted_allowed_ips' })
+  public encryptedAllowedIps!: string[];
 
   @Column('simple-array', { nullable: true })
-  encryptedAllowedIps: string[];
+  public permissions!: string[];
 
-  @Column('simple-array', { nullable: true })
-  permissions: string[];
+  @Column({ type: 'boolean', default: true, name: 'is_active' })
+  public isActive!: boolean;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ type: 'timestamp', nullable: false, name: 'expired_at' })
+  public expiredAt!: Date;
 
-  @Column({ type: 'timestamp', nullable: false })
-  expiredAt: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
+  public createdAt!: Date;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
+  })
+  public updatedAt!: Date;
 }

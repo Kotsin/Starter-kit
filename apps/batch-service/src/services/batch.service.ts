@@ -23,7 +23,7 @@ export class BatchService implements OnModuleInit, OnApplicationShutdown {
   private batchTimeToUpdate = Date.now();
   private readonly batchTransactions: Map<
     string,
-    Pick<OperationEntity, 'id' | 'operation_type' | 'sql' | 'status'>
+    Pick<OperationEntity, 'id' | 'operationType' | 'sql' | 'status'>
   > = new Map();
 
   constructor(
@@ -59,9 +59,9 @@ export class BatchService implements OnModuleInit, OnApplicationShutdown {
     request: ICreateBatchOperationRequest,
   ): Promise<ICreateBatchOperationResponse> {
     try {
-      this.batchTransactions.set(`${request.user_operation_id}`, {
-        id: request.user_operation_id,
-        operation_type: request.operation_type,
+      this.batchTransactions.set(`${request.userOperationId}`, {
+        id: request.userOperationId,
+        operationType: request.operationType,
         sql: request.sql,
         status: BatchOperationStatus.UNPROCESSED,
       });

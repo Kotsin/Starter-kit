@@ -15,8 +15,8 @@ export class OperationEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @Column({ type: 'enum', enum: UserOperationTypeEnum })
-  public operation_type!: UserOperationTypeEnum;
+  @Column({ type: 'enum', enum: UserOperationTypeEnum, name: 'operation_type' })
+  public operationType!: UserOperationTypeEnum;
 
   @Column({ type: 'varchar' })
   public sql!: string;
@@ -27,9 +27,17 @@ export class OperationEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   public error!: string | null;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  public created_at!: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
+  public createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  public updated_at!: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
+  })
+  public updatedAt!: Date;
 }

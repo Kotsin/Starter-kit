@@ -63,8 +63,8 @@ export interface IGetBatchOperationResponse extends IResponse {
 }
 
 export interface ICreateBatchOperationRequest
-  extends Pick<BatchOperation, 'operation_type' | 'sql'> {
-  readonly user_operation_id: string;
+  extends Pick<BatchOperation, 'operationType' | 'sql'> {
+  readonly userOperationId: string;
 }
 
 export type ICreateBatchOperationResponse = IResponse;

@@ -29,9 +29,9 @@ export class WorkerService {
     try {
       // TODO: index: status, created_at
       const result = (await this.operationRepository.find({
-        select: ['id', 'operation_type', 'sql', 'created_at'],
+        select: ['id', 'operationType', 'sql', 'createdAt'],
         where: { status: BatchOperationStatus.UNPROCESSED },
-        order: { created_at: 'ASC' },
+        order: { createdAt: 'ASC' },
         take: data.limit,
       })) as unknown as ProcessOperations;
 

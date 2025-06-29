@@ -13,6 +13,7 @@ import {
   ProcessOperations,
   UpdateBatchOperationStatus,
 } from '../interfaces/batch.interface';
+import { BATCH_CONNECTION_NAME } from './batch.constants';
 import { WorkerService } from './worker.service';
 
 interface DoOperations {
@@ -25,7 +26,7 @@ export class BatchWorker implements OnModuleInit {
   constructor(
     private readonly logger: CustomLoggerService,
     private readonly workerService: WorkerService,
-    @InjectDataSource()
+    @InjectDataSource(BATCH_CONNECTION_NAME)
     private readonly dataSource: DataSource,
     private readonly settingsService: SettingService,
   ) {
@@ -110,10 +111,10 @@ export class BatchWorker implements OnModuleInit {
         updated.push({
           id: operation.id,
           status: BatchOperationStatus.SUCCESS,
-          created_at: operation.created_at,
+          created_at: operation.createdAt,
         });
 
-        batchOperationResult[operation.operation_type].success.push({
+        batchOperationResult[operation.operationType].success.push({
           user_operation_id: operation.id,
         });
       });
@@ -167,26 +168,26 @@ export class BatchWorker implements OnModuleInit {
         const { operation } = promises[index];
 
         if (result.status === 'rejected') {
-          batchOperationResult[operation.operation_type].failed.push({
+          batchOperationResult[operation.operationType].failed.push({
             user_operation_id: operation.id,
           });
 
           updated.push({
             id: operation.id,
             status: BatchOperationStatus.FAIL,
-            created_at: operation.created_at,
+            created_at: operation.createdAt,
             error: result.reason.message,
           });
         }
 
         if (result.status === 'fulfilled') {
-          batchOperationResult[operation.operation_type].success.push({
+          batchOperationResult[operation.operationType].success.push({
             user_operation_id: operation.id,
           });
 
           updated.push({
             id: operation.id,
-            created_at: operation.created_at,
+            created_at: operation.createdAt,
             status: BatchOperationStatus.SUCCESS,
           });
         }

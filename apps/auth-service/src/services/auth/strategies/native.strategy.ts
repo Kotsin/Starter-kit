@@ -6,7 +6,7 @@ import {
   IAuthStrategy,
   INativeAuthCredentials,
   UserClient,
-} from '@crypton-nestjs-kit/common';
+} from '@merchant-outline/common';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

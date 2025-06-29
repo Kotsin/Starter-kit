@@ -46,18 +46,18 @@ export class JwtSocketGuard implements CanActivate {
 
     if (!userTokenInfo.user.userId) throw new UnauthorizedException();
 
-    const user_id = userTokenInfo.user.userId;
+    const userId = userTokenInfo.user.userId;
 
     const user = await this.userClient.getUserById(
       {
-        userId: user_id,
+        userId: userId,
       },
       uuid(),
     );
 
     if (!user) throw new UnauthorizedException();
 
-    socket.user_id = user_id;
+    socket.userId = userId;
 
     return true;
   }

@@ -8,7 +8,7 @@ import { CustomLoggerService } from '@merchant-outline/logger';
 
 declare module 'socket.io' {
   export interface Socket {
-    user_id?: string;
+    userId?: string;
   }
 }
 
