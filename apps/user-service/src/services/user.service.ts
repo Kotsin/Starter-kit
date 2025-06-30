@@ -80,7 +80,10 @@ export class UserService implements OnModuleInit {
 
   public async registerPermissions(request: any): Promise<any> {
     try {
-      await this.permissionRepo.upsert(request.permissions, ['alias', 'route']);
+      await this.permissionRepo.upsert(request.permissions, [
+        'messagePattern',
+        'method',
+      ]);
 
       await this.updateDefaultRolePermissions(request.permissions);
 

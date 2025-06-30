@@ -14,7 +14,7 @@ import {
   IGetUserByLoginRequest,
   INativeLoginRequest,
   INativeLoginResponse,
-  RequireConfirmation,
+  Permission,
   RequireConfirmationInterceptor,
   UserClientPatterns,
 } from '@crypton-nestjs-kit/common';
@@ -81,7 +81,7 @@ export class UserController {
     );
   }
 
-  @RequireConfirmation('d17ba476-d43e-49e7-a715-96b3c86c544c')
+  @Permission('d17ba476-d43e-49e7-a715-96b3c86c544c')
   @MessagePattern(UserClientPatterns.LOGIN_NATIVE)
   public async nativeLogin(
     data: INativeLoginRequest,

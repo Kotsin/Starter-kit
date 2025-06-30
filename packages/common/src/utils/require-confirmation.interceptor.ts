@@ -10,7 +10,7 @@ import { Observable, of } from 'rxjs';
 import { UserClient } from '../clients';
 import { AUTH_ERROR_CODES } from '../errors';
 
-import { REQUIRE_CONFIRMATION_KEY } from './require-confirmation.decorator';
+import { PERMISSION_ID } from './require-confirmation.decorator';
 
 @Injectable()
 export class RequireConfirmationInterceptor implements NestInterceptor {
@@ -25,7 +25,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
   ): Promise<Observable<any>> {
     try {
       const permissionId = this.reflector.get<string>(
-        REQUIRE_CONFIRMATION_KEY,
+        PERMISSION_ID,
         context.getHandler(),
       );
 
@@ -50,6 +50,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
       if (!userId) {
         const data = await this.userClient.getUserByLogin({ login }, '0000');
+
         userId = data.user.id;
       }
 

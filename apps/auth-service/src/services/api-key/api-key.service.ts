@@ -15,7 +15,6 @@ import {
 } from '@crypton-nestjs-kit/common';
 import * as crypto from 'crypto';
 import { Repository } from 'typeorm';
-import { MoreThan } from 'typeorm';
 
 const API_KEY_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
 const API_KEY_CACHE_SLICE_LENGTH = 24;
@@ -201,22 +200,19 @@ export class ApiKeyService {
         isActive: apiKey.isActive,
         expiredAt: apiKey.expiredAt?.toISOString(),
       };
-      await this.cacheManager.set(cacheKey, keyData, API_KEY_TTL);
-
-      if (!keyData.isActive) return false;
-
-      if (keyData.expiredAt && new Date(keyData.expiredAt) < new Date())
-        return false;
-
-      if (!keyData.encryptedAllowedIps?.length) {
-        return true;
-      }
-
-      if (keyData.encryptedAllowedIps.map(decrypt).includes(ip)) {
-        return true;
-      }
-
-      return false;
     }
+
+    await this.cacheManager.set(cacheKey, keyData, API_KEY_TTL);
+
+    if (!keyData.isActive) return false;
+
+    if (keyData.expiredAt && new Date(keyData.expiredAt) < new Date())
+      return false;
+
+    if (!keyData.encryptedAllowedIps?.length) {
+      return true;
+    }
+
+    return keyData.encryptedAllowedIps.map(decrypt).includes(ip);
   }
 }

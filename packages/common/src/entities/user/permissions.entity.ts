@@ -8,20 +8,23 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Unique(['alias', 'route'])
+@Unique(['messagePattern', 'method'])
 @Entity('Permissions')
 export class PermissionEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @Column({ type: 'varchar', unique: false })
-  public route!: string;
-
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: false })
   public method!: string;
 
   @Column({ type: 'varchar', nullable: true })
   public alias!: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  public messagePattern!: string;
+
+  @Column({ type: 'boolean', nullable: true })
+  public isPublic!: boolean;
 
   @Column({ type: 'text', nullable: true })
   public description!: string;

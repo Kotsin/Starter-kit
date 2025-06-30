@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   AuthClientPatterns,
+  ControllerMeta,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
   INativeAuthCredentials,
@@ -23,7 +24,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
-  RequireConfirmation,
+  Permission,
 } from '@crypton-nestjs-kit/common';
 
 import { AuthService } from '../services/auth/auth.service';
@@ -35,7 +36,11 @@ export class AuthController {
   /**
    * Нативная аутентификация (email/password)
    */
-  @RequireConfirmation('6d41d076-ea0c-4c71-ad34-ae957435ea46')
+  @ControllerMeta({
+    name: 'Аутентификация пользователя',
+    description: 'Аутентификация пользователя с помощью email и пароля 1',
+    isPublic: true,
+  })
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_NATIVE)
   public async authenticateNative(data: {
     credentials: INativeAuthCredentials;
@@ -72,6 +77,11 @@ export class AuthController {
     );
   }
 
+  @ControllerMeta({
+    name: 'Создание сессии',
+    description: 'Создание сессии пользователя',
+    isPublic: false,
+  })
   @MessagePattern(AuthClientPatterns.SESSION_CREATE)
   public async createSession(
     data: ISessionCreateRequest,

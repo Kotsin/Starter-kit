@@ -224,157 +224,6 @@
         "implicitDependencies": []
       }
     },
-    "@crypton-nestjs-kit/notification-service": {
-      "name": "@crypton-nestjs-kit/notification-service",
-      "type": "lib",
-      "data": {
-        "root": "apps/notification-service",
-        "sourceRoot": "apps/notification-service",
-        "name": "@crypton-nestjs-kit/notification-service",
-        "tags": [
-          "npm:public"
-        ],
-        "metadata": {
-          "targetGroups": {
-            "NPM Scripts": [
-              "start:dev",
-              "start:debug",
-              "build",
-              "start:test",
-              "start:prod",
-              "lint",
-              "docs:generate",
-              "docs:serve",
-              "docs:watch"
-            ]
-          },
-          "description": ""
-        },
-        "targets": {
-          "start:dev": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "start:dev"
-            },
-            "metadata": {
-              "scriptContent": "nest start --watch",
-              "runCommand": "pnpm run start:dev"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "start:debug": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "start:debug"
-            },
-            "metadata": {
-              "scriptContent": "nest start --debug --watch",
-              "runCommand": "pnpm run start:debug"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "build": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "build"
-            },
-            "metadata": {
-              "scriptContent": "tsc -p tsconfig.build.json",
-              "runCommand": "pnpm run build"
-            },
-            "configurations": {},
-            "parallelism": true,
-            "dependsOn": [
-              "^build"
-            ]
-          },
-          "start:test": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "start:test"
-            },
-            "metadata": {
-              "scriptContent": "tsc-watch -p tsconfig.build.json --onSuccess \"node -r dotenv/config dist/main.js dotenv_config_path=../.env.test\"",
-              "runCommand": "pnpm run start:test"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "start:prod": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "start:prod"
-            },
-            "metadata": {
-              "scriptContent": "node dist/main.js",
-              "runCommand": "pnpm run start:prod"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "lint": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "lint"
-            },
-            "metadata": {
-              "scriptContent": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
-              "runCommand": "pnpm run lint"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "docs:generate": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "docs:generate"
-            },
-            "metadata": {
-              "scriptContent": "compodoc -p tsconfig.build.json -d ../../docs/notification-service",
-              "runCommand": "pnpm run docs:generate"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "docs:serve": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "docs:serve"
-            },
-            "metadata": {
-              "scriptContent": "compodoc -p tsconfig.build.json -d ../../docs/notification-service -s",
-              "runCommand": "pnpm run docs:serve"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "docs:watch": {
-            "executor": "nx:run-script",
-            "options": {
-              "script": "docs:watch"
-            },
-            "metadata": {
-              "scriptContent": "compodoc -p tsconfig.build.json -d ../../docs/notification-service -w",
-              "runCommand": "pnpm run docs:watch"
-            },
-            "configurations": {},
-            "parallelism": true
-          },
-          "nx-release-publish": {
-            "executor": "@nx/js:release-publish",
-            "dependsOn": [
-              "^nx-release-publish"
-            ],
-            "options": {},
-            "configurations": {},
-            "parallelism": true
-          }
-        },
-        "implicitDependencies": []
-      }
-    },
     "@crypton-nestjs-kit/settings": {
       "name": "@crypton-nestjs-kit/settings",
       "type": "lib",
@@ -395,9 +244,11 @@
               "prepublishOnly",
               "pretest",
               "test",
-              "test:ci"
+              "test:ci",
+              "lint"
             ]
-          }
+          },
+          "description": ""
         },
         "targets": {
           "build": {
@@ -499,6 +350,18 @@
             "configurations": {},
             "parallelism": true
           },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
+              "runCommand": "pnpm run lint"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
           "nx-release-publish": {
             "executor": "@nx/js:release-publish",
             "dependsOn": [
@@ -534,9 +397,11 @@
               "prepublishOnly",
               "pretest",
               "test",
-              "test:ci"
+              "test:ci",
+              "lint"
             ]
-          }
+          },
+          "description": ""
         },
         "targets": {
           "build": {
@@ -658,6 +523,18 @@
             "metadata": {
               "scriptContent": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
               "runCommand": "pnpm run test:ci"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
+              "runCommand": "pnpm run lint"
             },
             "configurations": {},
             "parallelism": true
@@ -986,9 +863,11 @@
               "prepublishOnly",
               "pretest",
               "test",
-              "test:ci"
+              "test:ci",
+              "lint"
             ]
-          }
+          },
+          "description": ""
         },
         "targets": {
           "build": {
@@ -1110,6 +989,18 @@
             "metadata": {
               "scriptContent": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
               "runCommand": "pnpm run test:ci"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
+              "runCommand": "pnpm run lint"
             },
             "configurations": {},
             "parallelism": true
@@ -1462,9 +1353,11 @@
               "prepublishOnly",
               "pretest",
               "test",
-              "test:ci"
+              "test:ci",
+              "lint"
             ]
-          }
+          },
+          "description": ""
         },
         "targets": {
           "build": {
@@ -1562,6 +1455,18 @@
             "metadata": {
               "scriptContent": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
               "runCommand": "pnpm run test:ci"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
+              "runCommand": "pnpm run lint"
             },
             "configurations": {},
             "parallelism": true
@@ -1599,9 +1504,11 @@
               "prepublishOnly",
               "pretest",
               "test",
-              "test:ci"
+              "test:ci",
+              "lint"
             ]
-          }
+          },
+          "description": ""
         },
         "targets": {
           "build": {
@@ -1699,6 +1606,18 @@
             "metadata": {
               "scriptContent": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
               "runCommand": "pnpm run test:ci"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
+              "runCommand": "pnpm run lint"
             },
             "configurations": {},
             "parallelism": true
@@ -1738,9 +1657,11 @@
               "prepublishOnly",
               "pretest",
               "test",
-              "test:ci"
+              "test:ci",
+              "lint"
             ]
-          }
+          },
+          "description": ""
         },
         "targets": {
           "build": {
@@ -1862,6 +1783,18 @@
             "metadata": {
               "scriptContent": "jest --ci --collectCoverage --maxWorkers 2 --passWithNoTests",
               "runCommand": "pnpm run test:ci"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint \"{src,test}/**/*.ts\" --no-error-on-unmatched-pattern --quiet --fix",
+              "runCommand": "pnpm run lint"
             },
             "configurations": {},
             "parallelism": true
@@ -8433,9 +8366,9 @@
         "hash": "sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ=="
       }
     },
-    "npm:eslint-plugin-prettier": {
+    "npm:eslint-plugin-prettier@5.5.1": {
       "type": "npm",
-      "name": "npm:eslint-plugin-prettier",
+      "name": "npm:eslint-plugin-prettier@5.5.1",
       "data": {
         "version": "5.5.1",
         "packageName": "eslint-plugin-prettier",
@@ -8532,9 +8465,9 @@
         "hash": "sha512-ypowyDxpVSYpkXr9WPv2PAZCtNip1Mv5KTW0SCurXv/9iOpcrH9PaqUElksqEB6pChqHGDRCFTyrZlGhnLNGiA=="
       }
     },
-    "npm:eslint": {
+    "npm:eslint@9.29.0": {
       "type": "npm",
-      "name": "npm:eslint",
+      "name": "npm:eslint@9.29.0",
       "data": {
         "version": "9.29.0",
         "packageName": "eslint",
@@ -13104,9 +13037,9 @@
         "hash": "sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q=="
       }
     },
-    "npm:prettier": {
+    "npm:prettier@3.6.2": {
       "type": "npm",
-      "name": "npm:prettier",
+      "name": "npm:prettier@3.6.2",
       "data": {
         "version": "3.6.2",
         "packageName": "prettier",
@@ -15003,9 +14936,9 @@
         "hash": "sha512-Xv6jBQPoBEvBq/5i2TeSG9tt/nqkbpcurrEG1b+2yfBrcJelOZF9Ml6dmyMh7bcW9JyFbRYpR5rxROSlBLTZHA=="
       }
     },
-    "npm:ts-jest": {
+    "npm:ts-jest@29.4.0": {
       "type": "npm",
-      "name": "npm:ts-jest",
+      "name": "npm:ts-jest@29.4.0",
       "data": {
         "version": "29.4.0",
         "packageName": "ts-jest",
@@ -16052,6 +15985,36 @@
     "@crypton-nestjs-kit/coordinator-service": [
       {
         "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:@nestjs/config@2.3.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:@nestjs/microservices",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:@nestjs/platform-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:@nestjs/typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
         "target": "@crypton-nestjs-kit/common",
         "type": "static"
       },
@@ -16077,11 +16040,61 @@
       },
       {
         "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:pg",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
         "target": "npm:reflect-metadata",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:typeorm",
         "type": "static"
       }
     ],
     "@crypton-nestjs-kit/notification-gateway": [
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:@nestjs/platform-socket.io",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:@nestjs/swagger@7.4.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:@nestjs/websockets",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:@socket.io/redis-adapter",
+        "type": "static"
+      },
       {
         "source": "@crypton-nestjs-kit/notification-gateway",
         "target": "@crypton-nestjs-kit/common",
@@ -16104,26 +16117,94 @@
       },
       {
         "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:class-transformer",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:class-validator",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:redis",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
         "target": "npm:reflect-metadata",
         "type": "static"
-      }
-    ],
-    "@crypton-nestjs-kit/notification-service": [
+      },
       {
-        "source": "@crypton-nestjs-kit/notification-service",
-        "target": "npm:@compodoc/compodoc",
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:socket.io",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:uuid",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:uuidv4",
         "type": "static"
       }
     ],
     "@crypton-nestjs-kit/settings": [
       {
         "source": "@crypton-nestjs-kit/settings",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/common@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/settings",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/config@3.2.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@nestjs/microservices",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@nestjs/testing@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@types/uuid@9.0.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
         "type": "static"
       },
       {
@@ -16143,12 +16224,12 @@
       },
       {
         "source": "@crypton-nestjs-kit/settings",
-        "target": "npm:eslint",
+        "target": "npm:eslint@8.57.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/settings",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16158,12 +16239,17 @@
       },
       {
         "source": "@crypton-nestjs-kit/settings",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/settings",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:prettier@2.8.8",
         "type": "static"
       },
       {
@@ -16173,7 +16259,32 @@
       },
       {
         "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:tslib@2.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
         "target": "npm:typescript",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@nestjs/schedule",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@nestjs/typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:typeorm",
         "type": "static"
       },
       {
@@ -16185,34 +16296,114 @@
     "@crypton-nestjs-kit/io-emitter": [
       {
         "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:@nestjs/config@3.3.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:@nestjs/swagger@7.4.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:@socket.io/redis-emitter",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
         "target": "@crypton-nestjs-kit/common",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:class-transformer",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:class-validator",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:redis",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/io-emitter",
         "target": "npm:reflect-metadata",
         "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/io-emitter",
+        "target": "npm:tslib@2.8.1",
+        "type": "static"
       }
     ],
     "@crypton-nestjs-kit/batch-service": [
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/cli@10.4.9",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/schematics@10.2.3",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:eslint",
+        "target": "npm:@nestjs/testing@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@types/supertest@6.0.3",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@types/uuid@9.0.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:dotenv-cli@7.4.4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16222,27 +16413,72 @@
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:rimraf",
+        "target": "npm:prettier@2.8.8",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
-        "target": "npm:ts-jest",
+        "target": "npm:rimraf@3.0.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:supertest@7.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:ts-loader",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:ts-node",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
         "target": "npm:typescript",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@nestjs/cache-manager",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@nestjs/microservices",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@nestjs/platform-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@nestjs/typeorm",
         "type": "static"
       },
       {
@@ -16272,7 +16508,32 @@
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:cache-manager-redis-yet",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:pg",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:redis",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
         "target": "npm:reflect-metadata",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:typeorm",
         "type": "static"
       },
       {
@@ -16289,22 +16550,102 @@
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/cli@9.5.0",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/schematics@9.2.0",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
-        "target": "npm:eslint",
+        "target": "npm:@nestjs/testing@9.4.3",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@types/bcrypt",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/jsonwebtoken@8.5.9",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/passport",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/passport-apple",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/passport-google-oauth20",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/passport-twitter",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/supertest@2.0.16",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:concurrently@5.3.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:copyfiles",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:dotenv@8.6.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:dotenv-cli@4.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16314,17 +16655,57 @@
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
-        "target": "npm:ts-jest",
+        "target": "npm:globals@15.15.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:nock",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:nodemon@2.0.22",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:prettier@2.8.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:supertest@6.3.4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:ts-jest@27.1.5",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:ts-loader",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:ts-node",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:tsconfig-paths@4.2.0",
         "type": "static"
       },
       {
@@ -16354,12 +16735,132 @@
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/cache-manager",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/config@3.2.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/jwt",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/microservices",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/passport",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/platform-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/swagger@7.3.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@nestjs/typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
         "target": "npm:axios",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:bcrypt",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:cache-manager",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:cache-manager-redis-yet",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:class-transformer",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:class-validator",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:install",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:nestjs-throttler",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:passport",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:passport-apple",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:passport-google-oauth20",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:passport-twitter",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:pg",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
         "target": "npm:randomstring",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:redis",
         "type": "static"
       },
       {
@@ -16374,29 +16875,94 @@
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:swagger-ui-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:url-join-ts",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
         "target": "npm:uuid",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:uuidv4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:winston",
         "type": "static"
       }
     ],
     "@crypton-nestjs-kit/database": [
       {
         "source": "@crypton-nestjs-kit/database",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/common@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/database",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/config@3.2.2",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/database",
-        "target": "npm:eslint",
+        "target": "npm:@nestjs/core@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/database",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@nestjs/testing@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:@types/uuid@9.0.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16406,12 +16972,17 @@
       },
       {
         "source": "@crypton-nestjs-kit/database",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/database",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:prettier@2.8.8",
         "type": "static"
       },
       {
@@ -16421,7 +16992,27 @@
       },
       {
         "source": "@crypton-nestjs-kit/database",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:tslib@2.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
         "target": "npm:typescript",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:@nestjs/typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
+        "target": "npm:typeorm",
         "type": "static"
       },
       {
@@ -16443,22 +17034,62 @@
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/cli@10.4.9",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/schematics@10.2.3",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
-        "target": "npm:eslint",
+        "target": "npm:@nestjs/testing@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@types/supertest@6.0.3",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:concurrently@8.2.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:copyfiles",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:dotenv-cli@7.4.4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16468,12 +17099,27 @@
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:nock",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:nodemon@3.1.10",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:prettier@2.8.8",
         "type": "static"
       },
       {
@@ -16483,7 +17129,17 @@
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
-        "target": "npm:ts-jest",
+        "target": "npm:supertest@7.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:ts-loader",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:ts-node",
         "type": "static"
       },
       {
@@ -16493,7 +17149,47 @@
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/cache-manager",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/microservices",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/platform-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/swagger@7.3.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
         "target": "npm:@nestjs/terminus",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@nestjs/jwt",
         "type": "static"
       },
       {
@@ -16523,34 +17219,159 @@
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:cache-manager",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:cache-manager-redis-yet",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:class-transformer",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:class-validator",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:pg",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:redis",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
         "target": "npm:reflect-metadata",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:url-join-ts",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
         "target": "npm:uuid",
         "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:uuidv4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:winston",
+        "type": "static"
       }
     ],
     "@crypton-nestjs-kit/gateway": [
       {
         "source": "@crypton-nestjs-kit/gateway",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/cli@10.4.9",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/schematics@10.2.3",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
-        "target": "npm:eslint",
+        "target": "npm:@nestjs/testing@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@types/passport",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/passport-google-oauth20",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/passport-twitter",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/passport-apple",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/supertest@6.0.3",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:concurrently@8.2.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:copyfiles",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:dotenv-cli@7.4.4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16560,12 +17381,27 @@
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:nock",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:nodemon@3.1.10",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:prettier@2.8.8",
         "type": "static"
       },
       {
@@ -16575,7 +17411,17 @@
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
-        "target": "npm:ts-jest",
+        "target": "npm:supertest@7.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:ts-loader",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:ts-node",
         "type": "static"
       },
       {
@@ -16590,7 +17436,57 @@
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/cache-manager",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/mapped-types@2.1.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/microservices",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/platform-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/passport",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/swagger@7.4.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
         "target": "npm:@nestjs/terminus",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/throttler",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@nestjs/typeorm",
         "type": "static"
       },
       {
@@ -16620,7 +17516,37 @@
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:amqp-connection-manager",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:amqplib",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
         "target": "npm:axios",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:cache-manager-redis-store",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:cache-manager-redis-yet",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:class-transformer",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:class-validator",
         "type": "static"
       },
       {
@@ -16630,7 +17556,57 @@
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:ioredis",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
         "target": "npm:moment",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/moment",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:nestjs-throttler-storage-redis",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:pg",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:passport",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:passport-google-oauth20",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:passport-twitter",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:passport-apple",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:redis",
         "type": "static"
       },
       {
@@ -16640,7 +17616,32 @@
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:swagger-ui-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
         "target": "npm:uuid",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:uuidv4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:validator",
         "type": "static"
       }
     ],
@@ -16652,22 +17653,52 @@
       },
       {
         "source": "@crypton-nestjs-kit/common",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/testing@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/common",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@types/eslint-plugin-prettier",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/common",
-        "target": "npm:eslint",
+        "target": "npm:@types/jest",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/common",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@types/uuid@9.0.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:class-transformer",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:class-validator",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16677,17 +17708,32 @@
       },
       {
         "source": "@crypton-nestjs-kit/common",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/common",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:prettier@2.8.8",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/common",
         "target": "npm:reflect-metadata",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:tslib@2.8.1",
         "type": "static"
       },
       {
@@ -16697,29 +17743,124 @@
       },
       {
         "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@nestjs/typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:bcrypt",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
         "target": "npm:uuid",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@nestjs/config@3.2.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@nestjs/jwt",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@nestjs/microservices",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@nestjs/swagger@7.3.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@types/bcrypt",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:redis",
         "type": "static"
       }
     ],
     "@crypton-nestjs-kit/config": [
       {
         "source": "@crypton-nestjs-kit/config",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/common@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/config",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/microservices",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/config",
-        "target": "npm:eslint",
+        "target": "npm:@nestjs/config@3.2.2",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/config",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:@nestjs/testing@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:@types/uuid@9.0.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16729,17 +17870,32 @@
       },
       {
         "source": "@crypton-nestjs-kit/config",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/config",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:prettier@2.8.8",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/config",
         "target": "npm:reflect-metadata",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
+        "target": "npm:tslib@2.8.1",
         "type": "static"
       },
       {
@@ -16756,22 +17912,77 @@
     "@crypton-nestjs-kit/logger": [
       {
         "source": "@crypton-nestjs-kit/logger",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@nestjs/common@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/logger",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@nestjs/config@3.2.2",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/logger",
-        "target": "npm:eslint",
+        "target": "npm:@nestjs/core@10.4.15",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/logger",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:@nestjs/testing@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@nestjs/typeorm",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@types/eslint-plugin-prettier",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@types/uuid@9.0.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@opentelemetry/api",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@opentelemetry/core@2.0.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@opentelemetry/propagator-jaeger",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
@@ -16781,17 +17992,42 @@
       },
       {
         "source": "@crypton-nestjs-kit/logger",
-        "target": "npm:eslint-plugin-prettier",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/logger",
-        "target": "npm:prettier",
+        "target": "npm:eslint-plugin-simple-import-sort",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:prettier@2.8.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:express",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/logger",
         "target": "npm:reflect-metadata",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:rxjs@7.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:tslib@2.8.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:typeorm",
         "type": "static"
       },
       {
@@ -16811,7 +18047,22 @@
       },
       {
         "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@types/luxon@3.6.2",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:luxon@3.6.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
         "target": "npm:moment",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:winston",
         "type": "static"
       }
     ],
@@ -20082,7 +21333,7 @@
       },
       {
         "source": "npm:@eslint-community/eslint-utils",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       }
     ],
@@ -23081,7 +24332,7 @@
       },
       {
         "source": "npm:@typescript-eslint/eslint-plugin",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -23170,7 +24421,7 @@
       },
       {
         "source": "npm:@typescript-eslint/parser",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -23253,7 +24504,7 @@
       },
       {
         "source": "npm:@typescript-eslint/type-utils@7.18.0",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -23426,7 +24677,7 @@
       },
       {
         "source": "npm:@typescript-eslint/utils@7.18.0",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       }
     ],
@@ -26959,7 +28210,7 @@
       },
       {
         "source": "npm:eslint-config-next",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -27008,7 +28259,7 @@
     "npm:eslint-config-prettier": [
       {
         "source": "npm:eslint-config-prettier",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       }
     ],
@@ -27042,7 +28293,7 @@
       },
       {
         "source": "npm:eslint-import-resolver-typescript",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -27104,7 +28355,7 @@
       },
       {
         "source": "npm:eslint-module-utils",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -27221,7 +28472,7 @@
       },
       {
         "source": "npm:eslint-plugin-import",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -27273,7 +28524,7 @@
       },
       {
         "source": "npm:eslint-plugin-jsx-a11y",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -27334,34 +28585,34 @@
         "type": "static"
       }
     ],
-    "npm:eslint-plugin-prettier": [
+    "npm:eslint-plugin-prettier@5.5.1": [
       {
-        "source": "npm:eslint-plugin-prettier",
-        "target": "npm:eslint",
+        "source": "npm:eslint-plugin-prettier@5.5.1",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
-        "source": "npm:eslint-plugin-prettier",
-        "target": "npm:prettier",
+        "source": "npm:eslint-plugin-prettier@5.5.1",
+        "target": "npm:prettier@3.6.2",
         "type": "static"
       },
       {
-        "source": "npm:eslint-plugin-prettier",
+        "source": "npm:eslint-plugin-prettier@5.5.1",
         "target": "npm:prettier-linter-helpers",
         "type": "static"
       },
       {
-        "source": "npm:eslint-plugin-prettier",
+        "source": "npm:eslint-plugin-prettier@5.5.1",
         "target": "npm:synckit",
         "type": "static"
       },
       {
-        "source": "npm:eslint-plugin-prettier",
+        "source": "npm:eslint-plugin-prettier@5.5.1",
         "target": "npm:@types/eslint",
         "type": "static"
       },
       {
-        "source": "npm:eslint-plugin-prettier",
+        "source": "npm:eslint-plugin-prettier@5.5.1",
         "target": "npm:eslint-config-prettier",
         "type": "static"
       }
@@ -27369,7 +28620,7 @@
     "npm:eslint-plugin-react-hooks": [
       {
         "source": "npm:eslint-plugin-react-hooks",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       }
     ],
@@ -27406,7 +28657,7 @@
       },
       {
         "source": "npm:eslint-plugin-react",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -27480,7 +28731,7 @@
     "npm:eslint-plugin-svelte3": [
       {
         "source": "npm:eslint-plugin-svelte3",
-        "target": "npm:eslint",
+        "target": "npm:eslint@9.29.0",
         "type": "static"
       },
       {
@@ -27717,184 +28968,184 @@
         "type": "static"
       }
     ],
-    "npm:eslint": [
+    "npm:eslint@9.29.0": [
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint-community/eslint-utils",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint-community/regexpp",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint/config-array",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint/config-helpers",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint/core",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint/eslintrc@3.3.1",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint/js@9.29.0",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@eslint/plugin-kit",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@humanfs/node",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@humanwhocodes/module-importer",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@humanwhocodes/retry@0.4.3",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@types/estree",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:@types/json-schema",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:ajv@6.12.6",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:chalk@4.1.2",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:cross-spawn@7.0.6",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:debug@4.4.1",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:escape-string-regexp@4.0.0",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:eslint-scope@8.4.0",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:eslint-visitor-keys@4.2.1",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:espree@10.4.0",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:esquery",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:esutils",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:fast-deep-equal",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:file-entry-cache@8.0.0",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:find-up@5.0.0",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:glob-parent@6.0.2",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:ignore",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:imurmurhash",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:is-glob",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:json-stable-stringify-without-jsonify",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:lodash.merge",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:minimatch@3.1.2",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:natural-compare",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:optionator",
         "type": "static"
       },
       {
-        "source": "npm:eslint",
+        "source": "npm:eslint@9.29.0",
         "target": "npm:jiti",
         "type": "static"
       }
@@ -33395,7 +34646,7 @@
     "npm:prettier-plugin-svelte": [
       {
         "source": "npm:prettier-plugin-svelte",
-        "target": "npm:prettier",
+        "target": "npm:prettier@3.6.2",
         "type": "static"
       },
       {
@@ -35385,89 +36636,89 @@
         "type": "static"
       }
     ],
-    "npm:ts-jest": [
+    "npm:ts-jest@29.4.0": [
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:bs-logger",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:ejs",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:fast-json-stable-stringify",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:jest",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:json5@2.2.3",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:lodash.memoize",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:make-error",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:semver@7.7.2",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:type-fest@4.41.0",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:typescript",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:yargs-parser@21.1.1",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:@babel/core@7.25.8",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:@jest/transform",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:@jest/types@29.6.3",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:babel-jest",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:jest-util@29.7.0",
         "type": "static"
       },
       {
-        "source": "npm:ts-jest",
+        "source": "npm:ts-jest@29.4.0",
         "target": "npm:@babel/core@7.27.7",
         "type": "static"
       }

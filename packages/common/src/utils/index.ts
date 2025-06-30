@@ -1,3 +1,4 @@
+export * from './controller-meta.decorator';
 export * from './createRmqMessage';
 export * from './doWithCatch';
 export * from './encryption.util';
@@ -7,6 +8,8 @@ export * from './getTimePeriod';
 export * from './getUnixTime';
 export * from './hashPassword';
 export * from './interpolateSql';
+export * from './permission-registrar.module';
+export * from './permissions-registrar.service';
 export * from './redisLocks';
 export * from './require-confirmation.decorator';
 export * from './require-confirmation.interceptor';
