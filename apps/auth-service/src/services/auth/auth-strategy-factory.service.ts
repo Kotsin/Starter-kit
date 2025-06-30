@@ -39,8 +39,6 @@ export class AuthStrategyFactory {
    * Автоматически определяет тип стратегии на основе переданных данных
    */
   createStrategyFromCredentials(credentials: AuthCredentials): IAuthStrategy {
-    console.log('credentials', credentials);
-
     if ('loginType' in credentials && 'password' in credentials) {
       return this.createStrategy(AuthStrategyType.NATIVE);
     }

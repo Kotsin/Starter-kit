@@ -39,6 +39,15 @@ export class CreateApiKeyDto {
 }
 
 export class UpdateApiKeyDto {
+  @ApiProperty({
+    type: String,
+    required: false,
+    description: 'Type of api-key',
+  })
+  @IsString()
+  @IsOptional()
+  type?: string;
+
   @ApiProperty({ type: Boolean, required: false })
   @IsBoolean()
   @IsOptional()

@@ -8,14 +8,22 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthClient, UserClient } from '@crypton-nestjs-kit/common';
 import { Request } from 'express';
 
+import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
 import { RequestIpFromRequest } from '../../decorators/extract-ip.decorator';
 import { RequestUserAgentFromRequest } from '../../decorators/extract-userAgent.decorator';
 import { CheckPermissions } from '../../decorators/role-permissions-decorator';
+import { SessionIdFromRequest } from '../../decorators/sessionId-from-request.decorator';
+import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { BruteForceGuard } from '../../guards/bruteForce.guard';
 import { CaptchaGuard } from '../../guards/captcha.guard';
 import { RolesGuard } from '../../guards/role.guard';
@@ -25,6 +33,8 @@ import { LoginValidationPipe } from '../../pipes/login-validator.pipe';
 import {
   ApiResponses,
   AuthDtoRequest,
+  ConfirmationCodesRequest,
+  RefreshTokenDtoRequest,
   RegisterConfirmRequestDTO,
   RegisterDtoRequest,
 } from './dto/auth.dto';
@@ -238,6 +248,7 @@ export class AuthController {
           password: body.password,
           login: body.login,
           loginType: body['loginType'],
+          twoFaCodes: body.twoFaCodes,
         },
         sessionData: {
           userAgent: user_agent,
@@ -245,7 +256,6 @@ export class AuthController {
           fingerprint: headers['fingerprint'] || '',
           country: headers['cf-ipcountry'] || '',
           city: headers['cf-ipcity'] || '',
-          twoFaCodes: body.twoFaCodes,
         },
       },
       traceId,
@@ -262,6 +272,172 @@ export class AuthController {
     return {
       message: 'User successfully authenticated',
       tokens: userData['tokens'],
+    };
+  }
+
+  /**
+   * Refresh access token using refresh token
+   *
+   * @param body - Refresh token data
+   * @param traceId
+   * @returns New access token
+   */
+  @ApiOperation({
+    summary: 'Refresh access token',
+    description: `
+      Refreshes the access token using a valid refresh token.
+      - Validates refresh token
+      - Returns new access token
+      - Maintains session continuity
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Token successfully refreshed',
+    schema: {
+      properties: {
+        message: { type: 'string', example: 'Token successfully refreshed' },
+        tokens: {
+          type: 'object',
+          properties: {
+            accessToken: { type: 'string' },
+            refreshToken: { type: 'string' },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Invalid refresh token',
+  })
+  @Post('tokens/refresh')
+  async refreshToken(
+    @Body() body: RefreshTokenDtoRequest,
+    @CorrelationIdFromRequest() traceId: string,
+  ): Promise<IAuthResponse> {
+    const result = await this.authClient.refreshToken(
+      {
+        token: body.refreshToken,
+      },
+      traceId,
+    );
+
+    if (!result.status) {
+      throw new AuthenticationFailedException();
+    }
+
+    return {
+      message: 'Token successfully refreshed',
+      tokens: result.tokens,
+    };
+  }
+
+  /**
+   * Logout user and terminate session
+   *
+   * @param traceId - Request tracking identifier
+   * @param userId - User ID from request
+   * @param sessionId
+   * @returns Logout result
+   */
+  @ApiOperation({
+    summary: 'Logout user',
+    description: `
+      Logs out the user and terminates the current session.
+      - Invalidates current session
+      - Clears user authentication state
+      - Requires valid authentication
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully logged out',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiBearerAuth()
+  @Authorization(true)
+  @Post('logout')
+  async logout(
+    @CorrelationIdFromRequest() traceId: string,
+    @UserIdFromRequest() userId: string,
+    @SessionIdFromRequest() sessionId: string,
+  ): Promise<{ message: string }> {
+    const result = await this.authClient.terminateSessionById(traceId, {
+      userId,
+      sessionId,
+    });
+
+    if (!result.status) {
+      throw new AuthenticationFailedException();
+    }
+
+    return {
+      message: 'Successfully logged out',
+    };
+  }
+
+  /**
+   * Request confirmation codes for 2FA
+   *
+   * @param traceId - Request tracking identifier
+   * @param userId - User ID from request
+   * @param body - Confirmation codes request data
+   * @returns Confirmation codes result
+   */
+  @ApiOperation({
+    summary: 'Request confirmation codes',
+    description: `
+      Requests confirmation codes for two-factor authentication.
+      - Validates user permissions
+      - Sends confirmation codes via configured methods
+      - Protected against brute force attacks
+      - Required for operations with 2FA enabled
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Confirmation codes sent successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid request or user not found',
+  })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many attempts. Try again later',
+  })
+  @UseGuards(BaseCodeBruteForceGuard)
+  @Post('confirmation-codes/request')
+  async requestConfirmationCodes(
+    @CorrelationIdFromRequest() traceId: string,
+    @Body() body: ConfirmationCodesRequest,
+  ): Promise<{ message: string; data: any }> {
+    const userData = await this.userClient.getUserByLogin(
+      {
+        login: body.login,
+      },
+      traceId,
+    );
+
+    const result = await this.userClient.createConfirmationCode(
+      {
+        userId: userData.user.id,
+        permissionId: body.permissionId,
+      },
+      traceId,
+    );
+
+    if (!result.status) {
+      throw new AuthenticationFailedException();
+    }
+
+    return {
+      message: 'Confirmation codes sent successfully',
+      data: result.confirmationMethods,
     };
   }
 }

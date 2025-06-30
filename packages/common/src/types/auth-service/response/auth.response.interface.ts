@@ -21,6 +21,7 @@ export interface ITokenVerifyResponse extends IResponse {
     role: string;
     permissions?: string[];
   } | null;
+  sessionId?: string;
   details?: Record<string, any>;
 }
 

@@ -2,8 +2,13 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   API_KEY_ERROR_CODES,
+  ApiKeyValidateDto,
   AuthClientPatterns,
   CreateApiKeyDto,
+  IApiKeyCreateResponse,
+  IApiKeyListResponse,
+  IApiKeyRemoveResponse,
+  IApiKeyUpdateResponse,
   UpdateApiKeyDto,
 } from '@crypton-nestjs-kit/common';
 
@@ -14,15 +19,16 @@ export class ApiKeyController {
   constructor(private readonly apiKeyService: ApiKeyService) {}
 
   @MessagePattern(AuthClientPatterns.API_KEY_CREATE)
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  async create(@Payload() dto: CreateApiKeyDto) {
+  async create(
+    @Payload() dto: CreateApiKeyDto,
+  ): Promise<IApiKeyCreateResponse> {
     try {
       const result = await this.apiKeyService.createApiKey(dto);
 
       return {
         status: true,
         message: 'API key created',
-        data: result,
+        result,
       };
     } catch (error) {
       return {
@@ -35,13 +41,13 @@ export class ApiKeyController {
   }
 
   @MessagePattern(AuthClientPatterns.API_KEY_LIST)
-  async list() {
+  async list(): Promise<IApiKeyListResponse> {
     const result = await this.apiKeyService.listApiKeys();
 
     return {
       status: true,
       message: 'API keys list',
-      data: result,
+      result,
     };
   }
 
@@ -65,15 +71,17 @@ export class ApiKeyController {
     }
   }
 
-  @MessagePattern('api-key.update')
-  async update(@Payload() data: { id: string; dto: UpdateApiKeyDto }) {
+  @MessagePattern(AuthClientPatterns.API_KEY_UPDATE)
+  async update(
+    @Payload() data: { id: string; dto: UpdateApiKeyDto },
+  ): Promise<IApiKeyUpdateResponse> {
     try {
       const result = await this.apiKeyService.updateApiKey(data.id, data.dto);
 
       return {
         status: true,
         message: 'API key updated',
-        data: result,
+        result,
       };
     } catch (error) {
       return {
@@ -85,8 +93,8 @@ export class ApiKeyController {
     }
   }
 
-  @MessagePattern('api-key.delete')
-  async remove(@Payload() id: string) {
+  @MessagePattern(AuthClientPatterns.API_KEY_DELETE)
+  async remove(@Payload() id: string): Promise<IApiKeyRemoveResponse> {
     try {
       const result = await this.apiKeyService.deleteApiKey(id);
 
@@ -99,6 +107,33 @@ export class ApiKeyController {
         status: false,
         message: error.message,
         errorCode: API_KEY_ERROR_CODES.NOT_FOUND,
+        error: error.message,
+      };
+    }
+  }
+
+  @MessagePattern(AuthClientPatterns.API_KEY_VALIDATE)
+  async validate(@Payload() data: ApiKeyValidateDto): Promise<{
+    status: boolean;
+    message: string;
+    errorCode?: string;
+    error?: string;
+  }> {
+    try {
+      const isValid = await this.apiKeyService.validateApiKey(
+        data.rawKey,
+        data.ip,
+      );
+
+      return {
+        status: isValid,
+        message: isValid ? 'API key is valid' : 'API key is invalid',
+      };
+    } catch (error) {
+      return {
+        status: false,
+        message: error.message,
+        errorCode: API_KEY_ERROR_CODES.FORBIDDEN,
         error: error.message,
       };
     }

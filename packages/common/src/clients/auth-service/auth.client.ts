@@ -3,9 +3,14 @@ import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 import {
+  ApiKeyValidateDto,
   CreateApiKeyDto,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
+  IApiKeyCreateResponse,
+  IApiKeyListResponse,
+  IApiKeyRemoveResponse,
+  INativeLogin,
   ISessionCreateRequest,
   ISessionCreateResponse,
   ISessionsHistoryRequest,
@@ -22,6 +27,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  UpdateApiKeyDto,
 } from '../../types';
 import { createRmqMessage } from '../../utils';
 
@@ -52,9 +58,9 @@ export class AuthClient {
   ) {}
 
   async authenticateNative(
-    request: any,
+    request: INativeLogin,
     traceId: string,
-  ): Promise<ISessionCreateResponse> {
+  ): Promise<any> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.AUTHENTICATE_NATIVE,
@@ -141,13 +147,18 @@ export class AuthClient {
    * Refreshes the provided refresh token and returns a new access token.
    *
    * @param {ITokenRefreshRequest} request
+   * @param traceId
    * @return {Promise<ITokenRefreshResponse>} An object with the following properties:
    */
   async refreshToken(
     request: ITokenRefreshRequest,
+    traceId: string,
   ): Promise<ITokenRefreshResponse> {
     return await firstValueFrom(
-      this.authClientProxy.send(AuthClientPatterns.REFRESH_TOKEN, request),
+      this.authClientProxy.send(
+        AuthClientPatterns.REFRESH_TOKEN,
+        await createRmqMessage(traceId, request),
+      ),
     );
   }
 
@@ -243,7 +254,7 @@ export class AuthClient {
   async apiKeyCreate(
     request: CreateApiKeyDto,
     traceId: string,
-  ): Promise<ISessionCreateResponse> {
+  ): Promise<IApiKeyCreateResponse> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.API_KEY_CREATE,
@@ -252,11 +263,47 @@ export class AuthClient {
     );
   }
 
-  async apiKeyList(traceId: string): Promise<ISessionCreateResponse> {
+  async apiKeyUpdate(
+    request: { id: string; dto: UpdateApiKeyDto },
+    traceId: string,
+  ): Promise<IApiKeyCreateResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_UPDATE,
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
+
+  async apiKeyRemove(
+    id: string,
+    traceId: string,
+  ): Promise<IApiKeyRemoveResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_DELETE,
+        await createRmqMessage(traceId, id),
+      ),
+    );
+  }
+
+  async apiKeyList(traceId: string): Promise<IApiKeyListResponse> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.API_KEY_LIST,
         await createRmqMessage(traceId),
+      ),
+    );
+  }
+
+  async apiKeyValidate(
+    request: ApiKeyValidateDto,
+    traceId: string,
+  ): Promise<{ status: boolean; message: string }> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.API_KEY_VALIDATE,
+        await createRmqMessage(traceId, request),
       ),
     );
   }
@@ -277,6 +324,8 @@ export enum AuthClientPatterns {
   DELETE_SESSIONS_BY_IDS = 'delete_sessions_by_ids',
   GET_SESSIONS_COUNT = 'get_sessions_count',
   API_KEY_CREATE = 'api_key_create',
+  API_KEY_UPDATE = 'api_key_update',
   API_KEY_DELETE = 'api_key_delete',
   API_KEY_LIST = 'api_key_list',
+  API_KEY_VALIDATE = 'api-key.validate',
 }

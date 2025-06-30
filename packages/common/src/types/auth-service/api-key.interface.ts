@@ -1,3 +1,5 @@
+import { IResponse } from '../response.interface';
+
 import { ApiKeyType } from './dto/api-key.dto';
 
 export interface IApiKey {
@@ -11,6 +13,18 @@ export interface IApiKey {
   createdAt: string;
 }
 
+export interface IApiKeyCreateResponse extends IResponse {
+  result?: IApiKey;
+}
+
+export type IApiKeyUpdateResponse = IApiKeyCreateResponse;
+
+export type IApiKeyRemoveResponse = IResponse;
+
+export interface IApiKeyListResponse extends IResponse {
+  result: IApiKey[];
+}
+
 export interface IDecryptedApiKey {
   id: string;
   rawKey: string;
@@ -18,6 +32,6 @@ export interface IDecryptedApiKey {
   allowedIps: string[];
   permissions: string[];
   isActive: boolean;
+  expiredAt: string;
   createdAt: string;
-  updatedAt: string;
 }

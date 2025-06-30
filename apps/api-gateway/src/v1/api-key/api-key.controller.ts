@@ -8,30 +8,40 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
-import { Inject } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
+  ApiHeader,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiProperty,
-  ApiPropertyOptional,
   ApiResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { AuthClient } from '@crypton-nestjs-kit/common';
+import {
+  AuthClient,
+  CustomError,
+  ExtendedHttpStatus,
+  IApiKeyCreateResponse,
+  IApiKeyListResponse,
+  IApiKeyRemoveResponse,
+  IApiKeyUpdateResponse,
+  UserClient,
+} from '@crypton-nestjs-kit/common';
 
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
+import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
+import { ApiKeyGuard } from '../../guards/api-key.guard';
 
 import {
   ApiKeyResponseDto,
-  ApiKeyType,
   CreateApiKeyDto,
   UpdateApiKeyDto,
 } from './api-key.dto';
@@ -41,11 +51,51 @@ import {
 @ApiExtraModels(ApiKeyResponseDto)
 @Controller('v1/api-keys')
 export class ApiKeyController {
-  constructor(private readonly authClient: AuthClient) {}
+  constructor(
+    private readonly authClient: AuthClient,
+    private readonly userClient: UserClient,
+  ) {}
+
+  @Get('allowedPermissions')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Getting all of allowed permissions' })
+  @ApiOkResponse({
+    description: 'All allowed permissions list',
+  })
+  @Authorization(true)
+  async getAllowedPermissions(
+    @UserRoleFromRequest() roleId: string,
+    @CorrelationIdFromRequest() traceId: string,
+  ): Promise<any> {
+    const data = await this.userClient.getPermissionsByRole(roleId, traceId);
+
+    if (!data.status) {
+      throw new CustomError(
+        ExtendedHttpStatus.FORBIDDEN,
+        'Permissions not found',
+      );
+    }
+
+    return data;
+  }
+
+  @ApiOperation({ summary: 'Api key test endpoint' })
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API Key. Необходим для доступа к этому эндпоинту',
+    required: true,
+  })
+  @UseGuards(ApiKeyGuard)
+  @Get('test')
+  async apiKeyTest(): Promise<boolean> {
+    return true;
+  }
 
   /**
    * Create a new API key
    * @param dto - API key creation data
+   * @param traceId
+   * @param userId
    * @returns Created API key
    */
   @Post()
@@ -60,14 +110,16 @@ export class ApiKeyController {
     schema: { $ref: getSchemaPath(ApiKeyResponseDto) },
   })
   @ApiResponse({ status: 400, description: 'Invalid input or duplicate key' })
+  @ApiBearerAuth()
   @Authorization(true)
   async create(
     @Body() dto: CreateApiKeyDto,
     @CorrelationIdFromRequest() traceId: string,
     @UserIdFromRequest() userId: string,
-  ) {
+  ): Promise<IApiKeyCreateResponse> {
     const result = await this.authClient.apiKeyCreate(
       {
+        userId,
         type: dto.type,
         permissions: dto.permissions,
         allowedIps: dto.allowedIps,
@@ -100,15 +152,18 @@ export class ApiKeyController {
       items: { $ref: getSchemaPath(ApiKeyResponseDto) },
     },
   })
-  async list() {
-    // const result = await this.authServiceClient
-    //   .send('api-key.list', {})
-    //   .toPromise();
-    // if (!result.status) {
-    //   throw new HttpException(result, HttpStatus.BAD_REQUEST);
-    // }
-    //
-    // return result.data;
+  @ApiBearerAuth()
+  @Authorization(true)
+  async list(
+    @CorrelationIdFromRequest() traceId: string,
+  ): Promise<IApiKeyListResponse> {
+    const result = await this.authClient.apiKeyList(traceId);
+
+    if (!result.status) {
+      throw new HttpException(result, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
   }
 
   /**
@@ -128,6 +183,8 @@ export class ApiKeyController {
     schema: { $ref: getSchemaPath(ApiKeyResponseDto) },
   })
   @ApiResponse({ status: 404, description: 'API key not found' })
+  @ApiBearerAuth()
+  @Authorization(true)
   async getById(@Param('id') id: string) {
     // const result = await this.authServiceClient
     //   .send('api-key.get', id)
@@ -144,6 +201,7 @@ export class ApiKeyController {
    * Update API key
    * @param id - API key ID
    * @param dto - Update data
+   * @param traceId
    * @returns Updated API key
    */
   @Patch(':id')
@@ -159,21 +217,36 @@ export class ApiKeyController {
     schema: { $ref: getSchemaPath(ApiKeyResponseDto) },
   })
   @ApiResponse({ status: 404, description: 'API key not found' })
-  async update(@Param('id') id: string, @Body() dto: UpdateApiKeyDto) {
-    // const result = await this.authServiceClient
-    //   .send('api-key.update', { id, dto })
-    //   .toPromise();
-    //
-    // if (!result.status) {
-    //   throw new HttpException(result, HttpStatus.NOT_FOUND);
-    // }
-    //
-    // return result.data;
+  @ApiBearerAuth()
+  @Authorization(true)
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateApiKeyDto,
+    @CorrelationIdFromRequest() traceId: string,
+  ): Promise<IApiKeyUpdateResponse> {
+    const result = await this.authClient.apiKeyUpdate(
+      {
+        id,
+        dto: {
+          type: dto.type,
+          permissions: dto.permissions,
+          allowedIps: dto.allowedIps,
+        },
+      },
+      traceId,
+    );
+
+    if (!result.status) {
+      throw new HttpException(result, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
   }
 
   /**
    * Delete API key
    * @param id - API key ID
+   * @param traceId
    * @returns Deletion result
    */
   @Delete(':id')
@@ -190,15 +263,18 @@ export class ApiKeyController {
     },
   })
   @ApiResponse({ status: 404, description: 'API key not found' })
-  async remove(@Param('id') id: string) {
-    // const result = await this.authServiceClient
-    //   .send('api-key.delete', id)
-    //   .toPromise();
-    //
-    // if (!result.status) {
-    //   throw new HttpException(result, HttpStatus.NOT_FOUND);
-    // }
-    //
-    // return { message: result.message };
+  @ApiBearerAuth()
+  @Authorization(true)
+  async remove(
+    @Param('id') id: string,
+    @CorrelationIdFromRequest() traceId: string,
+  ): Promise<IApiKeyRemoveResponse> {
+    const result = await this.authClient.apiKeyRemove(id, traceId);
+
+    if (!result.status) {
+      throw new HttpException(result, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
   }
 }

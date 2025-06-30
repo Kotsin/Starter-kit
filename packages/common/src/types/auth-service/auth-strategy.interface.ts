@@ -1,3 +1,5 @@
+import { ITwoFaCodes } from '../../clients';
+
 export interface IAuthStrategy {
   authenticate?: (credentials: any, traceId?: string) => Promise<IAuthResult>;
   validateToken(token: string): Promise<IAuthResult>;
@@ -17,6 +19,7 @@ export interface INativeAuthCredentials {
   login: string;
   loginType: string;
   password: string;
+  twoFaCodes?: ITwoFaCodes;
 }
 
 export interface IOAuthAuthCredentials {

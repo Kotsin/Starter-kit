@@ -169,13 +169,11 @@ export class UserService implements OnModuleInit {
         };
       });
 
-      const a = await this.twoFactorPermissionsRepo.upsert(permissions, [
+      await this.twoFactorPermissionsRepo.upsert(permissions, [
         'user',
         'permission',
         'confirmationMethod',
       ]);
-
-      console.log(a);
 
       return {
         status: true,
@@ -595,17 +593,49 @@ export class UserService implements OnModuleInit {
     }
   }
 
-  private async resetConfirmationCode(
-    login: string,
-    userId: string,
+  async resetConfirmationCode(
+    login?: string,
+    userId?: string,
+    id?: string,
   ): Promise<any> {
-    const { affected } = await this.userLoginMethods.update(
-      { login, userId: userId },
-      { code: null, codeLifetime: null },
-    );
+    try {
+      const where: { userId?: string; login?: string; id?: string } = {};
 
-    if (affected == 0) {
-      throw new Error('Code reset failed');
+      if (!id) {
+        if (userId) where.userId = userId;
+
+        if (login) where.login = login;
+      }
+
+      where.id = id;
+
+      if (!where) {
+        throw new Error('Code reset failed');
+      }
+
+      const loginMethod = await this.userLoginMethods.findOne({ where });
+
+      if (!loginMethod) {
+        throw new Error('Code reset failed');
+      }
+
+      const { affected } = await this.userLoginMethods.update(
+        { id: loginMethod.id },
+        {
+          code: null,
+          code_lifetime: null,
+        },
+      );
+
+      if (affected == 0) {
+        throw new Error('Code reset failed');
+      }
+
+      await this.cacheManager.del(`getUserById:${loginMethod.user_id}`);
+
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -647,7 +677,9 @@ export class UserService implements OnModuleInit {
   ): Promise<IGetUserByIdResponse> {
     try {
       const CACHE_KEY = `getUserById:${data.userId}`;
-      const cachedData = await this.cacheManager.get(CACHE_KEY);
+      let cachedData = await this.cacheManager.get(CACHE_KEY);
+
+      cachedData = undefined;
 
       if (cachedData) {
         return {

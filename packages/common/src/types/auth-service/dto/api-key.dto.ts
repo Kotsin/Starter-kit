@@ -13,6 +13,10 @@ export enum ApiKeyType {
 }
 
 export class CreateApiKeyDto {
+  @IsString()
+  @IsOptional()
+  userId?: string;
+
   @IsEnum(ApiKeyType)
   type: ApiKeyType | undefined;
 
@@ -26,6 +30,10 @@ export class CreateApiKeyDto {
 }
 
 export class UpdateApiKeyDto {
+  @IsString()
+  @IsOptional()
+  type?: string;
+
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
@@ -63,4 +71,12 @@ export class ApiKeyResponseDto {
 
   @IsString()
   updatedAt!: string;
+}
+
+export class ApiKeyValidateDto {
+  @IsString()
+  rawKey!: string;
+
+  @IsString()
+  ip!: string;
 }

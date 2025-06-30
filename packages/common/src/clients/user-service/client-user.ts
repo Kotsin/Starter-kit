@@ -143,6 +143,18 @@ export class UserClient {
     );
   }
 
+  async resetConfirmationCode(
+    request: { login?: string; userId?: string; id?: string },
+    traceId: string,
+  ): Promise<boolean> {
+    return await firstValueFrom(
+      this.userClientProxy.send(
+        UserClientPatterns.RESET_CONFIRMATION_CODE,
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
+
   async nativeLogin(
     request: INativeLoginRequest,
     traceId: string,
@@ -169,6 +181,7 @@ export enum UserClientPatterns {
   // --- User ---
   GET_ME = 'get_me',
   REGISTER_PERMISSIONS = 'register_permissions',
+  RESET_CONFIRMATION_CODE = 'reset_confirmation_code',
   UPDATE_2FA_PERMISSIONS = 'update_2fa_permissions',
   GET_PERMISSIONS_LIST = 'get_permissions_list',
   GET_CONFIRMATION_METHODS = 'get_confirmation_methods',

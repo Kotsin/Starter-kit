@@ -3,10 +3,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  ApiKeyType,
   AUTH_ERROR_CODES,
   AuthCredentials,
   AuthenticationError,
   AuthErrorMessages,
+  decrypt,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
   ICachedSessionData,
@@ -457,10 +459,17 @@ export class AuthService {
         session.role,
         '0000',
       );
+      const permissions = permissionsResult.permissions.map((k) => ({
+        id: k.id,
+        route: k.route,
+        method: k.method,
+        alias: k.alias,
+      }));
 
       const serviceJwt = await this.serviceJwtUseCase.generateServiceJwt({
         userId: session.userId,
         serviceId: data.serviceId,
+        authType: 'jwtToken',
       });
 
       return {
@@ -469,8 +478,9 @@ export class AuthService {
         user: {
           userId: session.userId,
           role: session.role,
-          permissions: permissionsResult.permissions,
+          permissions,
         },
+        sessionId: tokenData.sessionId,
         serviceJwt,
       };
     } catch (error) {
