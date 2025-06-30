@@ -6,7 +6,7 @@ import {
 
 export type ProcessOperations = Pick<
   BatchOperation,
-  'id' | 'operation_type' | 'sql' | 'created_at'
+  'id' | 'operationType' | 'sql' | 'createdAt'
 >[];
 
 export interface BatchOperationResultData {

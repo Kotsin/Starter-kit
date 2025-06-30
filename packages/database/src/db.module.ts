@@ -52,6 +52,7 @@ export class DBModule {
     };
 
     if (dbData.replication) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       db['replication'] = {
         master: db,

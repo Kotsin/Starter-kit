@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthClient } from '@crypton-nestjs-kit/common';
-import { ConfigService } from '@crypton-nestjs-kit/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

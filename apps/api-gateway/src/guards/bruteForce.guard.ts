@@ -21,6 +21,7 @@ export class BruteForceGuard implements CanActivate {
 
   private getBlockTime(attempts: number): number {
     if (attempts <= this.ATTEMPTS_LIMIT) return 0;
+
     const penalties = [10, 30, 60, 300, 900, 7200];
 
     return penalties[
@@ -60,6 +61,7 @@ export class BruteForceGuard implements CanActivate {
         const message = `Too many login attempts. Try again after ${
           blockTime - (now - lastAttemptTime)
         } seconds.`;
+
         throw new CustomError(ExtendedHttpStatus.TOO_MANY_REQUESTS, message, {
           nextTryTime: blockTime - (now - lastAttemptTime),
         });
@@ -79,6 +81,7 @@ export class BruteForceGuard implements CanActivate {
 
   async resetAttempts(ip: string, login: string): Promise<void> {
     const key = `bruteforce:${ip}:${login}`;
+
     await this.cacheManager.del(key);
     await this.cacheManager.del(`${key}:time`);
   }

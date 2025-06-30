@@ -18,13 +18,14 @@ export class SessionEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, name: 'user_id' })
   public userId!: string;
 
   @Column({
     type: 'varchar',
     length: 255,
     nullable: true,
+    name: 'user_agent',
   })
   public userAgent!: string;
 
@@ -39,6 +40,7 @@ export class SessionEntity extends BaseEntity {
     type: 'varchar',
     length: 255,
     nullable: true,
+    name: 'user_ip',
   })
   public userIp!: string;
 
@@ -73,12 +75,14 @@ export class SessionEntity extends BaseEntity {
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
   })
   public createdAt!: Date;
 
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
   })
   public updatedAt!: Date;
 }

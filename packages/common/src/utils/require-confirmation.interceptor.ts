@@ -3,7 +3,6 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable, of } from 'rxjs';
@@ -72,8 +71,11 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
       for (const entry of confirmationMethods) {
         const method = entry?.method;
+
         if (!method) continue;
+
         const expectedCode = confirmationCodes?.[`${method}Code`];
+
         if (!expectedCode) {
           return of({
             status: false,
@@ -82,15 +84,13 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
           });
         }
 
-        const codeLifetime = new Date(entry.code_lifetime);
+        const codeLifetime = new Date(entry.codeLifetime);
         const currentTime = new Date();
 
         const normalizedEntryCode = String(entry.code).trim();
         const normalizedExpectedCode = String(expectedCode).trim();
 
-        if (
-          normalizedEntryCode !== normalizedExpectedCode
-        ) {
+        if (normalizedEntryCode !== normalizedExpectedCode) {
           return of({
             status: false,
             error: 'INVALID_CONFIRMATION_CODE',
@@ -98,9 +98,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
           });
         }
 
-        if (
-          currentTime.getTime() > codeLifetime.getTime()
-        ) {
+        if (currentTime.getTime() > codeLifetime.getTime()) {
           return of({
             status: false,
             error: 'EXPIRED_CONFIRMATION_CODE',

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BatchOperationStatus } from '@crypton-nestjs-kit/common';
+import {
+  BatchOperationStatus,
+  OperationEntity,
+} from '@crypton-nestjs-kit/common';
 import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
 import { In, Repository } from 'typeorm';
 
-import { OperationEntity } from '../entities/operation.entity';
 import {
   ProcessOperations,
   UpdateBatchOperationStatus,
@@ -27,9 +29,9 @@ export class WorkerService {
     try {
       // TODO: index: status, created_at
       const result = (await this.operationRepository.find({
-        select: ['id', 'operation_type', 'sql', 'created_at'],
+        select: ['id', 'operationType', 'sql', 'createdAt'],
         where: { status: BatchOperationStatus.UNPROCESSED },
-        order: { created_at: 'ASC' },
+        order: { createdAt: 'ASC' },
         take: data.limit,
       })) as unknown as ProcessOperations;
 

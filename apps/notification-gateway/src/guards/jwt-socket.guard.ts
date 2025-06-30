@@ -8,6 +8,7 @@ import { UserClient } from '@crypton-nestjs-kit/common';
 import { AuthClient } from '@crypton-nestjs-kit/common';
 import { ConfigService } from '@crypton-nestjs-kit/config';
 import { Socket } from 'socket.io';
+import { uuid } from 'uuidv4';
 
 @Injectable()
 export class JwtSocketGuard implements CanActivate {
@@ -38,19 +39,25 @@ export class JwtSocketGuard implements CanActivate {
         token,
         userAgent: '',
         userIp: '',
+        fingerprint: '',
       },
       '123123',
     );
 
     if (!userTokenInfo.user.userId) throw new UnauthorizedException();
 
-    const user_id = userTokenInfo.user.userId;
+    const userId = userTokenInfo.user.userId;
 
-    const user = await this.userClient.getUserById({ user_id });
+    const user = await this.userClient.getUserById(
+      {
+        userId: userId,
+      },
+      uuid(),
+    );
 
     if (!user) throw new UnauthorizedException();
 
-    socket.user_id = user_id;
+    socket.userId = userId;
 
     return true;
   }

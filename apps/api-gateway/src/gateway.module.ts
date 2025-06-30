@@ -10,7 +10,6 @@ import {
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
 import {
-  AuthClient,
   ClientAuthModule,
   ClientUserModule,
   GlobalExceptionFilter,
@@ -117,7 +116,7 @@ export class GatewayModule implements OnModuleInit {
     private readonly userClient: UserClient,
   ) {}
 
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     try {
       const { permissions } = await this.userClient.getPermissionList(
         '5555555',

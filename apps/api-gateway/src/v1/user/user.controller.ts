@@ -1,5 +1,13 @@
 import { Cache } from '@nestjs/cache-manager';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiHeader,
@@ -36,6 +44,7 @@ import {
 @ApiTags('User')
 @Controller('v1/users')
 @UseGuards(RolesGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   private readonly redisClient: RedisClientType;
   constructor(
@@ -214,9 +223,10 @@ export class UserController {
       throw new CustomError(ExtendedHttpStatus.NOT_FOUND, 'User not found');
     }
 
-    return {
+    return new UsersMeResponseDto({
+      success: true,
       message: 'User found',
-      data: userData.user,
-    };
+      data: { user: userData.user },
+    });
   }
 }

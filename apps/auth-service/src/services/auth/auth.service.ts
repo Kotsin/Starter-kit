@@ -31,12 +31,13 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  SessionEntity,
+  SessionStatus,
   UserClient,
 } from '@crypton-nestjs-kit/common';
 import { ConfigService } from '@crypton-nestjs-kit/config';
 import { In, LessThan, Repository } from 'typeorm';
 
-import { SessionEntity, SessionStatus } from '../../entity/session.entity';
 import { ServiceJwtUseCase } from '../../use-cases/service-jwt.use-case';
 
 import { AuthStrategyFactory } from './auth-strategy-factory.service';

@@ -3,24 +3,29 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { PermissionEntity } from './permissions.entity';
+import { UserOperationTypeEnum } from '../../enums';
+import { BatchOperationStatus } from '../../types';
 
-@Entity('Roles')
-export class RoleEntity extends BaseEntity {
+@Entity('BatchOperation')
+export class OperationEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @Column({ type: 'varchar', unique: true })
-  public name!: string;
+  @Column({ type: 'enum', enum: UserOperationTypeEnum, name: 'operation_type' })
+  public operationType!: UserOperationTypeEnum;
+
+  @Column({ type: 'varchar' })
+  public sql!: string;
+
+  @Column({ type: 'enum', enum: BatchOperationStatus })
+  public status!: BatchOperationStatus;
 
   @Column({ type: 'varchar', nullable: true })
-  public description!: string;
+  public error!: string | null;
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -35,8 +40,4 @@ export class RoleEntity extends BaseEntity {
     name: 'updated_at',
   })
   public updatedAt!: Date;
-
-  @ManyToMany(() => PermissionEntity, { cascade: true })
-  @JoinTable({ name: 'RolePermissions' })
-  public permissions!: PermissionEntity[];
 }

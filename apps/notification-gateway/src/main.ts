@@ -8,7 +8,7 @@ import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
 
 declare module 'socket.io' {
   export interface Socket {
-    user_id?: string;
+    userId?: string;
   }
 }
 

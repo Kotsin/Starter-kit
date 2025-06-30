@@ -32,8 +32,8 @@ export class UserLoginMethodsEntity extends BaseEntity {
   @JoinColumn({ name: 'user_id' })
   public user!: UserEntity;
 
-  @Column({ type: 'varchar', nullable: false })
-  public user_id!: string;
+  @Column({ type: 'varchar', nullable: false, name: 'user_id' })
+  public userId!: string;
 
   @Column({ type: 'enum', enum: LoginMethod })
   public method!: LoginMethod;
@@ -44,18 +44,26 @@ export class UserLoginMethodsEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   public token!: string;
 
-  @Column({ type: 'boolean', default: true })
-  public is_primary!: boolean;
+  @Column({ type: 'boolean', default: true, name: 'is_primary' })
+  public isPrimary!: boolean;
 
   @Column({ type: 'numeric', nullable: true })
   public code!: number;
 
-  @Column({ type: 'timestamptz', nullable: true })
-  public code_lifetime!: Date;
+  @Column({ type: 'timestamptz', nullable: true, name: 'code_lifetime' })
+  public codeLifetime!: Date;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  public created_at!: Date;
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
+  public createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  public updated_at!: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
+  })
+  public updatedAt!: Date;
 }

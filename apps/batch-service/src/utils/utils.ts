@@ -7,6 +7,7 @@ export function measurePerformance(target, propertyKey, descriptor) {
     const end = process.hrtime.bigint();
 
     const executionTime = Number(end - start) / 1e6;
+
     console.log(
       `Method "${propertyKey}" executed in ${executionTime.toFixed(2)} ms`,
     );

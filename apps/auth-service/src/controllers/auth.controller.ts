@@ -47,7 +47,7 @@ export class AuthController {
       city?: string;
     };
     traceId?: string;
-  }) {
+  }): Promise<void> {
     try {
       return await this.authService.authenticateAndCreateSession(
         data.credentials,

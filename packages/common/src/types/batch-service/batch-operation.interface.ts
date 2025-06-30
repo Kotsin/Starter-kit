@@ -7,10 +7,10 @@ export enum BatchOperationStatus {
 
 export interface BatchOperation {
   readonly id: string;
-  readonly operation_type: any;
+  readonly operationType: any;
   readonly sql: string;
   readonly status: BatchOperationStatus;
   readonly error: string | null;
-  readonly created_at: string;
-  readonly updated_at: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
 }

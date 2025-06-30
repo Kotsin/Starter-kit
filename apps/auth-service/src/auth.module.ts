@@ -4,10 +4,11 @@ import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
+  ApiKeyEntity,
   ClientUserModule,
   loadUserClientOptions,
   RequireConfirmationInterceptor,
-  ServiceJwtInterceptor,
+  SessionEntity,
   UserClient,
 } from '@crypton-nestjs-kit/common';
 import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
@@ -21,8 +22,6 @@ import { RedisClientOptions } from 'redis';
 
 import { ApiKeyController } from './controllers/api-key.controller';
 import { AuthController } from './controllers/auth.controller';
-import { ApiKeyEntity } from './entity/api-key.entity';
-import { SessionEntity } from './entity/session.entity';
 import { ApiKeyService } from './services/api-key/api-key.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthStrategyFactory } from './services/auth/auth-strategy-factory.service';

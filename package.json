@@ -12,7 +12,8 @@
     "prettier:write": "../node_modules/.bin/prettier --write \"**/*.{js,json,ts,yml,yaml}\"",
     "docs:generate": "pnpm run docs:generate -r",
     "docs:serve": "pnpm run docs:serve -r",
-    "docs:watch": "pnpm run docs:watch -r"
+    "docs:watch": "pnpm run docs:watch -r",
+    "check-nx-rules": "node scripts/check-nx-rules.js"
   },
   "keywords": [],
   "license": "UNLICENSED",

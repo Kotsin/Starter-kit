@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 
 import { UserStatus, UserType } from '../../enums';
+
 import { TwoFactorPermissionsEntity } from './2fa-permissions.entity';
 import { UserLoginMethodsEntity } from './user-login-method.entity';
 import { UserRoleEntity } from './user-role.entity';
@@ -26,8 +27,9 @@ export class UserEntity extends BaseEntity {
     type: 'varchar',
     length: 255,
     default: null,
+    name: 'full_name',
   })
-  public full_name!: string;
+  public fullName!: string;
 
   @Index()
   @Column({
@@ -44,8 +46,13 @@ export class UserEntity extends BaseEntity {
   })
   public password!: string;
 
-  @Column({ type: 'numeric', unique: true, default: null })
-  public referral_code!: number;
+  @Column({
+    type: 'numeric',
+    unique: true,
+    default: null,
+    name: 'referral_code',
+  })
+  public referralCode!: number;
 
   @Column({
     type: 'enum',
@@ -62,26 +69,29 @@ export class UserEntity extends BaseEntity {
   })
   public type!: UserType;
 
-  @Column({ type: 'jsonb', nullable: false, default: {} })
-  public extra_data?: any;
+  @Column({ type: 'jsonb', nullable: false, default: {}, name: 'extra_data' })
+  public extraData?: any;
 
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
   })
-  public created_at!: Date;
+  public createdAt!: Date;
 
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
   })
-  public updated_at!: Date;
+  public updatedAt!: Date;
 
   @DeleteDateColumn({
     type: 'timestamptz',
     default: null,
+    name: 'deleted_at',
   })
-  public deleted_at!: Date;
+  public deletedAt!: Date;
 
   @OneToMany(() => UserLoginMethodsEntity, (loginMethod) => loginMethod.user, {
     cascade: true,

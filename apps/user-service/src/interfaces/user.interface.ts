@@ -6,10 +6,10 @@ export type IUser = Partial<UserEntity>;
 // --------------------------------------------------------------
 
 export interface IUserCreateRequest extends IRequest, UserEntity {
-  tg_id: number;
+  tgId: number;
   username: string;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface IUserCreateResponse extends IResponse {
@@ -33,7 +33,7 @@ export interface IUserGetByLoginResponse
 // GET BY ID
 // --------------------------------------------------------------
 export interface IUserGetByIdRequest extends IRequest {
-  user_id: string;
+  userId: string;
 }
 
 type UserWithReferralName = UserEntity & { referralUsername: string | null };
@@ -51,13 +51,4 @@ export interface INotifyInactiveUsersRequest extends IRequest {
     readonly en: string;
     readonly ru: string;
   };
-}
-
-export interface IUserUpdateMetadataRequest extends IRequest {
-  readonly user_id: string;
-  readonly last_login_at?: Date;
-  readonly is_notify?: boolean;
-  readonly is_bot_blocked?: boolean;
-  readonly lang?: string;
-  readonly extra_data?: any;
 }

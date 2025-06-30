@@ -34,7 +34,7 @@ import { uuid } from 'uuidv4';
 const randomstring = require('randomstring');
 
 const filterUser = (user: any) => {
-  const { id, username, status, type, referral_code, roles, loginMethods } =
+  const { id, username, status, type, referralCode, roles, loginMethods } =
     user;
 
   return {
@@ -42,11 +42,11 @@ const filterUser = (user: any) => {
     username,
     status,
     type,
-    referral_code,
+    referralCode,
     loginMethods: loginMethods.map((lm: any) => ({
       method: lm.method,
       login: lm.login,
-      is_primary: lm.is_primary,
+      isPrimary: lm.isPrimary,
     })),
   };
 };
@@ -226,9 +226,9 @@ export class UserService implements OnModuleInit {
   public async getUserConfirmationMethods(request: any): Promise<any> {
     try {
       const confirmationMethods = await this.userLoginMethods.find({
-        select: ['id', 'method', 'login', 'is_primary'],
+        select: ['id', 'method', 'login', 'isPrimary'],
         where: {
-          user_id: request.userId,
+          userId: request.userId,
         },
       });
 
@@ -414,9 +414,9 @@ export class UserService implements OnModuleInit {
         .select([
           'user.id AS id',
           'ulm.login AS login',
-          'ulm.method AS login_type',
+          'ulm.method AS loginType',
           'ulm.code AS code',
-          'ulm.code_lifetime AS code_lifetime',
+          'ulm.codeLifetime AS codeLifetime',
         ])
         .getRawOne();
 
@@ -428,7 +428,7 @@ export class UserService implements OnModuleInit {
         };
       }
 
-      if (+user.code !== +data.code || user.code_lifetime < new Date()) {
+      if (+user.code !== +data.code || user.codeLifetime < new Date()) {
         return {
           status: false,
           message: 'Invalid code or code expired',
@@ -473,7 +473,7 @@ export class UserService implements OnModuleInit {
         'user.password AS password',
         'userRole.role AS role',
         'ulm.login AS login',
-        'ulm.method AS login_type',
+        'ulm.method AS loginType',
       ])
       .getRawOne();
   }
@@ -549,17 +549,17 @@ export class UserService implements OnModuleInit {
     const username = `${USERNAME_PREFIX}${uniqueUsernameNumber}`;
 
     const loginMethod = this.userLoginMethods.create({
-      user_id: userId,
+      userId,
       method: LoginMethod[data.loginType.toUpperCase()],
       login: data.login,
       code: randomstring.generate({ length: 6, charset: 'numeric' }),
-      code_lifetime: new Date(Date.now() + 5 * 60 * 1000),
+      codeLifetime: new Date(Date.now() + 5 * 60 * 1000),
     });
 
     const newUser = this.userRepo.create({
       id: userId,
       username,
-      referral_code: referralCode,
+      referralCode: referralCode,
       password: await hashPassword(data.password),
       loginMethods: [loginMethod],
     });
@@ -578,14 +578,14 @@ export class UserService implements OnModuleInit {
       id: newUser.id,
       role: newUser.type,
       login: data.login,
-      createdAt: newUser.created_at,
+      createdAt: newUser.createdAt,
     };
   }
 
   private async activateUser(userId: string): Promise<any> {
     const { affected } = await this.userRepo.update(
       { id: userId },
-      { status: UserStatus.ACTIVE, updated_at: new Date() },
+      { status: UserStatus.ACTIVE, updatedAt: new Date() },
     );
 
     if (affected === 0) {
@@ -623,7 +623,7 @@ export class UserService implements OnModuleInit {
         { id: loginMethod.id },
         {
           code: null,
-          code_lifetime: null,
+          codeLifetime: null,
         },
       );
 
@@ -631,7 +631,7 @@ export class UserService implements OnModuleInit {
         throw new Error('Code reset failed');
       }
 
-      await this.cacheManager.del(`getUserById:${loginMethod.user_id}`);
+      await this.cacheManager.del(`getUserById:${loginMethod.userId}`);
 
       return true;
     } catch (e) {
@@ -644,10 +644,10 @@ export class UserService implements OnModuleInit {
     verificationMethod: string,
   ): Promise<any> {
     const { affected } = await this.userLoginMethods.update(
-      { user_id: userId, login: verificationMethod },
+      { userId: userId, login: verificationMethod },
       {
         code: randomstring.generate({ length: 6, charset: 'numeric' }),
-        code_lifetime: new Date(Date.now() + 5 * 60 * 1000),
+        codeLifetime: new Date(Date.now() + 5 * 60 * 1000),
       },
     );
 
@@ -661,7 +661,7 @@ export class UserService implements OnModuleInit {
       { id: verificationMethodId },
       {
         code: randomstring.generate({ length: 6, charset: 'numeric' }),
-        code_lifetime: new Date(Date.now() + 5 * 60 * 1000),
+        codeLifetime: new Date(Date.now() + 5 * 60 * 1000),
       },
     );
 
@@ -750,7 +750,7 @@ export class UserService implements OnModuleInit {
           'user.id AS id',
           'user.password AS password',
           'ulm.login AS login',
-          'ulm.method AS login_type',
+          'ulm.method AS loginType',
         ])
         .getRawOne();
 

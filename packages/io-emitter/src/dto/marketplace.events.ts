@@ -10,10 +10,10 @@ import { UserOperationStatusEnum } from '@crypton-nestjs-kit/common';
 
 class BaseMarketplaceWSEventDto {
   @ApiProperty({ description: 'User id', type: () => String })
-  readonly user_id!: string;
+  readonly userId!: string;
 
   @ApiProperty({ description: 'User operation id', type: () => String })
-  readonly user_operation_id!: string;
+  readonly userOperationId!: string;
 
   @ApiProperty({
     description: `Status '${UserOperationStatusEnum.COMPLETED}' or '${UserOperationStatusEnum.FAILED}'`,
@@ -36,10 +36,10 @@ export class MarketplaceCancelWSEventDto extends BaseMarketplaceWSEventDto {}
 
 export class MarketplaceBuyWSEventDto extends PickType(
   BaseMarketplaceWSEventDto,
-  ['user_operation_id', 'status'] as const,
+  ['userOperationId', 'status'] as const,
 ) {
   @ApiProperty({ description: 'Buyer user id', type: () => String })
-  readonly user_id!: string;
+  readonly userId!: string;
 
   @ApiPropertyOptional({ description: 'Amount', type: () => Number })
   readonly amount?: number;
@@ -50,10 +50,10 @@ export class MarketplaceBuyWSEventDto extends PickType(
 
 export class MarketplaceSellWSEventDto extends PickType(
   BaseMarketplaceWSEventDto,
-  ['user_operation_id', 'status'] as const,
+  ['userOperationId', 'status'] as const,
 ) {
   @ApiProperty({ description: 'Seller user id', type: () => String })
-  readonly user_id!: string;
+  readonly userId!: string;
 
   @ApiPropertyOptional({ description: 'User operation id', type: () => Number })
   readonly amount?: number;

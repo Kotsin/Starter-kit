@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   API_KEY_ERROR_CODES,
+  ApiKeyEntity,
   apiKeyErrorMessages,
   ApiKeyType,
   CreateApiKeyDto,
@@ -15,8 +16,6 @@ import {
 import * as crypto from 'crypto';
 import { Repository } from 'typeorm';
 import { MoreThan } from 'typeorm';
-
-import { ApiKeyEntity } from '../../entity/api-key.entity';
 
 const API_KEY_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
 const API_KEY_CACHE_SLICE_LENGTH = 24;

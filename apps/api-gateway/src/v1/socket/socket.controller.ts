@@ -8,6 +8,7 @@ import {
 import { CoordinatorClient, ServiceType } from '@crypton-nestjs-kit/common';
 
 import { Authorization } from '../../decorators/authorization.decorator';
+
 import { GetSocketConnectionResponseDto } from './dto/socket.dto';
 
 @Controller('v1/sockets')

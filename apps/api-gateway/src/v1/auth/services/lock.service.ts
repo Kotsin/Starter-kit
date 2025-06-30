@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { Cache } from '@nestjs/cache-manager';
+import { Injectable } from '@nestjs/common';
 import { RedisStore } from 'cache-manager-redis-yet';
+
 import { TooManyAttemptsException } from '../exceptions/auth.exceptions';
 
 @Injectable()
@@ -51,4 +52,4 @@ export class LockService {
       throw new TooManyAttemptsException();
     }
   }
-} 
+}

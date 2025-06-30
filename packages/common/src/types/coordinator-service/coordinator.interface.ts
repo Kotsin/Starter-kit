@@ -13,6 +13,6 @@ export interface Service {
   readonly type: ServiceType;
   readonly load: number;
   readonly status: ServiceStatus;
-  readonly last_updated: Date;
-  readonly created_at: Date;
+  readonly lastUpdated: Date;
+  readonly createdAt: Date;
 }

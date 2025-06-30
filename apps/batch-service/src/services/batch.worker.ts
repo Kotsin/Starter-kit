@@ -2,7 +2,6 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import {
   BatchOperationStatus,
-  MarketplaceClient,
   UserOperationTypeEnum,
 } from '@crypton-nestjs-kit/common';
 import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
@@ -14,6 +13,7 @@ import {
   ProcessOperations,
   UpdateBatchOperationStatus,
 } from '../interfaces/batch.interface';
+import { BATCH_CONNECTION_NAME } from './batch.constants';
 import { WorkerService } from './worker.service';
 
 interface DoOperations {
@@ -26,10 +26,9 @@ export class BatchWorker implements OnModuleInit {
   constructor(
     private readonly logger: CustomLoggerService,
     private readonly workerService: WorkerService,
-    @InjectDataSource()
+    @InjectDataSource(BATCH_CONNECTION_NAME)
     private readonly dataSource: DataSource,
     private readonly settingsService: SettingService,
-    private readonly marketplaceClient: MarketplaceClient,
   ) {
     this.logger.setContext(BatchWorker.name);
   }
@@ -112,10 +111,10 @@ export class BatchWorker implements OnModuleInit {
         updated.push({
           id: operation.id,
           status: BatchOperationStatus.SUCCESS,
-          created_at: operation.created_at,
+          created_at: operation.createdAt,
         });
 
-        batchOperationResult[operation.operation_type].success.push({
+        batchOperationResult[operation.operationType].success.push({
           user_operation_id: operation.id,
         });
       });
@@ -169,26 +168,26 @@ export class BatchWorker implements OnModuleInit {
         const { operation } = promises[index];
 
         if (result.status === 'rejected') {
-          batchOperationResult[operation.operation_type].failed.push({
+          batchOperationResult[operation.operationType].failed.push({
             user_operation_id: operation.id,
           });
 
           updated.push({
             id: operation.id,
             status: BatchOperationStatus.FAIL,
-            created_at: operation.created_at,
+            created_at: operation.createdAt,
             error: result.reason.message,
           });
         }
 
         if (result.status === 'fulfilled') {
-          batchOperationResult[operation.operation_type].success.push({
+          batchOperationResult[operation.operationType].success.push({
             user_operation_id: operation.id,
           });
 
           updated.push({
             id: operation.id,
-            created_at: operation.created_at,
+            created_at: operation.createdAt,
             status: BatchOperationStatus.SUCCESS,
           });
         }
@@ -218,24 +217,14 @@ export class BatchWorker implements OnModuleInit {
       )
         return;
 
-      const data = operations[operation_type];
+      // const data = operations[operation_type];
 
       switch (operation_type) {
-        case UserOperationTypeEnum.MAKE_TRADEABLE:
-          this.marketplaceClient.finishMakeTradeable(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_CANCEL:
-          this.marketplaceClient.finishCancel(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_DEAL:
-          this.marketplaceClient.finishDeal(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_LISTING:
-          this.marketplaceClient.finishCreateOffer(data);
-          break;
-        case UserOperationTypeEnum.MARKETPLACE_UPDATE:
-          this.marketplaceClient.finishUpdate(data);
-          break;
+        // send to service finish operation request by operation type, example:
+        // case UserOperationTypeEnum.MAKE_TRADEABLE:
+        //   this.marketplaceClient.finishMakeTradeable(data);
+        //   break;
+
         default:
           this.logger.error(
             `Unknown operation type ${operation_type} in batch`,

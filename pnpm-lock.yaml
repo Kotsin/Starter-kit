@@ -726,12 +726,12 @@ importers:
       socket.io:
         specifier: ^4.8.0
         version: 4.8.1
-
-  apps/notification-service:
-    devDependencies:
-      '@compodoc/compodoc':
-        specifier: ^1.1.23
-        version: 1.1.26(typescript@5.8.3)
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
+      uuidv4:
+        specifier: ^6.2.13
+        version: 6.2.13
 
   apps/user-service:
     dependencies:

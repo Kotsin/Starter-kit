@@ -40,12 +40,14 @@ export class TwoFactorPermissionsEntity extends BaseEntity {
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
   })
-  public created_at!: Date;
+  public createdAt!: Date;
 
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
   })
-  public updated_at!: Date;
+  public updatedAt!: Date;
 }

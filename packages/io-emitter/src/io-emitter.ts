@@ -31,20 +31,20 @@ export abstract class IOEmitter {
 
   /**
    * Returns tradable item room
-   * @param tradeable_item_id - tradeable item id
+   * @param tradeableItemId - tradeable item id
    * @returns tradable item room string
    */
-  buildTradableItemRoom(tradeable_item_id: string): string {
-    return `${IOEmitter.Events.TRADEABLE_ITEM}:${tradeable_item_id}`;
+  buildTradableItemRoom(tradeableItemId: string): string {
+    return `${IOEmitter.Events.TRADEABLE_ITEM}:${tradeableItemId}`;
   }
 
   /** Return user marketplace room
    *
-   * @param user_id - user id
+   * @param userId - user id
    * @returns user marketplace room string
    */
-  buildMarketplaceRoom(user_id: string): string {
-    return `${IOEmitter.Events.MARKETPLACE}:${user_id}`;
+  buildMarketplaceRoom(userId: string): string {
+    return `${IOEmitter.Events.MARKETPLACE}:${userId}`;
   }
 
   /**
