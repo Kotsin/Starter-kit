@@ -3,7 +3,7 @@ require('dotenv').config();
 
 import { NestFactory } from '@nestjs/core';
 import { RmqOptions } from '@nestjs/microservices';
-import { ConfigService } from '@merchant-outline/config';
+import { ConfigService } from '@crypton-nestjs-kit/config';
 
 import { UserModule } from './user.module';
 

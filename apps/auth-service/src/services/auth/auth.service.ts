@@ -32,8 +32,8 @@ import {
   SessionEntity,
   SessionStatus,
   UserClient,
-} from '@merchant-outline/common';
-import { ConfigService } from '@merchant-outline/config';
+} from '@crypton-nestjs-kit/common';
+import { ConfigService } from '@crypton-nestjs-kit/config';
 import { In, LessThan, Repository } from 'typeorm';
 
 import { ServiceJwtUseCase } from '../../use-cases/service-jwt.use-case';

@@ -13,7 +13,7 @@ import {
   IApiKey,
   IDecryptedApiKey,
   UpdateApiKeyDto,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 import * as crypto from 'crypto';
 import { Repository } from 'typeorm';
 

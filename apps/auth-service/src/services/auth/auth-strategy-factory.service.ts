@@ -4,7 +4,7 @@ import {
   AuthStrategyType,
   IAuthResult,
   IAuthStrategy,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 
 // import { AppleOAuthStrategy } from '../strategies/apple-oauth.strategy';
 // import { GoogleOAuthStrategy } from '../strategies/google-oauth.strategy';

@@ -6,8 +6,8 @@ import {
   mixin,
   Type,
 } from '@nestjs/common';
-import { CustomError, ExtendedHttpStatus } from '@merchant-outline/common';
-import { CustomLoggerService } from '@merchant-outline/logger';
+import { CustomError, ExtendedHttpStatus } from '@crypton-nestjs-kit/common';
+import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
 import { Request } from 'express';
 import moment from 'moment';
 

@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthClient } from '@merchant-outline/common';
+import { AuthClient } from '@crypton-nestjs-kit/common';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

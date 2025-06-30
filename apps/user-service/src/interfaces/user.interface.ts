@@ -1,4 +1,4 @@
-import { IRequest, IResponse, UserEntity } from '@merchant-outline/common';
+import { IRequest, IResponse, UserEntity } from '@crypton-nestjs-kit/common';
 
 export type IUser = Partial<UserEntity>;
 // --------------------------------------------------------------

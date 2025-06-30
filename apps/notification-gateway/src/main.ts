@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 
 import { GatewayModule } from './gateway.module';
 import { RedisIoAdapter } from './ws/redis-io.adapter';
-import { CustomLoggerService } from '@merchant-outline/logger';
+import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
 
 declare module 'socket.io' {
   export interface Socket {

@@ -19,7 +19,7 @@ import {
   CustomError,
   ExtendedHttpStatus,
   UserClient,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 import { RedisStore } from 'cache-manager-redis-yet';
 import { RedisClientType } from 'redis';
 

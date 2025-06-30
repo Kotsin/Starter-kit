@@ -22,7 +22,7 @@
 1. Установите пакет:
 
    ```
-   pnpm i @merchant-outline/settings
+   pnpm i @crypton-nestjs-kit/settings
    ```
 
 2. Добавьте `SettingModule` в `imports` корневого модуля.
@@ -34,8 +34,8 @@
 ```ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DBModule } from '@merchant-outline/database';
-import { SettingModule, SettingsEntity } from '@merchant-outline/settings';
+import { DBModule } from '@crypton-nestjs-kit/database';
+import { SettingModule, SettingsEntity } from '@crypton-nestjs-kit/settings';
 
 @Module({
   imports: [
@@ -58,7 +58,7 @@ export class SomeModule {}
 1. Импортируйте `SettingService`:
 
    ```ts
-   import { SettingService } from '@merchant-outline/settings';
+   import { SettingService } from '@crypton-nestjs-kit/settings';
    ```
 
 2. Объявите `settingsService` в классе:
@@ -85,7 +85,7 @@ export class SomeModule {}
 
 ```ts
 import { Injectable } from '@nestjs/common';
-import { SettingService } from '@merchant-outline/settings';
+import { SettingService } from '@crypton-nestjs-kit/settings';
 
 @Injectable()
 export class SomeService {

@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ConfigService } from '@merchant-outline/config';
+import { ConfigService } from '@crypton-nestjs-kit/config';
 
 import { API_KEY_METADATA } from '../decorators/api-key.decorator';
 

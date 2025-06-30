@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { ConfigService } from '@merchant-outline/config';
+import { ConfigService } from '@crypton-nestjs-kit/config';
 
 import { CaptchaVerificationFailedException } from '../v1/auth/exceptions/auth.exceptions';
 import { CaptchaService } from '../v1/auth/services/captcha.service';

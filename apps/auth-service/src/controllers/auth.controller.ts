@@ -23,7 +23,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 
 import { AuthService } from '../services/auth/auth.service';
 

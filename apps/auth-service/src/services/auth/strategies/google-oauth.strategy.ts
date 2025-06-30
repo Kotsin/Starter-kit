@@ -7,7 +7,7 @@ import {
   IAuthStrategy,
   IOAuthAuthCredentials,
   UserClient,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 
 @Injectable()

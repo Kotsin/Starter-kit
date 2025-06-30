@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   BatchOperationStatus,
   OperationEntity,
-} from '@merchant-outline/common';
-import { CustomLoggerService } from '@merchant-outline/logger';
+} from '@crypton-nestjs-kit/common';
+import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
 import { In, Repository } from 'typeorm';
 
 import {

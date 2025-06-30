@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@merchant-outline/config';
-import { DBModule } from '@merchant-outline/database';
+import { ConfigModule } from '@crypton-nestjs-kit/config';
+import { DBModule } from '@crypton-nestjs-kit/database';
 
 import { CoordinatorController } from './controller/coordinator.controller';
 import { CoordinatorService } from './services/coordinator.service';
 import { CoordinatorWorker } from './services/coordinator.worker';
-import { ServiceEntity } from '@merchant-outline/common';
+import { ServiceEntity } from '@crypton-nestjs-kit/common';
 
 @Module({
   imports: [

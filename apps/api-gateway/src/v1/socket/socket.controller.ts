@@ -5,7 +5,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CoordinatorClient, ServiceType } from '@merchant-outline/common';
+import { CoordinatorClient, ServiceType } from '@crypton-nestjs-kit/common';
 
 import { Authorization } from '../../decorators/authorization.decorator';
 

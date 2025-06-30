@@ -5,7 +5,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { SENSITIVE_FIELDS } from '@merchant-outline/common';
+import { SENSITIVE_FIELDS } from '@crypton-nestjs-kit/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

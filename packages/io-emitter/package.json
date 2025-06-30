@@ -1,8 +1,9 @@
 {
-  "name": "@merchant-outline/io-emitter",
+  "name": "@crypton-nestjs-kit/io-emitter",
   "version": "1.0.0",
-  "author": "Crypton Studio <info@crypton.studio>",
-  "license": "ISC",
+  "description": "",
+  "author": "",
+  "license": "MIT",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -31,7 +32,7 @@
     "@nestjs/config": "^3.2.3",
     "@nestjs/swagger": "^7.4.2",
     "@socket.io/redis-emitter": "^5.1.0",
-    "@merchant-outline/common": "workspace:^1.0.0",
+    "@crypton-nestjs-kit/common": "workspace:^1.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "redis": "^4.6.13",

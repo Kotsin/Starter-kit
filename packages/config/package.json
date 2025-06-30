@@ -1,8 +1,9 @@
 {
-  "name": "@merchant-outline/config",
+  "name": "@crypton-nestjs-kit/config",
   "version": "1.0.0",
-  "author": "Crypton Studio <info@crypton.studio>",
-  "license": "ISC",
+  "description": "",
+  "author": "",
+  "license": "MIT",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {

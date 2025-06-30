@@ -1,8 +1,9 @@
 {
-  "name": "@merchant-outline/logger",
+  "name": "@crypton-nestjs-kit/logger",
   "version": "1.0.0",
-  "author": "Crypton Studio <info@crypton.studio>",
-  "license": "ISC",
+  "description": "",
+  "author": "",
+  "license": "MIT",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -27,8 +28,8 @@
     "npm": ">=10.2.x"
   },
   "dependencies": {
-    "@merchant-outline/config": "workspace:*",
-    "@merchant-outline/common": "workspace:*",
+    "@crypton-nestjs-kit/config": "workspace:*",
+    "@crypton-nestjs-kit/common": "workspace:*",
     "@types/luxon": "^3.4.2",
     "luxon": "^3.4.4",
     "moment": "^2.30.1",

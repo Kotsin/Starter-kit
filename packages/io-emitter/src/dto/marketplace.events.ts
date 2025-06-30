@@ -6,7 +6,7 @@ import {
   ApiPropertyOptional,
 } from '@nestjs/swagger';
 import { IOEmitter } from '../io-emitter';
-import { UserOperationStatusEnum } from '@merchant-outline/common';
+import { UserOperationStatusEnum } from '@crypton-nestjs-kit/common';
 
 class BaseMarketplaceWSEventDto {
   @ApiProperty({ description: 'User id', type: () => String })

@@ -16,9 +16,9 @@ import {
   loadAuthClientOptions,
   loadUserClientOptions,
   UserClient,
-} from '@merchant-outline/common';
-import { ConfigModule, ConfigService } from '@merchant-outline/config';
-import { AppLoggerModule } from '@merchant-outline/logger';
+} from '@crypton-nestjs-kit/common';
+import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
+import { AppLoggerModule } from '@crypton-nestjs-kit/logger';
 import { redisStore } from 'cache-manager-redis-yet';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { RedisClientOptions } from 'redis';

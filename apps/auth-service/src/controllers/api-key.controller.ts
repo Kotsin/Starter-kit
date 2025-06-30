@@ -5,7 +5,7 @@ import {
   AuthClientPatterns,
   CreateApiKeyDto,
   UpdateApiKeyDto,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 
 import { ApiKeyService } from '../services/api-key/api-key.service';
 

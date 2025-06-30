@@ -11,9 +11,9 @@ import {
   IGetBatchOperationRequest,
   IGetBatchOperationResponse,
   OperationEntity,
-} from '@merchant-outline/common';
-import { CustomLoggerService } from '@merchant-outline/logger';
-import { SettingService } from '@merchant-outline/settings';
+} from '@crypton-nestjs-kit/common';
+import { CustomLoggerService } from '@crypton-nestjs-kit/logger';
+import { SettingService } from '@crypton-nestjs-kit/settings';
 import { Repository } from 'typeorm';
 
 import { BATCH_CONNECTION_NAME } from './batch.constants';

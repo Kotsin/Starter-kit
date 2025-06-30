@@ -1,11 +1,11 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OperationEntity } from '@merchant-outline/common';
-import { ConfigModule, ConfigService } from '@merchant-outline/config';
-import { DBModule } from '@merchant-outline/database';
-import { AppLoggerModule } from '@merchant-outline/logger';
-import { SettingModule, SettingsEntity } from '@merchant-outline/settings';
+import { OperationEntity } from '@crypton-nestjs-kit/common';
+import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
+import { DBModule } from '@crypton-nestjs-kit/database';
+import { AppLoggerModule } from '@crypton-nestjs-kit/logger';
+import { SettingModule, SettingsEntity } from '@crypton-nestjs-kit/settings';
 import { redisStore } from 'cache-manager-redis-yet';
 import { RedisClientOptions } from 'redis';
 

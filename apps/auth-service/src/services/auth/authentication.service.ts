@@ -9,8 +9,8 @@ import {
   IOAuthAuthCredentials,
   ISessionCreateRequest,
   ITokenCreateRequest,
-} from '@merchant-outline/common';
-import { ConfigService } from '@merchant-outline/config';
+} from '@crypton-nestjs-kit/common';
+import { ConfigService } from '@crypton-nestjs-kit/config';
 
 import { AuthService } from './auth.service';
 import { AuthStrategyFactory } from './auth-strategy-factory.service';

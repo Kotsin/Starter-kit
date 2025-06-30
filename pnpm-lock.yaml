@@ -86,19 +86,19 @@ importers:
 
   apps/api-gateway:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../../packages/common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:^1.0.0
         version: link:../../packages/config
-      "@merchant-outline/database":
+      "@crypton-nestjs-kit/database":
         specifier: workspace:^1.0.0
         version: link:../../packages/database
-      "@merchant-outline/io-emitter":
+      "@crypton-nestjs-kit/io-emitter":
         specifier: workspace:^1.0.0
         version: link:../../packages/io-emitter
-      "@merchant-outline/logger":
+      "@crypton-nestjs-kit/logger":
         specifier: workspace:^1.0.0
         version: link:../../packages/logger
       "@nestjs/cache-manager":
@@ -318,16 +318,16 @@ importers:
 
   apps/auth-service:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../../packages/common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:^1.0.0
         version: link:../../packages/config
-      "@merchant-outline/database":
+      "@crypton-nestjs-kit/database":
         specifier: workspace:^1.0.0
         version: link:../../packages/database
-      "@merchant-outline/logger":
+      "@crypton-nestjs-kit/logger":
         specifier: workspace:^1.0.0
         version: link:../../packages/logger
       "@nestjs/cache-manager":
@@ -547,19 +547,19 @@ importers:
 
   apps/batch-service:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../../packages/common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:^1.0.0
         version: link:../../packages/config
-      "@merchant-outline/database":
+      "@crypton-nestjs-kit/database":
         specifier: workspace:^1.0.0
         version: link:../../packages/database
-      "@merchant-outline/logger":
+      "@crypton-nestjs-kit/logger":
         specifier: workspace:^1.0.0
         version: link:../../packages/logger
-      "@merchant-outline/settings":
+      "@crypton-nestjs-kit/settings":
         specifier: workspace:^1.0.0
         version: link:../../packages/global-settings
       "@nestjs/cache-manager":
@@ -674,16 +674,16 @@ importers:
 
   apps/notification-gateway:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../../packages/common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:^1.0.0
         version: link:../../packages/config
-      "@merchant-outline/io-emitter":
+      "@crypton-nestjs-kit/io-emitter":
         specifier: workspace:^1.0.0
         version: link:../../packages/io-emitter
-      "@merchant-outline/logger":
+      "@crypton-nestjs-kit/logger":
         specifier: workspace:^1.0.0
         version: link:../../packages/logger
       "@nestjs/common":
@@ -734,16 +734,16 @@ importers:
 
   apps/user-service:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../../packages/common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:^1.0.0
         version: link:../../packages/config
-      "@merchant-outline/database":
+      "@crypton-nestjs-kit/database":
         specifier: workspace:^1.0.0
         version: link:../../packages/database
-      "@merchant-outline/logger":
+      "@crypton-nestjs-kit/logger":
         specifier: workspace:^1.0.0
         version: link:../../packages/logger
       "@nestjs/cache-manager":
@@ -909,16 +909,16 @@ importers:
 
   apps/ws-coordinator-service:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../../packages/common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:^1.0.0
         version: link:../../packages/config
-      "@merchant-outline/database":
+      "@crypton-nestjs-kit/database":
         specifier: workspace:^1.0.0
         version: link:../../packages/database
-      "@merchant-outline/logger":
+      "@crypton-nestjs-kit/logger":
         specifier: workspace:^1.0.0
         version: link:../../packages/logger
       "@nestjs/common":
@@ -1000,7 +1000,7 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1
     devDependencies:
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:*
         version: link:../config
       "@nestjs/testing":
@@ -1136,7 +1136,7 @@ importers:
 
   packages/database:
     dependencies:
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:*
         version: link:../config
       "@nestjs/typeorm":
@@ -1225,13 +1225,13 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1
     devDependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:^1.0.0
         version: link:../config
-      "@merchant-outline/database":
+      "@crypton-nestjs-kit/database":
         specifier: workspace:^1.0.0
         version: link:../database
       "@nestjs/common":
@@ -1300,7 +1300,7 @@ importers:
 
   packages/io-emitter:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:^1.0.0
         version: link:../common
       "@nestjs/common":
@@ -1336,10 +1336,10 @@ importers:
 
   packages/logger:
     dependencies:
-      "@merchant-outline/common":
+      "@crypton-nestjs-kit/common":
         specifier: workspace:*
         version: link:../common
-      "@merchant-outline/config":
+      "@crypton-nestjs-kit/config":
         specifier: workspace:*
         version: link:../config
       "@types/luxon":

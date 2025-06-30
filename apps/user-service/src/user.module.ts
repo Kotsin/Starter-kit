@@ -17,10 +17,13 @@ import {
   UserEntity,
   UserLoginMethodsEntity,
   UserRoleEntity,
-} from '@merchant-outline/common';
-import { ConfigModule, ConfigService } from '@merchant-outline/config';
-import { DBModule } from '@merchant-outline/database';
-import { AppLoggerModule, LoggingInterceptor } from '@merchant-outline/logger';
+} from '@crypton-nestjs-kit/common';
+import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
+import { DBModule } from '@crypton-nestjs-kit/database';
+import {
+  AppLoggerModule,
+  LoggingInterceptor,
+} from '@crypton-nestjs-kit/logger';
 import { redisStore } from 'cache-manager-redis-yet';
 import { RedisClientOptions } from 'redis';
 

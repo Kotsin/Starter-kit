@@ -22,10 +22,10 @@ import {
   UserEntity,
   UserLoginMethodsEntity,
   UserStatus,
-} from '@merchant-outline/common';
-import { PermissionEntity } from '@merchant-outline/common/build/entities/user/permissions.entity';
-import { RoleEntity } from '@merchant-outline/common/build/entities/user/role.entity';
-import { UserRoleEntity } from '@merchant-outline/common/build/entities/user/user-role.entity';
+} from '@crypton-nestjs-kit/common';
+import { PermissionEntity } from '@crypton-nestjs-kit/common/build/entities/user/permissions.entity';
+import { RoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/role.entity';
+import { UserRoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/user-role.entity';
 import { In, Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { uuid } from 'uuidv4';

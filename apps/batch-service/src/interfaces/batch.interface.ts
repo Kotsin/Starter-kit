@@ -2,7 +2,7 @@ import {
   BatchOperation,
   BatchOperationStatus,
   UserOperationTypeEnum,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 
 export type ProcessOperations = Pick<
   BatchOperation,

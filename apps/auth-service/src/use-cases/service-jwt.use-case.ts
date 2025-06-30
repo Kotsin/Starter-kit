@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@merchant-outline/config';
+import { ConfigService } from '@crypton-nestjs-kit/config';
 
 @Injectable()
 export class ServiceJwtUseCase {

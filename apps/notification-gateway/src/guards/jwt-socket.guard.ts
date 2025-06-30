@@ -4,9 +4,9 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserClient } from '@merchant-outline/common';
-import { AuthClient } from '@merchant-outline/common';
-import { ConfigService } from '@merchant-outline/config';
+import { UserClient } from '@crypton-nestjs-kit/common';
+import { AuthClient } from '@crypton-nestjs-kit/common';
+import { ConfigService } from '@crypton-nestjs-kit/config';
 import { Socket } from 'socket.io';
 import { uuid } from 'uuidv4';
 

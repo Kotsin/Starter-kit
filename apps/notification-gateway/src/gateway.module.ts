@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@merchant-outline/config';
+import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
 
 import { GatewayController } from './gateway.controller';
 import {
@@ -9,10 +9,10 @@ import {
   loadAuthClientOptions,
   loadCoordinatorClientOptions,
   loadUserClientOptions,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 import { WebsocketGateway, WebsocketGatewayModule } from './websocket-gateway';
 import { JwtSocketGuard } from './guards/jwt-socket.guard';
-import { IOEmitterModule } from '@merchant-outline/io-emitter';
+import { IOEmitterModule } from '@crypton-nestjs-kit/io-emitter';
 
 @Module({
   imports: [

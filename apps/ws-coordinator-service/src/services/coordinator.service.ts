@@ -8,7 +8,7 @@ import {
   IRegisterServiceResponse,
   ServiceEntity,
   ServiceStatus,
-} from '@merchant-outline/common';
+} from '@crypton-nestjs-kit/common';
 
 @Injectable()
 export class CoordinatorService {

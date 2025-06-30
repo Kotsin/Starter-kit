@@ -1,8 +1,9 @@
 {
-  "name": "@merchant-outline/common",
+  "name": "@crypton-nestjs-kit/common",
   "version": "1.0.0",
-  "author": "Crypton Studio <info@crypton.studio>",
-  "license": "ISC",
+  "description": "",
+  "author": "",
+  "license": "MIT",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -39,7 +40,7 @@
     "redis": "^4.6.13"
   },
   "devDependencies": {
-    "@merchant-outline/config": "workspace:*",
+    "@crypton-nestjs-kit/config": "workspace:*",
     "@nestjs/testing": "10.4.15",
     "@types/eslint-plugin-prettier": "^3.1.0",
     "@types/express": "^5.0.0",
