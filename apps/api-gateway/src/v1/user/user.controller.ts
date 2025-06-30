@@ -52,7 +52,7 @@ export class UserController {
     type: UsersMeResponseDto,
   })
   @Authorization(true)
-  @Post('permissions')
+  @Post('confirmations/2fa')
   async updatePermissions(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
@@ -120,7 +120,7 @@ export class UserController {
     type: UsersMeResponseDto,
   })
   @Authorization(true)
-  @Post('confirmationCodes/create')
+  @Post('confirmation-codes/request')
   async createConfirmationCodes(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
@@ -169,14 +169,12 @@ export class UserController {
     type: UsersMeResponseDto,
   })
   @Authorization(true)
-  @Get('allowedPermissions')
+  @Get('allowed-permissions')
   async getAllowedPermissions(
     @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
   ): Promise<any> {
     const data = await this.userClient.getPermissionsByRole(roleId, traceId);
-
-    console.log(data);
 
     if (!data.status) {
       throw new CustomError(

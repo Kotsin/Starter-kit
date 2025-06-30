@@ -6,8 +6,6 @@ export const SessionIdFromRequest = createParamDecorator(
 
     const sessionId = request['sessionId'];
 
-    console.log('sessionId', sessionId);
-
     if (!sessionId) {
       throw new Error('There is no sessionId in the http request!');
     }

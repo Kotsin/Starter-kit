@@ -33,8 +33,6 @@ export class ApiKeyGuard implements CanActivate {
       correlationId,
     );
 
-    console.log('validatedData', validatedData);
-
     if (!validatedData.status) {
       throw new ForbiddenException('Invalid API Key');
     }

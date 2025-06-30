@@ -169,13 +169,11 @@ export class UserService implements OnModuleInit {
         };
       });
 
-      const a = await this.twoFactorPermissionsRepo.upsert(permissions, [
+      await this.twoFactorPermissionsRepo.upsert(permissions, [
         'user',
         'permission',
         'confirmationMethod',
       ]);
-
-      console.log(a);
 
       return {
         status: true,
@@ -679,7 +677,9 @@ export class UserService implements OnModuleInit {
   ): Promise<IGetUserByIdResponse> {
     try {
       const CACHE_KEY = `getUserById:${data.userId}`;
-      const cachedData = await this.cacheManager.get(CACHE_KEY);
+      let cachedData = await this.cacheManager.get(CACHE_KEY);
+
+      cachedData = undefined;
 
       if (cachedData) {
         return {

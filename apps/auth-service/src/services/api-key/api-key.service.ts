@@ -14,6 +14,7 @@ import {
 } from '@crypton-nestjs-kit/common';
 import * as crypto from 'crypto';
 import { Repository } from 'typeorm';
+import { MoreThan } from 'typeorm';
 
 import { ApiKeyEntity } from '../../entity/api-key.entity';
 
@@ -64,7 +65,7 @@ export class ApiKeyService {
       allowedIps: dto.allowedIps || [],
       permissions: dto.permissions || [],
       isActive: apiKey.isActive,
-      expiredAt: expiredAt.toISOString(),
+      expiredAt: apiKey.expiredAt.toISOString(),
       createdAt: apiKey.createdAt.toISOString(),
     };
   }
@@ -116,7 +117,6 @@ export class ApiKeyService {
         encryptedAllowedIps: apiKey.encryptedAllowedIps,
         permissions: dto.permissions,
         isActive: apiKey.isActive,
-        expiredAt: apiKey.expiredAt?.toISOString(),
       },
       API_KEY_TTL,
     );
@@ -136,10 +136,7 @@ export class ApiKeyService {
   async deleteApiKey(
     id: string,
   ): Promise<{ status: boolean; message: string }> {
-    console.log('asdasd', id);
     const apiKey = await this.apiKeyRepo.findOne({ where: { id } });
-
-    console.log(apiKey);
 
     if (!apiKey) {
       throw new Error(apiKeyErrorMessages[API_KEY_ERROR_CODES.NOT_FOUND]);
@@ -206,21 +203,21 @@ export class ApiKeyService {
         expiredAt: apiKey.expiredAt?.toISOString(),
       };
       await this.cacheManager.set(cacheKey, keyData, API_KEY_TTL);
-    }
 
-    if (!keyData.isActive) return false;
+      if (!keyData.isActive) return false;
 
-    if (keyData.expiredAt && new Date(keyData.expiredAt) < new Date())
+      if (keyData.expiredAt && new Date(keyData.expiredAt) < new Date())
+        return false;
+
+      if (!keyData.encryptedAllowedIps?.length) {
+        return true;
+      }
+
+      if (keyData.encryptedAllowedIps.map(decrypt).includes(ip)) {
+        return true;
+      }
+
       return false;
-
-    if (!keyData.encryptedAllowedIps?.length) {
-      return true;
     }
-
-    if (keyData.encryptedAllowedIps.map(decrypt).includes(ip)) {
-      return true;
-    }
-
-    return false;
   }
 }

@@ -42,12 +42,15 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         rpcData?.twoFaCodes || rpcData?.credentials?.twoFaCodes;
 
       if (!userId && !login) {
-        throw new UnauthorizedException('User data not found');
+        return of({
+          status: false,
+          error: 'USER_DATA_NOT_FOUND',
+          message: 'User data not found',
+        });
       }
 
       if (!userId) {
         const data = await this.userClient.getUserByLogin({ login }, '0000');
-
         userId = data.user.id;
       }
 
@@ -69,15 +72,14 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
       for (const entry of confirmationMethods) {
         const method = entry?.method;
-
         if (!method) continue;
-
         const expectedCode = confirmationCodes?.[`${method}Code`];
-
         if (!expectedCode) {
-          throw new UnauthorizedException(
-            `Missing ${method} confirmation code`,
-          );
+          return of({
+            status: false,
+            error: 'MISSING_CONFIRMATION_CODE',
+            message: `Missing ${method} confirmation code`,
+          });
         }
 
         const codeLifetime = new Date(entry.code_lifetime);
@@ -87,10 +89,23 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         const normalizedExpectedCode = String(expectedCode).trim();
 
         if (
-          normalizedEntryCode !== normalizedExpectedCode ||
+          normalizedEntryCode !== normalizedExpectedCode
+        ) {
+          return of({
+            status: false,
+            error: 'INVALID_CONFIRMATION_CODE',
+            message: `Invalid ${method} confirmation code`,
+          });
+        }
+
+        if (
           currentTime.getTime() > codeLifetime.getTime()
         ) {
-          throw new UnauthorizedException(`Invalid or expired ${method} code`);
+          return of({
+            status: false,
+            error: 'EXPIRED_CONFIRMATION_CODE',
+            message: `Expired ${method} confirmation code`,
+          });
         }
 
         await this.userClient.resetConfirmationCode({ id: entry.id }, '0000');
@@ -98,8 +113,6 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
       return next.handle();
     } catch (err) {
-      console.log((err as Error).message);
-
       return of({
         status: false,
         error: null,

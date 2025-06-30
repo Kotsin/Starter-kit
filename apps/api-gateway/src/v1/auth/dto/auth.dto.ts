@@ -150,6 +150,22 @@ export class RefreshTokenDtoRequest {
   readonly refreshToken!: string;
 }
 
+export class ConfirmationCodesRequest {
+  @ApiProperty({
+    description: 'User login',
+    example: '88005553535',
+  })
+  @IsString()
+  readonly login!: string;
+
+  @ApiProperty({
+    description: 'Id of permission',
+    example: '4405130b-1120-402d-a6a9-cd6333520e58',
+  })
+  @IsString()
+  readonly permissionId!: string;
+}
+
 export class SigninSolanaDtoRequest {
   @ApiProperty({
     description:

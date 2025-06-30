@@ -33,6 +33,7 @@ import { LoginValidationPipe } from '../../pipes/login-validator.pipe';
 import {
   ApiResponses,
   AuthDtoRequest,
+  ConfirmationCodesRequest,
   RefreshTokenDtoRequest,
   RegisterConfirmRequestDTO,
   RegisterDtoRequest,
@@ -260,8 +261,6 @@ export class AuthController {
       traceId,
     );
 
-    console.log('userData', userData);
-
     if (!userData.status) {
       await this.bruteForceGuard.registerFailedAttempt(requestIp, body.login);
 
@@ -280,6 +279,7 @@ export class AuthController {
    * Refresh access token using refresh token
    *
    * @param body - Refresh token data
+   * @param traceId
    * @returns New access token
    */
   @ApiOperation({
@@ -411,17 +411,21 @@ export class AuthController {
     description: 'Too many attempts. Try again later',
   })
   @UseGuards(BaseCodeBruteForceGuard)
-  @Authorization(true)
-  @ApiBearerAuth()
   @Post('confirmation-codes/request')
   async requestConfirmationCodes(
     @CorrelationIdFromRequest() traceId: string,
-    @UserIdFromRequest() userId: string,
-    @Body() body: { permissionId: string },
+    @Body() body: ConfirmationCodesRequest,
   ): Promise<{ message: string; data: any }> {
+    const userData = await this.userClient.getUserByLogin(
+      {
+        login: body.login,
+      },
+      traceId,
+    );
+
     const result = await this.userClient.createConfirmationCode(
       {
-        userId,
+        userId: userData.user.id,
         permissionId: body.permissionId,
       },
       traceId,

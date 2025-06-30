@@ -186,7 +186,6 @@ export class ApiKeyController {
   @ApiBearerAuth()
   @Authorization(true)
   async getById(@Param('id') id: string) {
-    console.log('asdasdasdasd1123435', id);
     // const result = await this.authServiceClient
     //   .send('api-key.get', id)
     //   .toPromise();
