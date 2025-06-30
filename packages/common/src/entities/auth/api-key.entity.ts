@@ -6,13 +6,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('api_keys')
+@Entity('ApiKeys')
 export class ApiKeyEntity {
   @PrimaryGeneratedColumn('uuid')
-  public id!: string;
+  id!: string;
 
   @Column({ type: 'varchar', unique: true, name: 'encrypted_key' })
   public encryptedKey!: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'user_id' })
+  public userId!: string;
 
   @Column({ type: 'varchar' })
   public type!: string; // enum: 'read', 'write', 'admin', etc.

@@ -623,7 +623,7 @@ export class UserService implements OnModuleInit {
         { id: loginMethod.id },
         {
           code: null,
-          code_lifetime: null,
+          codeLifetime: null,
         },
       );
 
@@ -631,7 +631,7 @@ export class UserService implements OnModuleInit {
         throw new Error('Code reset failed');
       }
 
-      await this.cacheManager.del(`getUserById:${loginMethod.user_id}`);
+      await this.cacheManager.del(`getUserById:${loginMethod.userId}`);
 
       return true;
     } catch (e) {
