@@ -456,20 +456,23 @@ export class AuthService {
       }
 
       const permissionsResult = await this.userClient.getPermissionsByRole(
-        session.role,
+        { roleId: session.role },
         '0000',
       );
       const permissions = permissionsResult.permissions.map((k) => ({
         id: k.id,
-        route: k.route,
         method: k.method,
+        messagePattern: k.messagePattern,
         alias: k.alias,
+        isPublic: k.isPublic,
+        type: k.type,
       }));
 
       const serviceJwt = await this.serviceJwtUseCase.generateServiceJwt({
         userId: session.userId,
         serviceId: data.serviceId,
         authType: 'jwtToken',
+        permissions,
       });
 
       return {
@@ -478,7 +481,6 @@ export class AuthService {
         user: {
           userId: session.userId,
           role: session.role,
-          permissions,
         },
         sessionId: tokenData.sessionId,
         serviceJwt,

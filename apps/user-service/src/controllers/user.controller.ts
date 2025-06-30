@@ -114,7 +114,15 @@ export class UserController {
 
   @FunctionType('READ')
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_ROLE)
-  public async getPermissionsByRole(roleId: string): Promise<any> {
-    return await this.userService.getPermissionsByRole(roleId);
+  public async getPermissionsByRole(request: {
+    roleId: string;
+    type?: string;
+  }): Promise<any> {
+    return await this.userService.getPermissionsByRole(request);
+  }
+
+  @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_PATTERN)
+  public async getPermissionsByPattern(pattern: string): Promise<any> {
+    return await this.userService.getPermissionsByPattern(pattern);
   }
 }

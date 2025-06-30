@@ -67,7 +67,10 @@ export class ApiKeyController {
     @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
   ): Promise<any> {
-    const data = await this.userClient.getPermissionsByRole(roleId, traceId);
+    const data = await this.userClient.getPermissionsByRole(
+      { roleId },
+      traceId,
+    );
 
     if (!data.status) {
       throw new CustomError(

@@ -5,12 +5,13 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { PATTERN_METADATA } from '@nestjs/microservices/constants';
 import { Observable, of } from 'rxjs';
 
 import { UserClient } from '../clients';
 import { AUTH_ERROR_CODES } from '../errors';
 
-import { PERMISSION_ID } from './require-confirmation.decorator';
+import { CONTROLLER_META, ControllerType } from './controller-meta.decorator';
 
 @Injectable()
 export class RequireConfirmationInterceptor implements NestInterceptor {
@@ -24,13 +25,42 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
     next: CallHandler,
   ): Promise<Observable<any>> {
     try {
-      const permissionId = this.reflector.get<string>(
-        PERMISSION_ID,
+      const messagePattern = this.reflector.get<string>(
+        PATTERN_METADATA,
         context.getHandler(),
       );
 
-      if (!permissionId) {
+      const controllerMeta = this.reflector.get<{
+        name: string;
+        isPublic: boolean;
+        description: string;
+        type: string;
+      }>(CONTROLLER_META, context.getHandler());
+
+      if (
+        !controllerMeta ||
+        !controllerMeta.isPublic ||
+        !controllerMeta.type ||
+        controllerMeta.type == ControllerType.READ
+      ) {
         return next.handle();
+      }
+
+      if (!messagePattern) {
+        return next.handle();
+      }
+
+      const permissionData = await this.userClient.getPermissionsByPattern(
+        messagePattern[0],
+        '0000',
+      );
+
+      if (!permissionData.status) {
+        return of({
+          status: false,
+          error: 'PERMISSION_DATA_NOT_FOUND',
+          message: 'Permission data not found',
+        });
       }
 
       const rpcData = context.switchToRpc().getData();
@@ -57,7 +87,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       const data = await this.userClient.getUserById({ userId }, '0000');
 
       const twoFaEntries = data.user.twoFaPermissions.filter(
-        (entry: any) => entry.permission.id === permissionId,
+        (entry: any) => entry.permission.id === permissionData.permission.id,
       );
 
       const confirmationMethods = data.user.loginMethods.filter((entry: any) =>

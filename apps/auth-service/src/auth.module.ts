@@ -1,18 +1,12 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module, OnModuleInit } from '@nestjs/common';
-import {
-  APP_INTERCEPTOR,
-  DiscoveryService,
-  MetadataScanner,
-  Reflector,
-} from '@nestjs/core';
+import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ApiKeyEntity,
   ClientUserModule,
   loadUserClientOptions,
-  PermissionsRegistrar,
   PermissionsRegistrarModule,
   RequireConfirmationInterceptor,
   SessionEntity,

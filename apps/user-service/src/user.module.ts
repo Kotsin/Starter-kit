@@ -9,6 +9,7 @@ import {
   loadAuthClientOptions,
   loadUserClientOptions,
   PermissionEntity,
+  PermissionsRegistrarModule,
   RequireConfirmationInterceptor,
   RoleEntity,
   ServiceJwtInterceptor,
@@ -78,6 +79,7 @@ import { UserService } from './services/user.service';
       },
       inject: [ConfigService],
     }),
+    // PermissionsRegistrarModule,
   ],
   controllers: [UserController],
   providers: [

@@ -2,8 +2,10 @@ import { Cache } from '@nestjs/cache-manager';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  ApiKeyType,
   AuthClient,
   comparePassword,
+  decrypt,
   DefaultRole,
   hashPassword,
   ICreateConfirmationCodesResponse,
@@ -782,32 +784,50 @@ export class UserService implements OnModuleInit {
     }
   }
 
-  public async getPermissionsByRole(roleId: string): Promise<any> {
+  public async getPermissionsByRole(data: {
+    roleId: string;
+    type?: string;
+  }): Promise<any> {
     try {
-      const CACHE_KEY = `rolePermissions:${roleId}`;
-      const cachedData = await this.cacheManager.get(CACHE_KEY);
+      const CACHE_KEY = `rolePermissions:${data.roleId}`;
+      let permissions: any = await this.cacheManager.get(CACHE_KEY);
 
-      if (cachedData) {
-        const data = JSON.parse(cachedData.toString());
+      if (!permissions) {
+        const rolePermissions = await this.roleRepo.query(
+          `
+          SELECT p.*
+          FROM "RolePermissions" rp
+          JOIN "Permissions" p ON rp."permissionsId"::uuid = p.id::uuid
+          WHERE rp."rolesId" = $1 AND p."isPublic" = true;`,
+          [data.roleId],
+        );
 
-        return {
-          status: true,
-          message: 'Permissions found',
-          permissions: data.permissions,
-        };
+        permissions = rolePermissions.map((k) => ({
+          id: k.id,
+          nameCode: k.messagePattern.replace(':', '_'),
+          method: k.method,
+          alias: k.alias,
+          description: k.description,
+          type: k.type,
+        }));
+
+        await this.cacheManager.set(CACHE_KEY, permissions, 10 * 1000);
       }
 
-      const role = await this.roleRepo.findOne({
-        where: { id: roleId },
-        relations: ['permissions'],
-      });
-
-      await this.cacheManager.set(CACHE_KEY, JSON.stringify(role), 10 * 1000);
+      if (data.type) {
+        permissions = permissions.filter((p) => p.type === data.type);
+      }
 
       return {
         status: true,
         message: 'Permissions found',
-        permissions: role.permissions,
+        permissions: permissions,
+      };
+
+      return {
+        status: true,
+        message: 'Permissions found',
+        permissions: permissions,
       };
     } catch (e) {
       return {
@@ -815,6 +835,50 @@ export class UserService implements OnModuleInit {
         status: false,
         message: 'Permissions not found',
         permissions: [],
+      };
+    }
+  }
+
+  public async getPermissionsByPattern(pattern: string): Promise<any> {
+    try {
+      const CACHE_KEY = `permission:${pattern}`;
+      const cachedData = await this.cacheManager.get(CACHE_KEY);
+
+      if (cachedData) {
+        return {
+          status: true,
+          message: 'Permission found',
+          permissions: cachedData,
+        };
+      }
+
+      const permission = await this.permissionRepo.findOne({
+        where: {
+          messagePattern: pattern,
+        },
+      });
+
+      if (!permission) {
+        return {
+          status: false,
+          message: 'Permission not found',
+          permission: null,
+        };
+      }
+
+      await this.cacheManager.set(CACHE_KEY, permission, 10 * 1000);
+
+      return {
+        status: true,
+        message: 'Permission found',
+        permission: permission,
+      };
+    } catch (e) {
+      return {
+        error: e.message,
+        status: false,
+        message: 'Permission not found',
+        permission: null,
       };
     }
   }

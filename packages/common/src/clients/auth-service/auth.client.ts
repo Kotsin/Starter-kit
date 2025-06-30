@@ -310,7 +310,7 @@ export class AuthClient {
 }
 
 export enum AuthClientPatterns {
-  AUTHENTICATE_NATIVE = 'aut:native',
+  AUTHENTICATE_NATIVE = 'auth:native',
   AUTHENTICATE_SOCIAL = 'auth:social',
   SESSION_CREATE = 'session:create',
   TOKENS_CREATE = 'tokens:create',

@@ -98,11 +98,26 @@ export class UserClient {
     );
   }
 
-  async getPermissionsByRole(roleId: string, traceId: string): Promise<any> {
+  async getPermissionsByRole(
+    request: { roleId: string; type?: string },
+    traceId: string,
+  ): Promise<any> {
     return await firstValueFrom(
       this.userClientProxy.send(
         UserClientPatterns.GET_PERMISSIONS_BY_ROLE,
-        await createRmqMessage(traceId, roleId),
+        await createRmqMessage(traceId, request),
+      ),
+    );
+  }
+
+  async getPermissionsByPattern(
+    pattern: string,
+    traceId: string,
+  ): Promise<{ status: boolean; permission: { id: string } }> {
+    return await firstValueFrom(
+      this.userClientProxy.send(
+        UserClientPatterns.GET_PERMISSIONS_BY_PATTERN,
+        await createRmqMessage(traceId, pattern),
       ),
     );
   }
@@ -189,6 +204,7 @@ export enum UserClientPatterns {
   GET_USER_BY_ID = 'get_user_by_id',
   GET_USER_BY_LOGIN = 'get_user_by_login',
   GET_PERMISSIONS_BY_ROLE = 'get_permissions_by_role',
+  GET_PERMISSIONS_BY_PATTERN = 'get_permissions_by_pattern',
   FIND_OR_CREATE_USER = 'find_or_create_user',
   REGISTRATION_CONFIRM = 'registration_confirm',
   LOGIN_NATIVE = 'login_native',

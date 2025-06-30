@@ -17,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 import {
   acquireLock,
+  ControllerType,
   CustomError,
   ExtendedHttpStatus,
   UserClient,
@@ -43,7 +44,7 @@ import {
 
 @ApiTags('User')
 @Controller('v1/users')
-@UseGuards(RolesGuard)
+// @UseGuards(RolesGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   private readonly redisClient: RedisClientType;
@@ -102,6 +103,7 @@ export class UserController {
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
   ): Promise<any> {
+    console.log('asdasdasdsd');
     const data = await this.userClient.getUserConfirmationMethods(
       {
         userId,
@@ -109,9 +111,11 @@ export class UserController {
       traceId,
     );
 
+    console.log('asdasdasdsd', data);
+
     if (!data.status) {
       throw new CustomError(
-        ExtendedHttpStatus.FORBIDDEN,
+        ExtendedHttpStatus.FOUND,
         "Permissions don't created",
       );
     }
@@ -183,7 +187,10 @@ export class UserController {
     @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
   ): Promise<any> {
-    const data = await this.userClient.getPermissionsByRole(roleId, traceId);
+    const data = await this.userClient.getPermissionsByRole(
+      { roleId, type: ControllerType.WRITE },
+      traceId,
+    );
 
     if (!data.status) {
       throw new CustomError(
