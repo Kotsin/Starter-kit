@@ -42,6 +42,7 @@ export class AuthController {
     description: 'Аутентификация пользователя с помощью email и пароля 1',
     isPublic: true,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_NATIVE)
   public async authenticateNative(data: {
@@ -107,6 +108,7 @@ export class AuthController {
     name: 'Verify token',
     description: 'Verify access token',
     isPublic: false,
+    needsPermission: false,
   })
   @MessagePattern(AuthClientPatterns.TOKEN_VERIFY)
   public async verifyToken(
@@ -120,6 +122,7 @@ export class AuthController {
     description: 'Refresh access tokens',
     isPublic: true,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(AuthClientPatterns.REFRESH_TOKEN)
   public async refreshToken(

@@ -11,6 +11,8 @@ import {
   loadUserClientOptions,
   PermissionsRegistrarModule,
   RequireConfirmationInterceptor,
+  ServiceJwtGenerator,
+  ServiceJwtInterceptor,
   SessionEntity,
   UserClient,
 } from '@crypton-nestjs-kit/common';
@@ -30,7 +32,6 @@ import { AuthService } from './services/auth/auth.service';
 import { AuthStrategyFactory } from './services/auth/auth-strategy-factory.service';
 // Стратегии
 import { NativeStrategy } from './services/auth/strategies/native.strategy';
-import { ServiceJwtUseCase } from './use-cases/service-jwt.use-case';
 
 @Module({
   imports: [
@@ -75,10 +76,14 @@ import { ServiceJwtUseCase } from './use-cases/service-jwt.use-case';
     // Strategy's
     NativeStrategy,
     // Use cases
-    ServiceJwtUseCase,
+    ServiceJwtGenerator,
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ServiceJwtInterceptor,
     },
     {
       provide: APP_INTERCEPTOR,

@@ -36,6 +36,7 @@ import {
 
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
+import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
 import { ApiKeyGuard } from '../../guards/api-key.guard';
@@ -56,20 +57,22 @@ export class ApiKeyController {
     private readonly userClient: UserClient,
   ) {}
 
-  @Get('allowedPermissions')
-  @ApiBearerAuth()
+  @Get('allowed-permissions')
   @ApiOperation({ summary: 'Getting all of allowed permissions' })
   @ApiOkResponse({
     description: 'All allowed permissions list',
   })
+  @ApiBearerAuth()
   @Authorization(true)
   async getAllowedPermissions(
     @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<any> {
     const data = await this.userClient.getPermissionsByRole(
       { roleId },
       traceId,
+      serviceToken,
     );
 
     if (!data.status) {
@@ -99,6 +102,7 @@ export class ApiKeyController {
    * @param dto - API key creation data
    * @param traceId
    * @param userId
+   * @param serviceToken
    * @returns Created API key
    */
   @Post()
@@ -119,6 +123,7 @@ export class ApiKeyController {
     @Body() dto: CreateApiKeyDto,
     @CorrelationIdFromRequest() traceId: string,
     @UserIdFromRequest() userId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<IApiKeyCreateResponse> {
     const result = await this.authClient.apiKeyCreate(
       {
@@ -128,6 +133,7 @@ export class ApiKeyController {
         allowedIps: dto.allowedIps,
       },
       traceId,
+      serviceToken,
     );
 
     if (!result.status) {
@@ -159,8 +165,9 @@ export class ApiKeyController {
   @Authorization(true)
   async list(
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<IApiKeyListResponse> {
-    const result = await this.authClient.apiKeyList(traceId);
+    const result = await this.authClient.apiKeyList(traceId, serviceToken);
 
     if (!result.status) {
       throw new HttpException(result, HttpStatus.BAD_REQUEST);
@@ -205,6 +212,7 @@ export class ApiKeyController {
    * @param id - API key ID
    * @param dto - Update data
    * @param traceId
+   * @param serviceToken
    * @returns Updated API key
    */
   @Patch(':id')
@@ -226,6 +234,7 @@ export class ApiKeyController {
     @Param('id') id: string,
     @Body() dto: UpdateApiKeyDto,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<IApiKeyUpdateResponse> {
     const result = await this.authClient.apiKeyUpdate(
       {
@@ -237,6 +246,7 @@ export class ApiKeyController {
         },
       },
       traceId,
+      serviceToken,
     );
 
     if (!result.status) {
@@ -250,6 +260,7 @@ export class ApiKeyController {
    * Delete API key
    * @param id - API key ID
    * @param traceId
+   * @param serviceToken
    * @returns Deletion result
    */
   @Delete(':id')
@@ -271,8 +282,13 @@ export class ApiKeyController {
   async remove(
     @Param('id') id: string,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<IApiKeyRemoveResponse> {
-    const result = await this.authClient.apiKeyRemove(id, traceId);
+    const result = await this.authClient.apiKeyRemove(
+      id,
+      traceId,
+      serviceToken,
+    );
 
     if (!result.status) {
       throw new HttpException(result, HttpStatus.BAD_REQUEST);

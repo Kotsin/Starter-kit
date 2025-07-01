@@ -24,13 +24,14 @@ export class ApiKeyGuard implements CanActivate {
       request.headers['api-key'] ||
       request.query.apiKey;
 
-    const correlationId = request.headers['correlationId'];
+    const traceId = request.headers['correlationId'];
     const ip =
       request.headers['x-forwarded-for'] || request.headers.host || request.ip;
 
     const validatedData = await this.authClient.apiKeyValidate(
       { rawKey: providedApiKey, ip },
-      correlationId,
+      traceId,
+      'api-gateway',
     );
 
     if (!validatedData.status) {

@@ -9,8 +9,11 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { PATTERN_METADATA } from '@nestjs/microservices/constants';
+// import { ConfigService } from '@crypton-nestjs-kit/config';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
+import { CONTROLLER_META } from './controller-meta.decorator';
 
 @Injectable()
 export class ServiceJwtInterceptor implements NestInterceptor {
@@ -18,7 +21,7 @@ export class ServiceJwtInterceptor implements NestInterceptor {
     @Inject(Reflector)
     private readonly reflector: Reflector,
     @Inject(JwtService)
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService, // @Inject(ConfigService) // private readonly configService: ConfigService,
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -29,14 +32,34 @@ export class ServiceJwtInterceptor implements NestInterceptor {
       context.getHandler(),
     );
 
-    console.log('12313123', messagePattern);
+    const controllerMeta = this.reflector.get<{
+      name: string;
+      isPublic: boolean;
+      description: string;
+      type: string;
+      needsPermission: boolean;
+    }>(CONTROLLER_META, context.getHandler());
+
+    console.log('controllerMeta', controllerMeta);
+
+    if (controllerMeta.needsPermission === false) {
+      console.log('111111111');
+
+      return next.handle();
+    }
+
+    console.log('messagePattern', messagePattern, controllerMeta);
 
     const { serviceToken } = this.extractContextData(context, contextType);
 
-    // console.log('12313123', serviceToken);
+    console.log('serviceToken', serviceToken);
+
+    const decodedData = this.jwtService.decode(serviceToken);
+
+    console.log('decodedData', decodedData);
 
     try {
-      const data = this.jwtService.verify(serviceToken);
+      const data = this.jwtService.verify(serviceToken, { secret: 'as' });
 
       console.log('data', data);
     } catch (err) {

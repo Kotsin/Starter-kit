@@ -82,6 +82,7 @@ export class UserController {
     description: 'My profile',
     isPublic: true,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.FIND_OR_CREATE_USER)
   public async findOrCreateUser(
@@ -95,6 +96,7 @@ export class UserController {
     description: 'My profile',
     isPublic: true,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.CREATE_CONFIRMATION_CODES)
   public async createConfirmationCodes(
@@ -135,7 +137,7 @@ export class UserController {
   @ControllerMeta({
     name: 'My profile',
     description: 'My profile',
-    isPublic: true,
+    isPublic: false,
     type: ControllerType.WRITE,
   })
   @MessagePattern(UserClientPatterns.GET_USER_BY_LOGIN)
@@ -143,6 +145,20 @@ export class UserController {
     data: IGetUserByLoginRequest,
   ): Promise<IGetUserByIdResponse> {
     return await this.userService.getUserByLogin(data);
+  }
+
+  @ControllerMeta({
+    name: 'Get user by login',
+    description: 'Get user by login',
+    isPublic: false,
+    type: ControllerType.WRITE,
+    needsPermission: false,
+  })
+  @MessagePattern(UserClientPatterns.GET_USERS_BY_LOGIN_SECURE)
+  public async getUserByLoginSecure(
+    data: IGetUserByLoginRequest,
+  ): Promise<IGetUserByIdResponse> {
+    return await this.userService.getUserByLoginSecure(data);
   }
 
   @ControllerMeta({
@@ -164,6 +180,7 @@ export class UserController {
     description: 'My profile',
     isPublic: true,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_PATTERN)
   public async getPermissionsByPattern(pattern: string): Promise<any> {

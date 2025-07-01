@@ -66,17 +66,22 @@ export class UserController {
   async updatePermissions(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
     @Body() body: UpdatePermissionDto,
   ): Promise<any> {
-    const data = await this.userClient.updateTwoFaPermissions({
-      userId,
-      twoFaPermissions: [
-        {
-          permissionId: body.permissionId,
-          confirmationMethodId: body.confirmationMethodId,
-        },
-      ],
-    });
+    const data = await this.userClient.updateTwoFaPermissions(
+      traceId,
+      serviceToken,
+      {
+        userId,
+        twoFaPermissions: [
+          {
+            permissionId: body.permissionId,
+            confirmationMethodId: body.confirmationMethodId,
+          },
+        ],
+      },
+    );
 
     if (!data.status) {
       throw new CustomError(
@@ -102,12 +107,14 @@ export class UserController {
   async getConfirmationsMethods(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<any> {
     const data = await this.userClient.getUserConfirmationMethods(
       {
         userId,
       },
       traceId,
+      serviceToken,
     );
 
     if (!data.status) {
@@ -134,6 +141,7 @@ export class UserController {
   async createConfirmationCodes(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
     @Body() body: CreateConfirmationCodesDto,
   ): Promise<any> {
     const lockData = await acquireLock(
@@ -153,6 +161,7 @@ export class UserController {
     const data = await this.userClient.createConfirmationCode(
       { userId, permissionId: body.permissionId },
       traceId,
+      serviceToken,
     );
 
     if (!data.status) {
@@ -183,10 +192,12 @@ export class UserController {
   async getAllowedPermissions(
     @UserRoleFromRequest() roleId: string,
     @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<any> {
     const data = await this.userClient.getPermissionsByRole(
       { roleId, type: ControllerType.WRITE },
       traceId,
+      serviceToken,
     );
 
     if (!data.status) {

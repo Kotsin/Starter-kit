@@ -143,6 +143,7 @@ export class ApiKeyController {
     description: 'Validate API key',
     isPublic: false,
     type: ControllerType.READ,
+    needsPermission: false,
   })
   @MessagePattern(AuthClientPatterns.API_KEY_VALIDATE)
   async validate(@Payload() data: ApiKeyValidateDto): Promise<{

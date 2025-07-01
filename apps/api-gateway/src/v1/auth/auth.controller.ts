@@ -22,6 +22,7 @@ import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-r
 import { RequestIpFromRequest } from '../../decorators/extract-ip.decorator';
 import { RequestUserAgentFromRequest } from '../../decorators/extract-userAgent.decorator';
 import { CheckPermissions } from '../../decorators/role-permissions-decorator';
+import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { SessionIdFromRequest } from '../../decorators/sessionId-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { BruteForceGuard } from '../../guards/bruteForce.guard';
@@ -107,6 +108,7 @@ export class AuthController {
         loginType: body['loginType'],
       },
       trace_id,
+      'service',
     );
 
     if (!userData.status) {
@@ -167,6 +169,7 @@ export class AuthController {
         login: body.login,
       },
       traceId,
+      'api-gateway',
     );
 
     if (!data.status) {
@@ -188,6 +191,7 @@ export class AuthController {
    * @param traceId - Request tracking identifier
    * @param requestIp - User's IP address
    * @param user_agent - User's browser/client information
+   * @param serviceToken
    * @param body - Authentication credentials
    * @param headers - Request headers containing security information
    * @returns Authentication result with tokens
@@ -230,7 +234,7 @@ export class AuthController {
     status: 429,
     description: 'Too many attempts. Try again later',
   })
-  // @UseGuards(BruteForceGuard, CaptchaGuard)
+  @UseGuards(BruteForceGuard, CaptchaGuard)
   @UsePipes(LoginValidationPipe)
   @Post('signin')
   async auth(
@@ -258,6 +262,7 @@ export class AuthController {
         },
       },
       traceId,
+      'api-gateway',
     );
 
     if (!userData.status) {
@@ -320,6 +325,7 @@ export class AuthController {
         token: body.refreshToken,
       },
       traceId,
+      'api-gateway',
     );
 
     if (!result.status) {
@@ -338,6 +344,7 @@ export class AuthController {
    * @param traceId - Request tracking identifier
    * @param userId - User ID from request
    * @param sessionId
+   * @param serviceToken
    * @returns Logout result
    */
   @ApiOperation({
@@ -364,11 +371,16 @@ export class AuthController {
     @CorrelationIdFromRequest() traceId: string,
     @UserIdFromRequest() userId: string,
     @SessionIdFromRequest() sessionId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<{ message: string }> {
-    const result = await this.authClient.terminateSessionById(traceId, {
-      userId,
-      sessionId,
-    });
+    const result = await this.authClient.terminateSessionById(
+      traceId,
+      serviceToken,
+      {
+        userId,
+        sessionId,
+      },
+    );
 
     if (!result.status) {
       throw new AuthenticationFailedException();
@@ -415,11 +427,12 @@ export class AuthController {
     @CorrelationIdFromRequest() traceId: string,
     @Body() body: ConfirmationCodesRequest,
   ): Promise<{ message: string; data: any }> {
-    const userData = await this.userClient.getUserByLogin(
+    const userData = await this.userClient.getUserByLoginSecure(
       {
         login: body.login,
       },
       traceId,
+      'api-gateway',
     );
 
     const result = await this.userClient.createConfirmationCode(
@@ -428,6 +441,7 @@ export class AuthController {
         permissionId: body.permissionId,
       },
       traceId,
+      'api-gateway',
     );
 
     if (!result.status) {

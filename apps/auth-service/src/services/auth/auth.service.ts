@@ -32,14 +32,13 @@ import {
   ITokenVerifyRequest,
   ITokenVerifyResponse,
   PermissionClient,
+  ServiceJwtGenerator,
   SessionEntity,
   SessionStatus,
   UserClient,
 } from '@crypton-nestjs-kit/common';
 import { ConfigService } from '@crypton-nestjs-kit/config';
 import { In, LessThan, Repository } from 'typeorm';
-
-import { ServiceJwtUseCase } from '../../use-cases/service-jwt.use-case';
 
 import { AuthStrategyFactory } from './auth-strategy-factory.service';
 
@@ -55,7 +54,7 @@ export class AuthService {
     private readonly userClient: UserClient,
     private readonly permissionClient: PermissionClient,
     private readonly authStrategyFactory: AuthStrategyFactory,
-    private readonly serviceJwtUseCase: ServiceJwtUseCase,
+    private readonly serviceJwtGenerator: ServiceJwtGenerator,
   ) {}
 
   /**
@@ -216,6 +215,14 @@ export class AuthService {
           userId: data.userId,
         },
         data.traceId,
+        await this.serviceJwtGenerator.generateServiceJwt({
+          subject: data.userId,
+          actor: 'auth-service',
+          issuer: 'auth-service',
+          audience: 'user',
+          type: 'service',
+          expiresIn: '5m',
+        }),
       );
 
       const sessionData = {
@@ -479,11 +486,14 @@ export class AuthService {
         permissions,
       });
 
-      const serviceJwt = await this.serviceJwtUseCase.generateServiceJwt({
-        userId: session.userId,
-        serviceId: data.serviceId,
-        authType: 'jwtToken',
+      const serviceJwt = await this.serviceJwtGenerator.generateServiceJwt({
+        subject: session.userId,
+        actor: 'auth-service',
+        issuer: 'api-gateway',
+        audience: 'service',
+        type: 'access',
         permissions,
+        expiresIn: '5m',
       });
 
       return {

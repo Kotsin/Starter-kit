@@ -7,6 +7,7 @@ export interface ControllerMetaOptions {
   description?: string;
   isPublic?: boolean;
   type?: ControllerType;
+  needsPermission?: boolean;
 }
 
 export enum ControllerType {

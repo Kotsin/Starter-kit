@@ -5,23 +5,40 @@ import {
   AuthErrorMessages,
   IAuthStrategy,
   INativeAuthCredentials,
+  ServiceJwtGenerator,
   UserClient,
 } from '@crypton-nestjs-kit/common';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class NativeStrategy implements IAuthStrategy {
-  constructor(private readonly userClient: UserClient) {}
+  constructor(
+    private readonly userClient: UserClient,
+    private readonly serviceJwtGenerator: ServiceJwtGenerator,
+  ) {}
 
   async authenticate(
     credentials: INativeAuthCredentials,
     traceId?: string,
   ): Promise<any> {
     try {
+      const serviceToken = await this.serviceJwtGenerator.generateServiceJwt({
+        subject: credentials.login,
+        actor: 'auth-service',
+        issuer: 'auth-service',
+        audience: 'user',
+        type: 'service',
+        expiresIn: '5m',
+      });
+
+      console.log('userResult', serviceToken);
       const userResult = await this.userClient.getUserByLogin(
         { login: credentials.login },
         traceId,
+        serviceToken,
       );
+
+      console.log('userResult', userResult);
 
       if (!userResult.user) {
         throw new AuthenticationError(

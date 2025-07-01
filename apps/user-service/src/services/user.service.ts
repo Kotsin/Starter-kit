@@ -343,72 +343,6 @@ export class UserService implements OnModuleInit {
     }
   }
 
-  public async nativeLogin(
-    data: INativeLoginRequest,
-  ): Promise<INativeLoginResponse> {
-    try {
-      const existingUser = await this.findExistingUser(
-        data.login,
-        UserStatus.ACTIVE,
-      );
-
-      if (!existingUser) {
-        return {
-          status: true,
-          message: 'User not found',
-          user: null,
-          tokens: null,
-        };
-      }
-
-      if (!(await comparePassword(data.password, existingUser.password))) {
-        return {
-          status: false,
-          message: 'Invalid password',
-          user: null,
-          tokens: null,
-        };
-      }
-
-      const { status, tokens, message } = await this.createAccessData({
-        userId: existingUser.id,
-        userAgent: data.userAgent,
-        userIp: data.userIp,
-        fingerprint: data.fingerprint,
-        country: data.country,
-        city: data.city,
-        traceId: data.traceId,
-      });
-
-      if (!status) {
-        return {
-          status: false,
-          message: 'Access token creation failed',
-          user: null,
-          tokens: null,
-        };
-      }
-
-      return {
-        status: true,
-        message: 'User authenticated successfully',
-        user: {
-          id: existingUser.id,
-          login: existingUser.login,
-        },
-        tokens,
-      };
-    } catch (e) {
-      return {
-        error: e.message,
-        status: false,
-        message: 'User authentication failed',
-        user: null,
-        tokens: null,
-      };
-    }
-  }
-
   public async registrationConfirm(data: any): Promise<any> {
     try {
       const user = await this.userLoginMethods
@@ -481,56 +415,6 @@ export class UserService implements OnModuleInit {
         'ulm.method AS loginType',
       ])
       .getRawOne();
-  }
-
-  private async createAccessData(data: ISessionCreateRequest): Promise<{
-    status: boolean;
-    message: string;
-    tokens: any;
-  }> {
-    const sessionData = await this.authClient.sessionCreate(
-      {
-        userId: data.userId,
-        userAgent: data.userAgent,
-        userIp: data.userIp,
-        role: data.role,
-        country: data.country,
-        fingerprint: data.fingerprint,
-        city: data.city,
-        traceId: data.traceId,
-      },
-      data.traceId,
-    );
-
-    if (!sessionData.status) {
-      return {
-        status: false,
-        message: 'Session creation failed',
-        tokens: null,
-      };
-    }
-
-    const tokensData = await this.authClient.tokensCreate(
-      {
-        userId: data.userId,
-        sessionId: sessionData.sessionId,
-      },
-      data.traceId,
-    );
-
-    if (!tokensData.status) {
-      return {
-        status: false,
-        message: 'Session creation failed',
-        tokens: null,
-      };
-    }
-
-    return {
-      status: true,
-      message: 'Access data created successfully',
-      tokens: tokensData.tokens,
-    };
   }
 
   private async createUser(data: IFindOrCreateUserRequest): Promise<any> {
@@ -754,6 +638,58 @@ export class UserService implements OnModuleInit {
         .select([
           'user.id AS id',
           'user.password AS password',
+          'ulm.login AS login',
+          'ulm.method AS loginType',
+        ])
+        .getRawOne();
+
+      if (!user) {
+        return {
+          status: false,
+          message: 'User not found',
+          user: null,
+        };
+      }
+
+      await this.cacheManager.set(CACHE_KEY, JSON.stringify(user), 60 * 1000);
+
+      return {
+        status: true,
+        message: 'User exists',
+        user,
+      };
+    } catch (e) {
+      return {
+        error: e.message,
+        status: false,
+        message: 'User not found',
+        user: null,
+      };
+    }
+  }
+
+  public async getUserByLoginSecure(
+    data: IGetUserByLoginRequest,
+  ): Promise<IGetUserByIdResponse> {
+    try {
+      const CACHE_KEY = `getUserByLoginSecure:${data.login}`;
+
+      const cachedData = await this.cacheManager.get(CACHE_KEY);
+
+      if (cachedData) {
+        return {
+          status: true,
+          message: 'User exists',
+          user: JSON.parse(cachedData.toString()),
+        };
+      }
+
+      const user = await this.userLoginMethods
+        .createQueryBuilder('ulm')
+        .innerJoin('ulm.user', 'user')
+        .where('ulm.login = :login', { login: data.login })
+        .select([
+          'user.id AS id',
           'ulm.login AS login',
           'ulm.method AS loginType',
         ])

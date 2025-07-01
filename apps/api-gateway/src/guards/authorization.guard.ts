@@ -46,7 +46,7 @@ export class AuthGuard implements CanActivate {
     const tokenInfo = await this.authClient.tokenVerify(
       data,
       request['correlationId'],
-      true,
+      'service',
     );
 
     if (!tokenInfo.status) {

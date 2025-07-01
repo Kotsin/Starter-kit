@@ -50,9 +50,16 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         return next.handle();
       }
 
+      const rpcData = context.switchToRpc().getData();
+      const properties = context.getArgs()[1].args[0].properties;
+      const headers = properties.headers || {};
+      const serviceToken = headers['x-service-token'];
+      const traceId = headers.traceId || rpcData?.traceId || 'service';
+
       const permissionData = await this.userClient.getPermissionsByPattern(
         messagePattern[0],
-        '0000',
+        traceId,
+        serviceToken,
       );
 
       if (!permissionData.status) {
@@ -62,12 +69,6 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
           message: 'Permission data not found',
         });
       }
-
-      const rpcData = context.switchToRpc().getData();
-      // const properties = context.getArgs()[1].args[0].properties;
-      // const headers = properties.headers || {};
-      // const traceId = headers.traceId || rpcData?.traceId || 'service';
-      const traceId = 'service';
 
       let userId = rpcData?.userId;
       const login = rpcData?.credentials?.login;
@@ -83,7 +84,11 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       }
 
       if (!userId) {
-        const data = await this.userClient.getUserByLogin({ login }, traceId);
+        const data = await this.userClient.getUserByLoginSecure(
+          { login },
+          traceId,
+          serviceToken,
+        );
 
         if (!data.status) {
           return of({
@@ -96,7 +101,11 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         userId = data.user.id;
       }
 
-      const data = await this.userClient.getUserById({ userId }, traceId);
+      const data = await this.userClient.getUserById(
+        { userId },
+        traceId,
+        serviceToken,
+      );
 
       const twoFaEntries = data.user.twoFaPermissions.filter(
         (entry: any) => entry.permission.id === permissionData.permission.id,
@@ -152,11 +161,17 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
           });
         }
 
-        await this.userClient.resetConfirmationCode({ id: entry.id }, traceId);
+        await this.userClient.resetConfirmationCode(
+          { id: entry.id },
+          traceId,
+          serviceToken,
+        );
       }
 
       return next.handle();
     } catch (err) {
+      console.log('asdasdasd', err);
+
       return of({
         status: false,
         error: AuthErrorMessages[AUTH_ERROR_CODES.UNKNOWN_ERROR],
