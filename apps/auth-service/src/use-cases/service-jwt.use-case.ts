@@ -26,7 +26,7 @@ export class ServiceJwtUseCase {
   }): Promise<string> {
     const { serviceId, userId, permissions, expiresIn = '1m' } = options;
 
-    const secret = this.getServiceSecret(serviceId);
+    const secret = this.getServiceSecret('user');
 
     return this.jwtService.sign(
       {

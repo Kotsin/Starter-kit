@@ -9,7 +9,7 @@ import { PATTERN_METADATA } from '@nestjs/microservices/constants';
 import { Observable, of } from 'rxjs';
 
 import { UserClient } from '../clients';
-import { AUTH_ERROR_CODES } from '../errors';
+import { AUTH_ERROR_CODES, AuthErrorMessages } from '../errors';
 
 import { CONTROLLER_META, ControllerType } from './controller-meta.decorator';
 
@@ -64,6 +64,10 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       }
 
       const rpcData = context.switchToRpc().getData();
+      // const properties = context.getArgs()[1].args[0].properties;
+      // const headers = properties.headers || {};
+      // const traceId = headers.traceId || rpcData?.traceId || 'service';
+      const traceId = 'service';
 
       let userId = rpcData?.userId;
       const login = rpcData?.credentials?.login;
@@ -79,12 +83,20 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       }
 
       if (!userId) {
-        const data = await this.userClient.getUserByLogin({ login }, '0000');
+        const data = await this.userClient.getUserByLogin({ login }, traceId);
+
+        if (!data.status) {
+          return of({
+            status: false,
+            errorCode: AUTH_ERROR_CODES.INVALID_CREDENTIALS,
+            message: AuthErrorMessages[AUTH_ERROR_CODES.INVALID_CREDENTIALS],
+          });
+        }
 
         userId = data.user.id;
       }
 
-      const data = await this.userClient.getUserById({ userId }, '0000');
+      const data = await this.userClient.getUserById({ userId }, traceId);
 
       const twoFaEntries = data.user.twoFaPermissions.filter(
         (entry: any) => entry.permission.id === permissionData.permission.id,
@@ -110,8 +122,9 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         if (!expectedCode) {
           return of({
             status: false,
-            error: 'MISSING_CONFIRMATION_CODE',
-            message: `Missing ${method} confirmation code`,
+            errorCode: AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE,
+            message:
+              AuthErrorMessages[AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE],
           });
         }
 
@@ -124,27 +137,29 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         if (normalizedEntryCode !== normalizedExpectedCode) {
           return of({
             status: false,
-            error: 'INVALID_CONFIRMATION_CODE',
-            message: `Invalid ${method} confirmation code`,
+            errorCode: AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE,
+            message:
+              AuthErrorMessages[AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE],
           });
         }
 
         if (currentTime.getTime() > codeLifetime.getTime()) {
           return of({
             status: false,
-            error: 'EXPIRED_CONFIRMATION_CODE',
-            message: `Expired ${method} confirmation code`,
+            errorCode: AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE,
+            message:
+              AuthErrorMessages[AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE],
           });
         }
 
-        await this.userClient.resetConfirmationCode({ id: entry.id }, '0000');
+        await this.userClient.resetConfirmationCode({ id: entry.id }, traceId);
       }
 
       return next.handle();
     } catch (err) {
       return of({
         status: false,
-        error: null,
+        error: AuthErrorMessages[AUTH_ERROR_CODES.UNKNOWN_ERROR],
         message: (err as Error).message,
         errorCode: AUTH_ERROR_CODES.UNKNOWN_ERROR,
       });

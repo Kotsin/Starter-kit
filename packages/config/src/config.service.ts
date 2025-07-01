@@ -117,6 +117,16 @@ export class ConfigService {
         },
         transport: Transport.RMQ,
       },
+      permissionService: {
+        options: {
+          urls: [env.PERMISSION_SERVICE_RMQ_URL || ''],
+          queue: env.PERMISSION_SERVICE_RMQ_QUEUE || '',
+          queueOptions: {
+            durable: false,
+          },
+        },
+        transport: Transport.RMQ,
+      },
       oauth: {
         frontendUrl: env.FRONTEND_URL || '',
         google: {

@@ -1,11 +1,13 @@
 import { CacheModule } from '@nestjs/cache-manager';
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ApiKeyEntity,
+  ClientPermissionModule,
   ClientUserModule,
+  loadPermissionClientOptions,
   loadUserClientOptions,
   PermissionsRegistrarModule,
   RequireConfirmationInterceptor,
@@ -36,6 +38,7 @@ import { ServiceJwtUseCase } from './use-cases/service-jwt.use-case';
     ConfigModule,
     AppLoggerModule,
     ClientUserModule.forRoot(loadUserClientOptions()),
+    ClientPermissionModule.forRoot(loadPermissionClientOptions()),
     TypeOrmModule.forFeature([SessionEntity, ApiKeyEntity]),
     DBModule.forRoot({
       entities: [SessionEntity, ApiKeyEntity],

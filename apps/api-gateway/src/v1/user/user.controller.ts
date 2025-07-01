@@ -103,15 +103,12 @@ export class UserController {
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
   ): Promise<any> {
-    console.log('asdasdasdsd');
     const data = await this.userClient.getUserConfirmationMethods(
       {
         userId,
       },
       traceId,
     );
-
-    console.log('asdasdasdsd', data);
 
     if (!data.status) {
       throw new CustomError(

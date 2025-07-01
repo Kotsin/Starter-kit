@@ -11,8 +11,11 @@ async function bootstrap(): Promise<void> {
   const configService = new ConfigService();
 
   configService.loadFromEnv();
-  const userConfig = configService.get().userService as RmqOptions;
-  const app = await NestFactory.createMicroservice(PermissionModule, userConfig);
+  const userConfig = configService.get().permissionService as RmqOptions;
+  const app = await NestFactory.createMicroservice(
+    PermissionModule,
+    userConfig,
+  );
 
   await app.listen();
 }

@@ -1,6 +1,6 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -28,6 +28,7 @@ import { PermissionService } from './services/permission.service';
 @Module({
   imports: [
     ConfigModule,
+    ClientUserModule.forRoot(loadUserClientOptions()),
     TypeOrmModule.forFeature([
       UserEntity,
       UserLoginMethodsEntity,

@@ -24,6 +24,9 @@ export enum AUTH_ERROR_CODES {
   SESSIONS_UNTIL_DATE_FAILED = 'AUTH_303',
   // Аутентификация
   AUTHENTICATION_FAILED = 'AUTH_401',
+  MISSING_CONFIRMATION_CODE = 'AUTH_402',
+  INVALID_CONFIRMATION_CODE = 'AUTH_403',
+  EXPIRED_CONFIRMATION_CODE = 'AUTH_404',
 }
 
 export const AuthErrorMessages: Record<AUTH_ERROR_CODES, string> = {
@@ -48,4 +51,7 @@ export const AuthErrorMessages: Record<AUTH_ERROR_CODES, string> = {
   [AUTH_ERROR_CODES.SESSIONS_UNTIL_DATE_FAILED]:
     'Sessions until date fetch failed',
   [AUTH_ERROR_CODES.AUTHENTICATION_FAILED]: 'Authentication failed',
+  [AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE]: 'Missing confirmation code',
+  [AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE]: 'Invalid confirmation code',
+  [AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE]: 'Confirmation code is expired',
 };

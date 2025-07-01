@@ -182,8 +182,6 @@ export class AuthController {
     };
   }
 
-  //TODO ДОбавить универсальный api для запроса 2fa кодов для методов требующих 2fa(Если включены пользователем)
-
   /**
    * Authenticate user
    *
@@ -232,7 +230,7 @@ export class AuthController {
     status: 429,
     description: 'Too many attempts. Try again later',
   })
-  @UseGuards(BruteForceGuard, CaptchaGuard)
+  // @UseGuards(BruteForceGuard, CaptchaGuard)
   @UsePipes(LoginValidationPipe)
   @Post('signin')
   async auth(
@@ -242,6 +240,7 @@ export class AuthController {
     @Body() body: AuthDtoRequest,
     @Headers() headers: Record<string, string>,
   ): Promise<IAuthResponse> {
+    await this.bruteForceGuard.resetAttempts(requestIp, body.login);
     const userData = await this.authClient.authenticateNative(
       {
         credentials: {

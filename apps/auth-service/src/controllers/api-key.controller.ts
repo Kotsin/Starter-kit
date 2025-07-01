@@ -4,6 +4,8 @@ import {
   API_KEY_ERROR_CODES,
   ApiKeyValidateDto,
   AuthClientPatterns,
+  ControllerMeta,
+  ControllerType,
   CreateApiKeyDto,
   IApiKeyCreateResponse,
   IApiKeyListResponse,
@@ -18,6 +20,12 @@ import { ApiKeyService } from '../services/api-key/api-key.service';
 export class ApiKeyController {
   constructor(private readonly apiKeyService: ApiKeyService) {}
 
+  @ControllerMeta({
+    name: 'Create API key',
+    description: 'Create API key for user',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(AuthClientPatterns.API_KEY_CREATE)
   async create(
     @Payload() dto: CreateApiKeyDto,
@@ -40,6 +48,12 @@ export class ApiKeyController {
     }
   }
 
+  @ControllerMeta({
+    name: 'List API keys',
+    description: 'List API keys',
+    isPublic: true,
+    type: ControllerType.READ,
+  })
   @MessagePattern(AuthClientPatterns.API_KEY_LIST)
   async list(): Promise<IApiKeyListResponse> {
     const result = await this.apiKeyService.listApiKeys();
@@ -71,6 +85,12 @@ export class ApiKeyController {
     }
   }
 
+  @ControllerMeta({
+    name: 'Update API key',
+    description: 'Update API key params',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(AuthClientPatterns.API_KEY_UPDATE)
   async update(
     @Payload() data: { id: string; dto: UpdateApiKeyDto },
@@ -93,6 +113,12 @@ export class ApiKeyController {
     }
   }
 
+  @ControllerMeta({
+    name: 'Remove API key',
+    description: 'Remove API key',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(AuthClientPatterns.API_KEY_DELETE)
   async remove(@Payload() id: string): Promise<IApiKeyRemoveResponse> {
     try {
@@ -112,6 +138,12 @@ export class ApiKeyController {
     }
   }
 
+  @ControllerMeta({
+    name: 'Validate API key',
+    description: 'Validate API key',
+    isPublic: false,
+    type: ControllerType.READ,
+  })
   @MessagePattern(AuthClientPatterns.API_KEY_VALIDATE)
   async validate(@Payload() data: ApiKeyValidateDto): Promise<{
     status: boolean;

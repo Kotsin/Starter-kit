@@ -1,6 +1,8 @@
 import { Controller, UseInterceptors } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
+  ControllerMeta,
+  ControllerType,
   FunctionType,
   IConfirmRegistrationRequest,
   ICreateConfirmationCodesRequest,
@@ -25,29 +27,34 @@ import { UserService } from '../services/user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @FunctionType('READ')
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.GET_ME)
   public async getMe(request: IGetMeRequest): Promise<IGetMeResponse> {
     return await this.userService.getMe(request);
   }
 
-  @FunctionType('READ')
+  @ControllerMeta({
+    name: 'Confirmation methods',
+    description: 'Confirmation methods',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.GET_CONFIRMATION_METHODS)
   public async getUserConfirmationMethods(request: any): Promise<any> {
     return await this.userService.getUserConfirmationMethods(request);
   }
 
-  @FunctionType('READ')
-  @MessagePattern(UserClientPatterns.GET_PERMISSIONS_LIST)
-  public async getPermissionList(): Promise<any> {
-    return await this.userService.getPermissionList();
-  }
-
-  @MessagePattern(UserClientPatterns.REGISTER_PERMISSIONS)
-  public async registerPermissions(@Payload() data: any): Promise<any> {
-    return await this.userService.registerPermissions(data);
-  }
-
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.RESET_CONFIRMATION_CODE)
   public async resetConfirmationCode(
     @Payload() data: { login?: string; userId?: string; id?: string },
@@ -59,11 +66,23 @@ export class UserController {
     );
   }
 
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.UPDATE_2FA_PERMISSIONS)
   public async updateTwoFaPermissions(request: any): Promise<any> {
     return await this.userService.updateTwoFaPermissions(request);
   }
 
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.FIND_OR_CREATE_USER)
   public async findOrCreateUser(
     data: IFindOrCreateUserRequest,
@@ -71,6 +90,12 @@ export class UserController {
     return await this.userService.findOrCreateUser(data);
   }
 
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.CREATE_CONFIRMATION_CODES)
   public async createConfirmationCodes(
     data: ICreateConfirmationCodesRequest,
@@ -81,14 +106,12 @@ export class UserController {
     );
   }
 
-  @Permission('d17ba476-d43e-49e7-a715-96b3c86c544c')
-  @MessagePattern(UserClientPatterns.LOGIN_NATIVE)
-  public async nativeLogin(
-    data: INativeLoginRequest,
-  ): Promise<INativeLoginResponse> {
-    return await this.userService.nativeLogin(data);
-  }
-
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.REGISTRATION_CONFIRM)
   public async registrationConfirm(
     data: IConfirmRegistrationRequest,
@@ -96,7 +119,12 @@ export class UserController {
     return await this.userService.registrationConfirm(data);
   }
 
-  @FunctionType('READ')
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.GET_USER_BY_ID)
   public async getUserById(
     data: IGetUserByIdRequest,
@@ -104,7 +132,12 @@ export class UserController {
     return await this.userService.getUserById(data);
   }
 
-  @FunctionType('READ')
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.GET_USER_BY_LOGIN)
   public async getUserByLogin(
     data: IGetUserByLoginRequest,
@@ -112,7 +145,12 @@ export class UserController {
     return await this.userService.getUserByLogin(data);
   }
 
-  @FunctionType('READ')
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_ROLE)
   public async getPermissionsByRole(request: {
     roleId: string;
@@ -121,6 +159,12 @@ export class UserController {
     return await this.userService.getPermissionsByRole(request);
   }
 
+  @ControllerMeta({
+    name: 'My profile',
+    description: 'My profile',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_PATTERN)
   public async getPermissionsByPattern(pattern: string): Promise<any> {
     return await this.userService.getPermissionsByPattern(pattern);

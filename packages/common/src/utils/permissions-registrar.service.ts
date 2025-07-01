@@ -8,7 +8,7 @@ import {
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
 import { PATTERN_METADATA } from '@nestjs/microservices/constants';
 
-import { UserClient } from '../clients';
+import { PermissionClient } from '../clients';
 
 import { CONTROLLER_META, ControllerType } from './controller-meta.decorator';
 
@@ -20,14 +20,14 @@ export class PermissionsRegistrar implements OnModuleInit {
     @Inject(DiscoveryService)
     private readonly discoveryService: DiscoveryService,
     @Inject(MetadataScanner)
-    private readonly metadataScanner: MetadataScanner, // @InjectRepository(PermissionEntity) // private readonly permissionRepository: Repository<PermissionEntity>,
-    @Inject(forwardRef(() => UserClient))
-    private readonly userClient: UserClient,
+    private readonly metadataScanner: MetadataScanner,
+    @Inject(forwardRef(() => PermissionClient))
+    private readonly permissionClient: PermissionClient,
   ) {}
 
   async onModuleInit(): Promise<void> {
     try {
-      const { permissions } = await this.userClient.getPermissionList(
+      const { permissions } = await this.permissionClient.getPermissionList(
         '5555555',
       );
 
@@ -38,16 +38,16 @@ export class PermissionsRegistrar implements OnModuleInit {
         permissions,
       );
 
-      console.log('updatedPermissions', updatedPermissions);
-
       if (updatedPermissions.length > 0) {
-        await this.userClient.registerPermissions(
+        await this.permissionClient.registerPermissions(
           { permissions: updatedPermissions },
           '0000',
         );
       }
 
-      this.logger.log(`Permissions registered: ${permissionsList.length}`);
+      this.logger.log(
+        `Permissions registered: ${permissionsList.length} | updated: ${updatedPermissions.length}`,
+      );
     } catch (e) {
       this.logger.error('Failed to register permissions', e);
     }

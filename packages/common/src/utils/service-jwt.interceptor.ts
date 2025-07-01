@@ -8,10 +8,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { PATTERN_METADATA } from '@nestjs/microservices/constants';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
-import { FUNCTION_TYPE } from './function-type.decorator';
 
 @Injectable()
 export class ServiceJwtInterceptor implements NestInterceptor {
@@ -25,31 +24,45 @@ export class ServiceJwtInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const contextType = context.getType();
 
-    const functionType = this.reflector.get<string>(
-      FUNCTION_TYPE,
+    const messagePattern = this.reflector.get<string>(
+      PATTERN_METADATA,
       context.getHandler(),
     );
 
+    console.log('12313123', messagePattern);
+
     const { serviceToken } = this.extractContextData(context, contextType);
 
-    if (this.shouldVerifyToken(functionType)) {
-      if (!serviceToken) {
-        throw new UnauthorizedException('Service JWT token is missing');
-      }
+    // console.log('12313123', serviceToken);
 
-      try {
-        this.jwtService.verify(serviceToken);
-      } catch (err) {
-        throw new UnauthorizedException('Invalid or expired service JWT token');
-      }
+    try {
+      const data = this.jwtService.verify(serviceToken);
+
+      console.log('data', data);
+    } catch (err) {
+      throw new UnauthorizedException('Invalid or expired service JWT token');
     }
+
+    // if (this.shouldVerifyToken(functionType)) {
+    //   if (!serviceToken) {
+    //     throw new UnauthorizedException('Service JWT token is missing');
+    //   }
+    //
+    //   try {
+    //     const data = this.jwtService.verify(serviceToken);
+    //
+    //     console.log('data', data);
+    //   } catch (err) {
+    //     throw new UnauthorizedException('Invalid or expired service JWT token');
+    //   }
+    // }
 
     return next.handle().pipe(catchError((err) => throwError(() => err)));
   }
 
-  private shouldVerifyToken(functionType: string): boolean {
-    return !functionType || functionType === 'WRITE';
-  }
+  // private shouldVerifyToken(functionType: string): boolean {
+  //   return !functionType || functionType === 'WRITE';
+  // }
 
   private extractContextData(
     context: ExecutionContext,

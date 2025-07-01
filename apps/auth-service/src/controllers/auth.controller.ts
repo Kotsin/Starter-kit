@@ -80,7 +80,7 @@ export class AuthController {
   }
 
   @ControllerMeta({
-    name: 'Создание сессии',
+    name: 'Sessions creating',
     description: 'Создание сессии пользователя',
     isPublic: false,
   })

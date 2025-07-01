@@ -31,6 +31,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  PermissionClient,
   SessionEntity,
   SessionStatus,
   UserClient,
@@ -52,6 +53,7 @@ export class AuthService {
     private readonly cacheManager: Cache,
     private readonly configService: ConfigService,
     private readonly userClient: UserClient,
+    private readonly permissionClient: PermissionClient,
     private readonly authStrategyFactory: AuthStrategyFactory,
     private readonly serviceJwtUseCase: ServiceJwtUseCase,
   ) {}
@@ -455,10 +457,12 @@ export class AuthService {
         );
       }
 
-      const permissionsResult = await this.userClient.getPermissionsByRole(
-        { roleId: session.role },
-        '0000',
-      );
+      const permissionsResult =
+        await this.permissionClient.getPermissionsByRole(
+          { roleId: session.role },
+          '0000',
+        );
+
       const permissions = permissionsResult.permissions.map((k) => ({
         id: k.id,
         method: k.method,
@@ -467,6 +471,13 @@ export class AuthService {
         isPublic: k.isPublic,
         type: k.type,
       }));
+
+      console.log({
+        userId: session.userId,
+        serviceId: data.serviceId,
+        authType: 'jwtToken',
+        permissions,
+      });
 
       const serviceJwt = await this.serviceJwtUseCase.generateServiceJwt({
         userId: session.userId,

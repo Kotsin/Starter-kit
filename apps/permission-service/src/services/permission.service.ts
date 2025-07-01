@@ -50,7 +50,6 @@ export class PermissionService implements OnModuleInit {
     @InjectRepository(TwoFactorPermissionsEntity)
     private readonly twoFactorPermissionsRepo: Repository<TwoFactorPermissionsEntity>,
     private readonly cacheManager: Cache,
-    private readonly authClient: AuthClient,
   ) {}
 
   async onModuleInit(): Promise<void> {
@@ -121,14 +120,19 @@ export class PermissionService implements OnModuleInit {
 
     const isUpdated = await Promise.all(
       default_roles.map(async (role) => {
+        if (role.name == 'USER') {
+        }
+
         const newPermissions = permissions.filter(
           (permission) =>
-            !role.permissions.some((p) => p.alias === permission.alias),
+            !role.permissions.some((p) => p.method === permission.method),
         );
 
         if (newPermissions.length === 0) {
           return false;
         }
+
+        await this.cacheManager.del(`rolePermissions:${role.id}`);
 
         role.permissions.push(
           ...newPermissions.map((permission) =>
@@ -174,52 +178,6 @@ export class PermissionService implements OnModuleInit {
     }
   }
 
-  public async createConfirmationCodes(
-    userId: v4,
-    permissionId: v4,
-  ): Promise<ICreateConfirmationCodesResponse> {
-    try {
-      const data = await this.getUserById(userId);
-
-      const filteredTwoFaMethods = data.user.twoFaPermissions.filter(
-        (twoFaPermission) =>
-          twoFaPermission.permission.id === permissionId &&
-          !!twoFaPermission.confirmationMethod,
-      );
-
-      if (filteredTwoFaMethods.length < 1) {
-        return {
-          status: false,
-          message: 'Confirmation methods for permission not found',
-          confirmationMethods: [],
-        };
-      }
-
-      await Promise.all(
-        filteredTwoFaMethods.map((method) =>
-          this.crateTwoFaCode(method.confirmationMethod.id),
-        ),
-      );
-
-      const confirmationMethods = filteredTwoFaMethods.map(
-        (method) => method.confirmationMethod.login,
-      );
-
-      return {
-        status: true,
-        message: 'Confirmation codes successfully sent',
-        confirmationMethods,
-      };
-    } catch (e) {
-      return {
-        status: false,
-        error: e.message,
-        message: 'Confirmation codes not sent',
-        confirmationMethods: [],
-      };
-    }
-  }
-
   public async crateTwoFaCode(verificationMethodId: string): Promise<any> {
     const { affected } = await this.userLoginMethods.update(
       { id: verificationMethodId },
@@ -256,11 +214,12 @@ export class PermissionService implements OnModuleInit {
 
         permissions = rolePermissions.map((k) => ({
           id: k.id,
-          nameCode: k.messagePattern.replace(':', '_'),
+          messagePattern: k.messagePattern,
           method: k.method,
           alias: k.alias,
           description: k.description,
           type: k.type,
+          isPublic: k.isPublic,
         }));
 
         await this.cacheManager.set(CACHE_KEY, permissions, 10 * 1000);

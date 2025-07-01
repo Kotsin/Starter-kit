@@ -56,24 +56,6 @@ export class UserClient {
     );
   }
 
-  async registerPermissions(request: any, traceId: string): Promise<any> {
-    return await firstValueFrom(
-      this.userClientProxy.send(
-        UserClientPatterns.REGISTER_PERMISSIONS,
-        await createRmqMessage(traceId, request),
-      ),
-    );
-  }
-
-  async getPermissionList(traceId: string): Promise<any> {
-    return await firstValueFrom(
-      this.userClientProxy.send(
-        UserClientPatterns.GET_PERMISSIONS_LIST,
-        await createRmqMessage(traceId),
-      ),
-    );
-  }
-
   async getUserById(
     request: IGetUserByIdRequest,
     traceId: string,
@@ -165,18 +147,6 @@ export class UserClient {
     return await firstValueFrom(
       this.userClientProxy.send(
         UserClientPatterns.RESET_CONFIRMATION_CODE,
-        await createRmqMessage(traceId, request),
-      ),
-    );
-  }
-
-  async nativeLogin(
-    request: INativeLoginRequest,
-    traceId: string,
-  ): Promise<INativeLoginResponse> {
-    return await firstValueFrom(
-      this.userClientProxy.send(
-        UserClientPatterns.LOGIN_NATIVE,
         await createRmqMessage(traceId, request),
       ),
     );

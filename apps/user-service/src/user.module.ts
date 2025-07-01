@@ -5,8 +5,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ClientAuthModule,
+  ClientPermissionModule,
   ClientUserModule,
   loadAuthClientOptions,
+  loadPermissionClientOptions,
   loadUserClientOptions,
   PermissionEntity,
   PermissionsRegistrarModule,
@@ -34,8 +36,8 @@ import { UserService } from './services/user.service';
 @Module({
   imports: [
     ConfigModule,
-    ClientUserModule.forRoot(loadUserClientOptions()),
     ClientAuthModule.forRoot(loadAuthClientOptions()),
+    ClientPermissionModule.forRoot(loadPermissionClientOptions()),
     TypeOrmModule.forFeature([
       UserEntity,
       UserLoginMethodsEntity,
@@ -79,7 +81,7 @@ import { UserService } from './services/user.service';
       },
       inject: [ConfigService],
     }),
-    // PermissionsRegistrarModule,
+    PermissionsRegistrarModule,
   ],
   controllers: [UserController],
   providers: [
@@ -88,10 +90,10 @@ import { UserService } from './services/user.service';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: ServiceJwtInterceptor,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ServiceJwtInterceptor,
+    },
     // {
     //   provide: APP_INTERCEPTOR,
     //   useFactory: (reflector: Reflector, userClient: UserClient) => {

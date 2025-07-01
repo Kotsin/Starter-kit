@@ -6,8 +6,6 @@ export const UserRoleFromRequest = createParamDecorator(
 
     const userRole = request['user']?.role;
 
-    console.log(userRole);
-
     if (!userRole) {
       throw new Error('There is no userId in the http request!');
     }
