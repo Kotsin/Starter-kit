@@ -10,9 +10,9 @@ import {
   decrypt,
   encrypt,
   IApiKey,
-  IDecryptedApiKey,
   ServiceJwtGenerator,
   UpdateApiKeyDto,
+  UserClient,
 } from '@crypton-nestjs-kit/common';
 import * as crypto from 'crypto';
 import { Repository } from 'typeorm';
@@ -29,6 +29,7 @@ export class ApiKeyService {
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
     private readonly serviceJwtGenerator: ServiceJwtGenerator,
+    private readonly userClient: UserClient,
   ) {}
 
   async createApiKey(dto: CreateApiKeyDto): Promise<IApiKey> {
@@ -93,7 +94,11 @@ export class ApiKeyService {
     }));
   }
 
-  async updateApiKey(id: string, dto: UpdateApiKeyDto): Promise<IApiKey> {
+  async updateApiKey(
+    id: string,
+    userId: string,
+    dto: UpdateApiKeyDto,
+  ): Promise<IApiKey> {
     const apiKey = await this.apiKeyRepo.findOne({ where: { id } });
 
     if (!apiKey) {
@@ -102,6 +107,8 @@ export class ApiKeyService {
 
     const fieldMap: Record<string, (value: any) => any> = {
       allowedIps: (ips: string[]) => ips.map((ip) => encrypt(ip)),
+      permissions: (permissions: string[]) =>
+        permissions.map((permission) => encrypt(permission)),
     };
 
     Object.entries(dto).forEach(([key, value]) => {
@@ -109,6 +116,7 @@ export class ApiKeyService {
         if (fieldMap[key]) {
           apiKey[`encrypted${key.charAt(0).toUpperCase()}${key.slice(1)}`] =
             fieldMap[key](value);
+          apiKey[key] = fieldMap[key](value);
         } else {
           apiKey[key] = value;
         }
@@ -122,8 +130,10 @@ export class ApiKeyService {
         API_KEY_CACHE_SLICE_LENGTH,
       )}`,
       {
+        userId,
         encryptedAllowedIps: apiKey.encryptedAllowedIps,
-        permissions: dto.permissions,
+        permissions:
+          dto.permissions?.map((permission) => encrypt(permission)) || [],
         isActive: apiKey.isActive,
       },
       API_KEY_TTL,
@@ -131,7 +141,7 @@ export class ApiKeyService {
 
     return {
       id: apiKey.id,
-      key: apiKey.encryptedKey,
+      key: decrypt(apiKey.encryptedKey),
       type: apiKey.type as ApiKeyType,
       allowedIps: (apiKey.encryptedAllowedIps || []).map(decrypt),
       permissions: apiKey.permissions || [],

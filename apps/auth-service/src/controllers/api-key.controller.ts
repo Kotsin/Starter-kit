@@ -93,10 +93,14 @@ export class ApiKeyController {
   })
   @MessagePattern(AuthClientPatterns.API_KEY_UPDATE)
   async update(
-    @Payload() data: { id: string; dto: UpdateApiKeyDto },
+    @Payload() data: { id: string; userId: string; dto: UpdateApiKeyDto },
   ): Promise<IApiKeyUpdateResponse> {
     try {
-      const result = await this.apiKeyService.updateApiKey(data.id, data.dto);
+      const result = await this.apiKeyService.updateApiKey(
+        data.id,
+        data.userId,
+        data.dto,
+      );
 
       return {
         status: true,

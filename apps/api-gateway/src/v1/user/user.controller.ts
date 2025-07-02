@@ -92,6 +92,11 @@ export class UserController {
 
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Getting all of user confirmation methods' })
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API Key. Необходим для доступа к этому эндпоинту',
+    required: false,
+  })
   @ApiOkResponse({
     description: 'User info',
     type: UsersMeResponseDto,
