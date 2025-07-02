@@ -4,88 +4,128 @@ import {
   Inject,
   Injectable,
   NestInterceptor,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { PATTERN_METADATA } from '@nestjs/microservices/constants';
-// import { ConfigService } from '@crypton-nestjs-kit/config';
-import { Observable, throwError } from 'rxjs';
+import { ConfigService } from '@crypton-nestjs-kit/config';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { CONTROLLER_META } from './controller-meta.decorator';
+import { AUTH_ERROR_CODES, AuthErrorMessages } from '../errors';
+
+import {
+  CONTROLLER_META,
+  ControllerMetaOptions,
+} from './controller-meta.decorator';
 
 @Injectable()
 export class ServiceJwtInterceptor implements NestInterceptor {
+  private readonly serviceSecrets: Record<string, string>;
   constructor(
     @Inject(Reflector)
     private readonly reflector: Reflector,
     @Inject(JwtService)
-    private readonly jwtService: JwtService, // @Inject(ConfigService) // private readonly configService: ConfigService,
-  ) {}
+    private readonly jwtService: JwtService,
+    @Inject(ConfigService)
+    private readonly configService: ConfigService,
+  ) {
+    this.serviceSecrets = this.configService.get().auth.service_secrets;
+  }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const contextType = context.getType();
+    const handler = context.getHandler();
 
     const messagePattern = this.reflector.get<string>(
       PATTERN_METADATA,
       context.getHandler(),
     );
 
-    const controllerMeta = this.reflector.get<{
-      name: string;
-      isPublic: boolean;
-      description: string;
-      type: string;
-      needsPermission: boolean;
-    }>(CONTROLLER_META, context.getHandler());
+    const controllerMeta = this.reflector.get<ControllerMetaOptions>(
+      CONTROLLER_META,
+      context.getHandler(),
+    );
 
-    console.log('controllerMeta', controllerMeta);
-
-    if (controllerMeta.needsPermission === false) {
-      console.log('111111111');
-
+    if (controllerMeta?.needsPermission === false) {
       return next.handle();
     }
 
-    console.log('messagePattern', messagePattern, controllerMeta);
+    let { serviceToken } = this.extractContextData(context, contextType);
+    const serviceTokenPrefix = serviceToken.split('_')[0];
 
-    const { serviceToken } = this.extractContextData(context, contextType);
+    serviceToken = serviceToken.split('_')[1];
 
-    console.log('serviceToken', serviceToken);
-
-    const decodedData = this.jwtService.decode(serviceToken);
-
-    console.log('decodedData', decodedData);
-
-    try {
-      const data = this.jwtService.verify(serviceToken, { secret: 'as' });
-
-      console.log('data', data);
-    } catch (err) {
-      throw new UnauthorizedException('Invalid or expired service JWT token');
+    if (!serviceToken) {
+      return of({
+        status: false,
+        errorCode: AUTH_ERROR_CODES.ACCESS_DENIED,
+        message: AuthErrorMessages[AUTH_ERROR_CODES.ACCESS_DENIED] + '1',
+      });
     }
 
-    // if (this.shouldVerifyToken(functionType)) {
-    //   if (!serviceToken) {
-    //     throw new UnauthorizedException('Service JWT token is missing');
-    //   }
-    //
-    //   try {
-    //     const data = this.jwtService.verify(serviceToken);
-    //
-    //     console.log('data', data);
-    //   } catch (err) {
-    //     throw new UnauthorizedException('Invalid or expired service JWT token');
-    //   }
-    // }
+    let decodedData: any;
+
+    try {
+      decodedData = this.jwtService.decode(serviceToken);
+      const secret = this.resolveSecret(decodedData.aud);
+
+      console.log(
+        messagePattern,
+        'secret___ ',
+        serviceToken.slice(0, 50),
+        secret,
+      );
+
+      this.jwtService.verify(serviceToken, { secret });
+    } catch (err) {
+      console.log((err as Error).message);
+
+      return of({
+        status: false,
+        errorCode: AUTH_ERROR_CODES.ACCESS_DENIED,
+        message: AuthErrorMessages[AUTH_ERROR_CODES.ACCESS_DENIED] + '2',
+      });
+    }
+
+    if (decodedData.typ === 'access' || serviceTokenPrefix === 'api-key') {
+      if (
+        !this.hasScope(
+          decodedData.scope,
+          this.reflector.get<string>(PATTERN_METADATA, handler),
+        )
+      ) {
+        return of({
+          status: false,
+          errorCode: AUTH_ERROR_CODES.ACCESS_DENIED,
+          message: AuthErrorMessages[AUTH_ERROR_CODES.ACCESS_DENIED] + '3',
+        });
+      }
+    }
 
     return next.handle().pipe(catchError((err) => throwError(() => err)));
   }
+  private resolveSecret(aud: string): string {
+    return (
+      this.serviceSecrets[aud] ||
+      this.serviceSecrets[`${aud}_service`] ||
+      this.serviceSecrets.default
+    );
+  }
 
-  // private shouldVerifyToken(functionType: string): boolean {
-  //   return !functionType || functionType === 'WRITE';
-  // }
+  private hasScope(scope: any, messagePattern: string): boolean {
+    if (!Array.isArray(scope) || !messagePattern) return false;
+
+    const patternSet = new Set<string>(
+      scope
+        .map((s: { messagePattern?: string }) => s.messagePattern)
+        .filter((v): v is string => typeof v === 'string'),
+    );
+
+    // console.log(patternSet, messagePattern[0]);
+
+    return patternSet.has(messagePattern[0]);
+  }
 
   private extractContextData(
     context: ExecutionContext,

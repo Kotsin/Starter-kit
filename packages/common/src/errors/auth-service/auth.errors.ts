@@ -27,6 +27,8 @@ export enum AUTH_ERROR_CODES {
   MISSING_CONFIRMATION_CODE = 'AUTH_402',
   INVALID_CONFIRMATION_CODE = 'AUTH_403',
   EXPIRED_CONFIRMATION_CODE = 'AUTH_404',
+  // Accsess
+  ACCESS_DENIED = 'AUTH_501',
 }
 
 export const AuthErrorMessages: Record<AUTH_ERROR_CODES, string> = {
@@ -54,4 +56,5 @@ export const AuthErrorMessages: Record<AUTH_ERROR_CODES, string> = {
   [AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE]: 'Missing confirmation code',
   [AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE]: 'Invalid confirmation code',
   [AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE]: 'Confirmation code is expired',
+  [AUTH_ERROR_CODES.ACCESS_DENIED]: 'Access denied',
 };

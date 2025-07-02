@@ -12,10 +12,7 @@ import { API_KEY_METADATA } from '../decorators/api-key.decorator';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly authClient: AuthClient,
-  ) {}
+  constructor(private readonly authClient: AuthClient) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

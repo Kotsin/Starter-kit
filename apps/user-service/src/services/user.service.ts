@@ -28,6 +28,7 @@ import {
 import { PermissionEntity } from '@crypton-nestjs-kit/common/build/entities/user/permissions.entity';
 import { RoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/role.entity';
 import { UserRoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/user-role.entity';
+import { isUUID } from 'class-validator';
 import { In, Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { uuid } from 'uuidv4';
@@ -299,10 +300,19 @@ export class UserService implements OnModuleInit {
 
   public async createConfirmationCodes(
     userId: v4,
-    permissionId: v4,
+    permissionId: string,
   ): Promise<ICreateConfirmationCodesResponse> {
     try {
-      const data = await this.getUserById(userId);
+      const where: any[] = [];
+      const data = await this.getUserById({ userId });
+
+      if (!isUUID(permissionId)) {
+        const permission = await this.permissionRepo.findOne({
+          where: { method: permissionId },
+        });
+
+        permissionId = permission.id;
+      }
 
       const filteredTwoFaMethods = data.user.twoFaPermissions.filter(
         (twoFaPermission) =>
@@ -725,8 +735,22 @@ export class UserService implements OnModuleInit {
     type?: string;
   }): Promise<any> {
     try {
-      const CACHE_KEY = `rolePermissions:${data.roleId}`;
+      const where: any[] = [];
+
+      if (isUUID(data.roleId)) {
+        where.push({ id: data.roleId });
+      } else {
+        where.push({ name: data.roleId });
+      }
+
+      const role = await this.roleRepo.findOne({
+        where,
+      });
+      const CACHE_KEY = `rolePermissions:${role.id}`;
+
       let permissions: any = await this.cacheManager.get(CACHE_KEY);
+
+      permissions = undefined;
 
       if (!permissions) {
         const rolePermissions = await this.roleRepo.query(
@@ -735,12 +759,12 @@ export class UserService implements OnModuleInit {
           FROM "RolePermissions" rp
           JOIN "Permissions" p ON rp."permissionsId"::uuid = p.id::uuid
           WHERE rp."rolesId" = $1 AND p."isPublic" = true;`,
-          [data.roleId],
+          [role.id],
         );
 
         permissions = rolePermissions.map((k) => ({
           id: k.id,
-          nameCode: k.messagePattern.replace(':', '_'),
+          nameCode: k.messagePattern,
           method: k.method,
           alias: k.alias,
           description: k.description,

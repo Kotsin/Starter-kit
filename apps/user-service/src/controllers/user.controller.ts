@@ -3,7 +3,6 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   ControllerMeta,
   ControllerType,
-  FunctionType,
   IConfirmRegistrationRequest,
   ICreateConfirmationCodesRequest,
   ICreateConfirmationCodesResponse,
@@ -14,10 +13,6 @@ import {
   IGetUserByIdRequest,
   IGetUserByIdResponse,
   IGetUserByLoginRequest,
-  INativeLoginRequest,
-  INativeLoginResponse,
-  Permission,
-  RequireConfirmationInterceptor,
   UserClientPatterns,
 } from '@crypton-nestjs-kit/common';
 
@@ -28,8 +23,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
+    name: 'Get my profile',
+    description: 'Get the current user profile',
     isPublic: true,
     type: ControllerType.WRITE,
   })
@@ -39,8 +34,8 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'Confirmation methods',
-    description: 'Confirmation methods',
+    name: 'Get confirmation methods',
+    description: 'Get available user confirmation methods',
     isPublic: true,
     type: ControllerType.WRITE,
   })
@@ -50,10 +45,11 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
-    isPublic: true,
+    name: 'Reset confirmation code',
+    description: 'Reset the user confirmation code',
+    isPublic: false,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.RESET_CONFIRMATION_CODE)
   public async resetConfirmationCode(
@@ -67,8 +63,8 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
+    name: 'Update 2FA permissions',
+    description: 'Update user two-factor authentication permissions',
     isPublic: true,
     type: ControllerType.WRITE,
   })
@@ -78,9 +74,9 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
-    isPublic: true,
+    name: 'Find or create user',
+    description: 'Find or create a user',
+    isPublic: false,
     type: ControllerType.WRITE,
     needsPermission: false,
   })
@@ -92,8 +88,8 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
+    name: 'Create confirmation codes',
+    description: 'Create confirmation codes for the user',
     isPublic: true,
     type: ControllerType.WRITE,
     needsPermission: false,
@@ -109,8 +105,8 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
+    name: 'Confirm registration',
+    description: 'Confirm user registration',
     isPublic: true,
     type: ControllerType.WRITE,
   })
@@ -122,9 +118,9 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
-    isPublic: true,
+    name: 'Get user by ID',
+    description: 'Get user by identifier',
+    isPublic: false,
     type: ControllerType.WRITE,
   })
   @MessagePattern(UserClientPatterns.GET_USER_BY_ID)
@@ -135,8 +131,22 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
+    name: 'Get user by ID (service)',
+    description: 'Get user by identifier (for services)',
+    isPublic: false,
+    type: ControllerType.WRITE,
+    needsPermission: false,
+  })
+  @MessagePattern(UserClientPatterns.GET_USER_BY_ID_SERVICE)
+  public async getUserByIdService(
+    data: IGetUserByIdRequest,
+  ): Promise<IGetUserByIdResponse> {
+    return await this.userService.getUserById(data);
+  }
+
+  @ControllerMeta({
+    name: 'Get user by login',
+    description: 'Get user by login',
     isPublic: false,
     type: ControllerType.WRITE,
   })
@@ -148,8 +158,8 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'Get user by login',
-    description: 'Get user by login',
+    name: 'Get user by login (secure)',
+    description: 'Get user by login (secure)',
     isPublic: false,
     type: ControllerType.WRITE,
     needsPermission: false,
@@ -162,10 +172,11 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
+    name: 'Get permissions by role',
+    description: 'Get permissions by user role',
     isPublic: true,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_ROLE)
   public async getPermissionsByRole(request: {
@@ -176,9 +187,9 @@ export class UserController {
   }
 
   @ControllerMeta({
-    name: 'My profile',
-    description: 'My profile',
-    isPublic: true,
+    name: 'Get permissions by pattern',
+    description: 'Get permissions by pattern',
+    isPublic: false,
     type: ControllerType.WRITE,
     needsPermission: false,
   })

@@ -35,11 +35,11 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   /**
-   * Нативная аутентификация (email/password)
+   * Native authentication (email/password)
    */
   @ControllerMeta({
-    name: 'Аутентификация пользователя',
-    description: 'Аутентификация пользователя с помощью email и пароля 1',
+    name: 'User authentication',
+    description: 'Authenticate user using email and password',
     isPublic: true,
     type: ControllerType.WRITE,
     needsPermission: false,
@@ -67,8 +67,15 @@ export class AuthController {
   }
 
   /**
-   * OAuth аутентификация
+   * OAuth authentication
    */
+  @ControllerMeta({
+    name: 'OAuth authentication',
+    description: 'Authenticate user using OAuth provider',
+    isPublic: true,
+    type: ControllerType.WRITE,
+    needsPermission: false,
+  })
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_SOCIAL)
   public async authenticateOAuth(data: {
     credentials: IOAuthAuthCredentials;
@@ -81,9 +88,10 @@ export class AuthController {
   }
 
   @ControllerMeta({
-    name: 'Sessions creating',
-    description: 'Создание сессии пользователя',
+    name: 'Create session',
+    description: 'Create a new user session',
     isPublic: false,
+    type: ControllerType.WRITE,
   })
   @MessagePattern(AuthClientPatterns.SESSION_CREATE)
   public async createSession(
@@ -96,6 +104,7 @@ export class AuthController {
     name: 'Create tokens',
     description: 'Create access and refresh tokens',
     isPublic: false,
+    type: ControllerType.WRITE,
   })
   @MessagePattern(AuthClientPatterns.TOKENS_CREATE)
   public async createTokens(
@@ -109,6 +118,7 @@ export class AuthController {
     description: 'Verify access token',
     isPublic: false,
     needsPermission: false,
+    type: ControllerType.READ,
   })
   @MessagePattern(AuthClientPatterns.TOKEN_VERIFY)
   public async verifyToken(
@@ -123,6 +133,7 @@ export class AuthController {
     isPublic: true,
     type: ControllerType.WRITE,
     needsPermission: false,
+    needsConfirmation: false,
   })
   @MessagePattern(AuthClientPatterns.REFRESH_TOKEN)
   public async refreshToken(
@@ -184,8 +195,8 @@ export class AuthController {
   }
 
   @ControllerMeta({
-    name: 'Get active sessions',
-    description: 'Get active sessions for user',
+    name: 'Get sessions until date',
+    description: 'Get user sessions until a specific date',
     isPublic: false,
     type: ControllerType.READ,
   })

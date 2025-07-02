@@ -32,19 +32,13 @@ import { ServiceTokenFromRequest } from '../../decorators/service-token-from-req
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
 import { UsersMeResponseDto } from '../../dto/user-me-respone.dto';
-import { ApiKeyGuard } from '../../guards/api-key.guard';
-import { RolesGuard } from '../../guards/role.guard';
 
 import {
   CreateConfirmationCodesDto,
   UpdatePermissionDto,
 } from './dto/request/users.request.dto';
-
-// TODO: Структурировать и привести к общему виду сваггер документацию
-
 @ApiTags('User')
 @Controller('v1/users')
-// @UseGuards(RolesGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   private readonly redisClient: RedisClientType;

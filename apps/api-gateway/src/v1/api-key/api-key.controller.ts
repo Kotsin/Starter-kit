@@ -44,6 +44,7 @@ import { ApiKeyGuard } from '../../guards/api-key.guard';
 import {
   ApiKeyResponseDto,
   CreateApiKeyDto,
+  DeleteApiKeyDto,
   UpdateApiKeyDto,
 } from './api-key.dto';
 
@@ -93,8 +94,20 @@ export class ApiKeyController {
   })
   @UseGuards(ApiKeyGuard)
   @Get('test')
-  async apiKeyTest(): Promise<boolean> {
-    return true;
+  async apiKeyTest(
+    @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
+    @UserIdFromRequest() userId: string,
+  ): Promise<any> {
+    const userData = await this.userClient.getMe(
+      {
+        userId,
+      },
+      traceId,
+      serviceToken,
+    );
+
+    return userData;
   }
 
   /**
@@ -213,6 +226,7 @@ export class ApiKeyController {
    * @param dto - Update data
    * @param traceId
    * @param serviceToken
+   * @param userId
    * @returns Updated API key
    */
   @Patch(':id')
@@ -235,9 +249,11 @@ export class ApiKeyController {
     @Body() dto: UpdateApiKeyDto,
     @CorrelationIdFromRequest() traceId: string,
     @ServiceTokenFromRequest() serviceToken: string,
+    @UserIdFromRequest() userId: string,
   ): Promise<IApiKeyUpdateResponse> {
     const result = await this.authClient.apiKeyUpdate(
       {
+        userId,
         id,
         dto: {
           type: dto.type,
@@ -283,9 +299,11 @@ export class ApiKeyController {
     @Param('id') id: string,
     @CorrelationIdFromRequest() traceId: string,
     @ServiceTokenFromRequest() serviceToken: string,
+    @UserIdFromRequest() userId: string,
+    @Body() body: DeleteApiKeyDto,
   ): Promise<IApiKeyRemoveResponse> {
     const result = await this.authClient.apiKeyRemove(
-      id,
+      { id, userId },
       traceId,
       serviceToken,
     );

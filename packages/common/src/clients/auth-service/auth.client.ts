@@ -310,7 +310,7 @@ export class AuthClient {
    * @returns API key update result.
    */
   async apiKeyUpdate(
-    request: { id: string; dto: UpdateApiKeyDto },
+    request: { userId: string; id: string; dto: UpdateApiKeyDto },
     traceId: string,
     serviceToken: string,
   ): Promise<IApiKeyCreateResponse> {
@@ -330,14 +330,14 @@ export class AuthClient {
    * @returns API key removal result.
    */
   async apiKeyRemove(
-    id: string,
+    request: { id: string; userId: string },
     traceId: string,
     serviceToken: string,
   ): Promise<IApiKeyRemoveResponse> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.API_KEY_DELETE,
-        await createRmqMessage(traceId, serviceToken, id),
+        await createRmqMessage(traceId, serviceToken, request),
       ),
     );
   }
@@ -371,7 +371,12 @@ export class AuthClient {
     request: ApiKeyValidateDto,
     traceId: string,
     serviceToken: string,
-  ): Promise<{ status: boolean; message: string }> {
+  ): Promise<{
+    status: boolean;
+    serviceToken: string;
+    user: { userId: string };
+    message: string;
+  }> {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.API_KEY_VALIDATE,

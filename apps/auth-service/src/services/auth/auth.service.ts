@@ -288,12 +288,20 @@ export class AuthService {
         sessionId: data.sessionId,
       };
 
+      // const accessToken = this.jwtService.sign(jwtPayload, {
+      //   expiresIn: this.configService.get().auth.access_token_expires_in,
+      // });
+      //
+      // const refreshToken = this.jwtService.sign(jwtPayload, {
+      //   expiresIn: this.configService.get().auth.refresh_token_expires_in,
+      // });
+
       const accessToken = this.jwtService.sign(jwtPayload, {
-        expiresIn: this.configService.get().auth.access_token_expires_in,
+        expiresIn: '1d',
       });
 
       const refreshToken = this.jwtService.sign(jwtPayload, {
-        expiresIn: this.configService.get().auth.refresh_token_expires_in,
+        expiresIn: '1d',
       });
 
       return {
@@ -478,13 +486,6 @@ export class AuthService {
         isPublic: k.isPublic,
         type: k.type,
       }));
-
-      console.log({
-        userId: session.userId,
-        serviceId: data.serviceId,
-        authType: 'jwtToken',
-        permissions,
-      });
 
       const serviceJwt = await this.serviceJwtGenerator.generateServiceJwt({
         subject: session.userId,

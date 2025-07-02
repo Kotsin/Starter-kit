@@ -132,7 +132,7 @@ export class PermissionService implements OnModuleInit {
           return false;
         }
 
-        await this.cacheManager.del(`rolePermissions:${role.id}`);
+        await this.cacheManager.del(`rolePermissionsService:${role.id}`);
 
         role.permissions.push(
           ...newPermissions.map((permission) =>
@@ -199,7 +199,7 @@ export class PermissionService implements OnModuleInit {
     type?: string;
   }): Promise<any> {
     try {
-      const CACHE_KEY = `rolePermissions:${data.roleId}`;
+      const CACHE_KEY = `rolePermissionsService:${data.roleId}`;
       let permissions: any = await this.cacheManager.get(CACHE_KEY);
 
       if (!permissions) {
@@ -252,7 +252,7 @@ export class PermissionService implements OnModuleInit {
 
   public async getPermissionsByPattern(pattern: string): Promise<any> {
     try {
-      const CACHE_KEY = `permission:${pattern}`;
+      const CACHE_KEY = `permissionService:${pattern}`;
       const cachedData = await this.cacheManager.get(CACHE_KEY);
 
       if (cachedData) {

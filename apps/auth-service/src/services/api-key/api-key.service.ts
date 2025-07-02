@@ -11,6 +11,7 @@ import {
   encrypt,
   IApiKey,
   IDecryptedApiKey,
+  ServiceJwtGenerator,
   UpdateApiKeyDto,
 } from '@crypton-nestjs-kit/common';
 import * as crypto from 'crypto';
@@ -27,21 +28,25 @@ export class ApiKeyService {
     private readonly apiKeyRepo: Repository<ApiKeyEntity>,
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
+    private readonly serviceJwtGenerator: ServiceJwtGenerator,
   ) {}
 
   async createApiKey(dto: CreateApiKeyDto): Promise<IApiKey> {
     const rawKey = crypto.randomBytes(32).toString('hex');
     const encryptedKey = encrypt(rawKey);
     const encryptedAllowedIps = dto.allowedIps?.map((ip) => encrypt(ip)) || [];
+    const encryptedAllowedPermissions =
+      dto.permissions?.map((permission) => encrypt(permission)) || [];
 
     const now = new Date();
     const expiredAt = new Date(now.getTime() + API_KEY_TTL);
 
     const apiKey = this.apiKeyRepo.create({
+      userId: dto.userId,
       encryptedKey,
       type: dto.type,
       encryptedAllowedIps,
-      permissions: dto.permissions,
+      permissions: encryptedAllowedPermissions,
       isActive: true,
       expiredAt,
     });
@@ -52,7 +57,12 @@ export class ApiKeyService {
         0,
         API_KEY_CACHE_SLICE_LENGTH,
       )}`,
-      { encryptedAllowedIps, permissions: dto.permissions, isActive: true },
+      {
+        userId: dto.userId,
+        encryptedAllowedIps: encryptedAllowedIps,
+        permissions: encryptedAllowedPermissions,
+        isActive: true,
+      },
       API_KEY_TTL,
     );
 
@@ -173,18 +183,29 @@ export class ApiKeyService {
     return result;
   }
 
-  async validateApiKey(rawKey: string, ip: string): Promise<boolean> {
+  async validateApiKey(
+    rawKey: string,
+    ip: string,
+  ): Promise<{
+    status: boolean;
+    serviceToken?: string;
+    userId: string;
+  }> {
     const cacheKey = `${API_KEY_VALIDATE_CACHE_PREFIX}:${rawKey.slice(
       0,
       API_KEY_CACHE_SLICE_LENGTH,
     )}`;
 
     let keyData = await this.cacheManager.get<{
+      userId: string;
       encryptedAllowedIps: string[];
       permissions: string[];
       isActive: boolean;
       expiredAt?: string;
     }>(cacheKey);
+
+    keyData = undefined;
+    console.log(keyData);
 
     if (!keyData) {
       const apiKeys = await this.apiKeyRepo.find();
@@ -192,9 +213,16 @@ export class ApiKeyService {
         (key) => decrypt(key.encryptedKey) === rawKey,
       );
 
-      if (!apiKey) return false;
+      if (!apiKey) {
+        return {
+          status: false,
+          userId: null,
+          serviceToken: null,
+        };
+      }
 
       keyData = {
+        userId: apiKey.userId,
         encryptedAllowedIps: apiKey.encryptedAllowedIps,
         permissions: apiKey.permissions,
         isActive: apiKey.isActive,
@@ -202,17 +230,62 @@ export class ApiKeyService {
       };
     }
 
+    console.log(keyData);
+
     await this.cacheManager.set(cacheKey, keyData, API_KEY_TTL);
 
-    if (!keyData.isActive) return false;
-
-    if (keyData.expiredAt && new Date(keyData.expiredAt) < new Date())
-      return false;
-
-    if (!keyData.encryptedAllowedIps?.length) {
-      return true;
+    if (!keyData.isActive) {
+      return {
+        status: false,
+        userId: null,
+        serviceToken: null,
+      };
     }
 
-    return keyData.encryptedAllowedIps.map(decrypt).includes(ip);
+    if (keyData.expiredAt && new Date(keyData.expiredAt) < new Date()) {
+      return {
+        status: false,
+        userId: null,
+        serviceToken: null,
+      };
+    }
+
+    if (!keyData.encryptedAllowedIps?.length) {
+      return {
+        status: true,
+        userId: keyData.userId,
+        serviceToken: await this.serviceJwtGenerator.generateServiceJwt({
+          subject: `api-key:${rawKey}`,
+          actor: 'api-key-service',
+          issuer: 'api-gateway',
+          audience: 'service',
+          type: 'api-key',
+          expiresIn: '5m',
+          permissions: keyData.permissions.map(decrypt),
+        }),
+      };
+    }
+
+    if (!keyData.encryptedAllowedIps.map(decrypt).includes(ip)) {
+      return {
+        status: false,
+        userId: null,
+        serviceToken: null,
+      };
+    }
+
+    return {
+      status: true,
+      userId: keyData.userId,
+      serviceToken: await this.serviceJwtGenerator.generateServiceJwt({
+        subject: `api-key:${rawKey}`,
+        actor: 'api-key-service',
+        issuer: 'api-gateway',
+        audience: 'service',
+        type: 'api-key',
+        expiresIn: '5m',
+        permissions: keyData.permissions.map(decrypt),
+      }),
+    };
   }
 }

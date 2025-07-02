@@ -31,14 +31,11 @@ export class NativeStrategy implements IAuthStrategy {
         expiresIn: '5m',
       });
 
-      console.log('userResult', serviceToken);
       const userResult = await this.userClient.getUserByLogin(
         { login: credentials.login },
         traceId,
         serviceToken,
       );
-
-      console.log('userResult', userResult);
 
       if (!userResult.user) {
         throw new AuthenticationError(

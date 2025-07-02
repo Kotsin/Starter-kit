@@ -27,7 +27,6 @@ import { SessionIdFromRequest } from '../../decorators/sessionId-from-request.de
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { BruteForceGuard } from '../../guards/bruteForce.guard';
 import { CaptchaGuard } from '../../guards/captcha.guard';
-import { RolesGuard } from '../../guards/role.guard';
 import { BaseCodeBruteForceGuard } from '../../guards/twoFA.guard';
 import { LoginValidationPipe } from '../../pipes/login-validator.pipe';
 
@@ -63,7 +62,6 @@ import {
 @Injectable()
 @ApiTags('Auth')
 @Controller('v1/auth')
-@UseGuards(RolesGuard)
 export class AuthController {
   constructor(
     private readonly userClient: UserClient,
@@ -438,7 +436,7 @@ export class AuthController {
     const result = await this.userClient.createConfirmationCode(
       {
         userId: userData.user.id,
-        permissionId: body.permissionId,
+        permissionId: 'authenticateNative',
       },
       traceId,
       'api-gateway',

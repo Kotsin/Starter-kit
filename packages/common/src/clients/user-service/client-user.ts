@@ -93,6 +93,26 @@ export class UserClient {
   }
 
   /**
+   * Returns user information by user ID.
+   * @param request - Request data containing user ID.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @returns User information response.
+   */
+  async getUserByIdService(
+    request: IGetUserByIdRequest,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<IGetUserByIdResponse> {
+    return await firstValueFrom(
+      this.userClientProxy.send(
+        UserClientPatterns.GET_USER_BY_ID_SERVICE,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
+
+  /**
    * Returns user information by login.
    * @param request - Request data containing user login.
    * @param traceId - Trace identifier for request tracing in the system.
@@ -274,19 +294,19 @@ export class UserClient {
 }
 
 export enum UserClientPatterns {
-  // --- User ---
-  GET_ME = 'get_me',
-  RESET_CONFIRMATION_CODE = 'reset_confirmation_code',
-  UPDATE_2FA_PERMISSIONS = 'update_2fa_permissions',
-  GET_CONFIRMATION_METHODS = 'get_confirmation_methods',
-  GET_USER_BY_ID = 'get_user_by_id',
-  GET_USER_BY_LOGIN = 'get_user_by_login',
-  GET_USERS_BY_LOGIN_SECURE = 'get_users_by_login_secure',
-  GET_PERMISSIONS_BY_ROLE = 'get_permissions_by_role',
-  GET_PERMISSIONS_BY_PATTERN = 'get_permissions_by_pattern',
-  FIND_OR_CREATE_USER = 'find_or_create_user',
-  REGISTRATION_CONFIRM = 'registration_confirm',
-  CREATE_CONFIRMATION_CODES = 'create_confirmation_codes',
+  GET_ME = 'get:me',
+  RESET_CONFIRMATION_CODE = 'confirmation:code:reset',
+  UPDATE_2FA_PERMISSIONS = '2fa:permissions:update',
+  GET_CONFIRMATION_METHODS = 'confirmation:methods:list',
+  GET_USER_BY_ID = 'user:get:by_id',
+  GET_USER_BY_ID_SERVICE = 'user:get:by_service',
+  GET_USER_BY_LOGIN = 'user:get:by_login',
+  GET_USERS_BY_LOGIN_SECURE = 'users:get:by_login:secure',
+  GET_PERMISSIONS_BY_ROLE = 'permissions:get:by_role',
+  GET_PERMISSIONS_BY_PATTERN = 'permissions:get:by_pattern',
+  FIND_OR_CREATE_USER = 'user:find_or_create',
+  REGISTRATION_CONFIRM = 'registration:confirm',
+  CREATE_CONFIRMATION_CODES = 'confirmation_codes:create',
 }
 
 // --- User ---

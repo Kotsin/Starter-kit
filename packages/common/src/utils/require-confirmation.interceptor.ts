@@ -6,7 +6,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PATTERN_METADATA } from '@nestjs/microservices/constants';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 import { UserClient } from '../clients';
 import { AUTH_ERROR_CODES, AuthErrorMessages } from '../errors';
@@ -20,7 +21,19 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
     private readonly userClient: UserClient,
   ) {}
 
-  async intercept(
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    return from(this.handle(context, next)).pipe(
+      switchMap((result) => result),
+      catchError((err) => {
+        return this.errorResponse(
+          AUTH_ERROR_CODES.UNKNOWN_ERROR,
+          (err as Error).message,
+        );
+      }),
+    );
+  }
+
+  private async handle(
     context: ExecutionContext,
     next: CallHandler,
   ): Promise<Observable<any>> {
@@ -35,13 +48,15 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         isPublic: boolean;
         description: string;
         type: string;
+        needsConfirmation: boolean;
       }>(CONTROLLER_META, context.getHandler());
 
       if (
         !controllerMeta ||
         !controllerMeta.isPublic ||
         !controllerMeta.type ||
-        controllerMeta.type == ControllerType.READ
+        controllerMeta.type == ControllerType.READ ||
+        controllerMeta.needsConfirmation === false
       ) {
         return next.handle();
       }
@@ -53,8 +68,13 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       const rpcData = context.switchToRpc().getData();
       const properties = context.getArgs()[1].args[0].properties;
       const headers = properties.headers || {};
-      const serviceToken = headers['x-service-token'];
+      const serviceTokenPrefix = headers['x-service-token']?.split('_')[0];
+      const serviceToken = headers['x-service-token']?.split('_')[1];
       const traceId = headers.traceId || rpcData?.traceId || 'service';
+
+      if (serviceTokenPrefix === 'api-key') {
+        return next.handle();
+      }
 
       const permissionData = await this.userClient.getPermissionsByPattern(
         messagePattern[0],
@@ -76,11 +96,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         rpcData?.twoFaCodes || rpcData?.credentials?.twoFaCodes;
 
       if (!userId && !login) {
-        return of({
-          status: false,
-          error: 'USER_DATA_NOT_FOUND',
-          message: 'User data not found',
-        });
+        return this.errorResponse(AUTH_ERROR_CODES.INVALID_CREDENTIALS);
       }
 
       if (!userId) {
@@ -91,17 +107,13 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         );
 
         if (!data.status) {
-          return of({
-            status: false,
-            errorCode: AUTH_ERROR_CODES.INVALID_CREDENTIALS,
-            message: AuthErrorMessages[AUTH_ERROR_CODES.INVALID_CREDENTIALS],
-          });
+          return this.errorResponse(AUTH_ERROR_CODES.INVALID_CREDENTIALS);
         }
 
         userId = data.user.id;
       }
 
-      const data = await this.userClient.getUserById(
+      const data = await this.userClient.getUserByIdService(
         { userId },
         traceId,
         serviceToken,
@@ -110,14 +122,14 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       const twoFaEntries = data.user.twoFaPermissions.filter(
         (entry: any) => entry.permission.id === permissionData.permission.id,
       );
-
+      const twoFaPermissionIds = new Set(
+        twoFaEntries.map((e: any) => e.confirmationMethod?.id),
+      );
       const confirmationMethods = data.user.loginMethods.filter((entry: any) =>
-        twoFaEntries.some(
-          (twoFaMethod: any) => twoFaMethod.confirmationMethod?.id === entry.id,
-        ),
+        twoFaPermissionIds.has(entry.id),
       );
 
-      if (confirmationMethods.length < 0) {
+      if (confirmationMethods.length < 1) {
         return next.handle();
       }
 
@@ -129,12 +141,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         const expectedCode = confirmationCodes?.[`${method}Code`];
 
         if (!expectedCode) {
-          return of({
-            status: false,
-            errorCode: AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE,
-            message:
-              AuthErrorMessages[AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE],
-          });
+          return this.errorResponse(AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE);
         }
 
         const codeLifetime = new Date(entry.codeLifetime);
@@ -144,21 +151,11 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
         const normalizedExpectedCode = String(expectedCode).trim();
 
         if (normalizedEntryCode !== normalizedExpectedCode) {
-          return of({
-            status: false,
-            errorCode: AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE,
-            message:
-              AuthErrorMessages[AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE],
-          });
+          return this.errorResponse(AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE);
         }
 
         if (currentTime.getTime() > codeLifetime.getTime()) {
-          return of({
-            status: false,
-            errorCode: AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE,
-            message:
-              AuthErrorMessages[AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE],
-          });
+          return this.errorResponse(AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE);
         }
 
         await this.userClient.resetConfirmationCode(
@@ -170,14 +167,20 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
       return next.handle();
     } catch (err) {
-      console.log('asdasdasd', err);
+      console.log('asdasdasdasdasdasdasdasdsa');
 
-      return of({
-        status: false,
-        error: AuthErrorMessages[AUTH_ERROR_CODES.UNKNOWN_ERROR],
-        message: (err as Error).message,
-        errorCode: AUTH_ERROR_CODES.UNKNOWN_ERROR,
-      });
+      return this.errorResponse(
+        AUTH_ERROR_CODES.UNKNOWN_ERROR,
+        (err as Error).message,
+      );
     }
+  }
+
+  private errorResponse(code: AUTH_ERROR_CODES, message?: string) {
+    return of({
+      status: false,
+      errorCode: code,
+      message: message || AuthErrorMessages[code],
+    });
   }
 }

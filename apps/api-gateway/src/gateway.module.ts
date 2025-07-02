@@ -23,7 +23,7 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { RedisClientOptions } from 'redis';
 
-import { AuthGuard } from './guards/authorization.guard';
+import { AuthOrApiKeyGuard } from './guards/authorization.guard';
 import { BruteForceGuard } from './guards/bruteForce.guard';
 import { CaptchaGuard } from './guards/captcha.guard';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
@@ -94,7 +94,7 @@ import { ApiKeyController } from './v1';
     CaptchaGuard,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: AuthOrApiKeyGuard,
     },
     // {
     //   provide: APP_GUARD,

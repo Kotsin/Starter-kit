@@ -120,9 +120,11 @@ export class ApiKeyController {
     type: ControllerType.WRITE,
   })
   @MessagePattern(AuthClientPatterns.API_KEY_DELETE)
-  async remove(@Payload() id: string): Promise<IApiKeyRemoveResponse> {
+  async remove(
+    @Payload() request: { id: string; userId: string },
+  ): Promise<IApiKeyRemoveResponse> {
     try {
-      const result = await this.apiKeyService.deleteApiKey(id);
+      const result = await this.apiKeyService.deleteApiKey(request.id);
 
       return {
         status: true,
@@ -149,23 +151,35 @@ export class ApiKeyController {
   async validate(@Payload() data: ApiKeyValidateDto): Promise<{
     status: boolean;
     message: string;
+    serviceToken: string;
+    user: {
+      userId: string;
+    };
     errorCode?: string;
     error?: string;
   }> {
     try {
-      const isValid = await this.apiKeyService.validateApiKey(
+      const validateData = await this.apiKeyService.validateApiKey(
         data.rawKey,
         data.ip,
       );
 
       return {
-        status: isValid,
-        message: isValid ? 'API key is valid' : 'API key is invalid',
+        status: validateData.status,
+        serviceToken: validateData.serviceToken,
+        user: {
+          userId: validateData.userId,
+        },
+        message: validateData.status
+          ? 'API key is valid'
+          : 'API key is invalid',
       };
     } catch (error) {
       return {
         status: false,
         message: error.message,
+        serviceToken: null,
+        user: null,
         errorCode: API_KEY_ERROR_CODES.FORBIDDEN,
         error: error.message,
       };

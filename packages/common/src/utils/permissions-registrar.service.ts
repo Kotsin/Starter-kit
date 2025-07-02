@@ -123,10 +123,14 @@ export class PermissionsRegistrar implements OnModuleInit {
     isPublic: boolean;
     type: string;
   }> {
+    // Оптимизация: строим Map для быстрого поиска по messagePattern
+    const existingMap = new Map<string, typeof existingPermissions[0]>();
+    for (const p of existingPermissions) {
+      existingMap.set(p.messagePattern, p);
+    }
+
     return permissionsList.filter((permission) => {
-      const existingPermission = existingPermissions.find(
-        (p) => p.messagePattern === permission.messagePattern,
-      );
+      const existingPermission = existingMap.get(permission.messagePattern);
 
       return (
         !existingPermission ||

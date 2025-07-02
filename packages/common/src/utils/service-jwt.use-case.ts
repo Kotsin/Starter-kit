@@ -42,7 +42,7 @@ export class ServiceJwtGenerator {
       audience,
       type,
       permissions,
-      expiresIn = '1m',
+      expiresIn = '1h',
     } = options;
 
     // Use audience as the serviceId for secret lookup
@@ -61,10 +61,14 @@ export class ServiceJwtGenerator {
       payload.scope = permissions;
     }
 
-    return this.jwtService.sign(payload, {
+    const token = this.jwtService.sign(payload, {
       secret,
       expiresIn,
     });
+
+    console.log('secret1232', secret);
+
+    return `${type}_${token}`;
   }
 
   /**
@@ -80,8 +84,6 @@ export class ServiceJwtGenerator {
     >;
     const secret =
       secrets[serviceId] || secrets[`${serviceId}_service`] || secrets.default;
-
-    console.log('secret', secret);
 
     if (!secret) {
       throw new Error(`Service secret for "${serviceId}" not found`);
