@@ -118,9 +118,9 @@ export class PermissionClient {
 }
 
 export enum PermisssionClientPatterns {
-  REGISTER_PERMISSIONS = 'permissions:register',
-  UPDATE_2FA_PERMISSIONS = 'permissions:update',
-  GET_PERMISSIONS_LIST = 'permissions:list',
-  GET_PERMISSIONS_BY_ROLE = 'permissions:by:role',
-  GET_PERMISSIONS_BY_PATTERN = 'permissions:by:pattern',
+  REGISTER_PERMISSIONS = 'permissions:register:service',
+  UPDATE_2FA_PERMISSIONS = 'permissions:update:service',
+  GET_PERMISSIONS_LIST = 'permissions:list:service',
+  GET_PERMISSIONS_BY_ROLE = 'permissions:by:role:service',
+  GET_PERMISSIONS_BY_PATTERN = 'permissions:by:pattern:service',
 }

@@ -11,8 +11,6 @@ class PermissionModule {}
 
 export class ClientPermissionModule {
   static forRoot(options: ClientOptions | CustomClientOptions): DynamicModule {
-    console.log(' static forRoot(options:');
-
     return {
       global: true,
       module: PermissionModule,

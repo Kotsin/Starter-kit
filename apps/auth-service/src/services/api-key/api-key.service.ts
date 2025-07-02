@@ -204,9 +204,6 @@ export class ApiKeyService {
       expiredAt?: string;
     }>(cacheKey);
 
-    keyData = undefined;
-    console.log(keyData);
-
     if (!keyData) {
       const apiKeys = await this.apiKeyRepo.find();
       const apiKey = apiKeys.find(
@@ -229,8 +226,6 @@ export class ApiKeyService {
         expiredAt: apiKey.expiredAt?.toISOString(),
       };
     }
-
-    console.log(keyData);
 
     await this.cacheManager.set(cacheKey, keyData, API_KEY_TTL);
 

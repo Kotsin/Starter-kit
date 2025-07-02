@@ -44,7 +44,6 @@ export class SessionsController {
     @ServiceTokenFromRequest() serviceToken: string,
   ): Promise<SessionResponseDto> {
     try {
-      console.log('adasdasdsa');
       const sessions = await this.authClient.getActiveSessions(
         traceId,
         serviceToken,
@@ -117,7 +116,6 @@ export class SessionsController {
     @Param('id') id: string,
     @Body() body: TerminateSessionDto,
   ): Promise<{ message: string }> {
-    console.log(body);
     await this.authClient.terminateSessionById(traceId, serviceToken, {
       userId,
       sessionId: id,
@@ -142,7 +140,6 @@ export class SessionsController {
     @ServiceTokenFromRequest() serviceToken: string,
     @Body() body: TerminateAllSessionsDto,
   ): Promise<{ message: string }> {
-    console.log(body);
     await this.authClient.terminateAllSessions(traceId, serviceToken, {
       userId,
     });

@@ -92,7 +92,7 @@ export class ApiKeyController {
     description: 'API Key. Необходим для доступа к этому эндпоинту',
     required: true,
   })
-  @UseGuards(ApiKeyGuard)
+  @Authorization(true)
   @Get('test')
   async apiKeyTest(
     @CorrelationIdFromRequest() traceId: string,

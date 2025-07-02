@@ -76,7 +76,7 @@ import { UserService } from './services/user.service';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         return {
-          secret: configService.get().auth.service_secrets.user_service,
+          secret: configService.get().auth.service_secrets.default,
         };
       },
       inject: [ConfigService],

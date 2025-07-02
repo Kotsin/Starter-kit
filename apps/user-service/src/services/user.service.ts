@@ -808,7 +808,7 @@ export class UserService implements OnModuleInit {
         return {
           status: true,
           message: 'Permission found',
-          permissions: cachedData,
+          permission: cachedData,
         };
       }
 

@@ -68,8 +68,8 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       const rpcData = context.switchToRpc().getData();
       const properties = context.getArgs()[1].args[0].properties;
       const headers = properties.headers || {};
-      const serviceTokenPrefix = headers['x-service-token']?.split('_')[0];
-      const serviceToken = headers['x-service-token']?.split('_')[1];
+      const serviceTokenPrefix = headers['x-service-token']?.split('____')[0];
+      const serviceToken = headers['x-service-token']?.split('____')[1];
       const traceId = headers.traceId || rpcData?.traceId || 'service';
 
       if (serviceTokenPrefix === 'api-key') {
@@ -122,9 +122,11 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       const twoFaEntries = data.user.twoFaPermissions.filter(
         (entry: any) => entry.permission.id === permissionData.permission.id,
       );
+
       const twoFaPermissionIds = new Set(
         twoFaEntries.map((e: any) => e.confirmationMethod?.id),
       );
+
       const confirmationMethods = data.user.loginMethods.filter((entry: any) =>
         twoFaPermissionIds.has(entry.id),
       );
@@ -167,8 +169,6 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
       return next.handle();
     } catch (err) {
-      console.log('asdasdasdasdasdasdasdasdsa');
-
       return this.errorResponse(
         AUTH_ERROR_CODES.UNKNOWN_ERROR,
         (err as Error).message,

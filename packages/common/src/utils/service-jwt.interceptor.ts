@@ -37,11 +37,6 @@ export class ServiceJwtInterceptor implements NestInterceptor {
     const contextType = context.getType();
     const handler = context.getHandler();
 
-    const messagePattern = this.reflector.get<string>(
-      PATTERN_METADATA,
-      context.getHandler(),
-    );
-
     const controllerMeta = this.reflector.get<ControllerMetaOptions>(
       CONTROLLER_META,
       context.getHandler(),
@@ -52,9 +47,9 @@ export class ServiceJwtInterceptor implements NestInterceptor {
     }
 
     let { serviceToken } = this.extractContextData(context, contextType);
-    const serviceTokenPrefix = serviceToken.split('_')[0];
+    const serviceTokenPrefix = serviceToken.split('____')[0];
 
-    serviceToken = serviceToken.split('_')[1];
+    serviceToken = serviceToken.split('____')[1];
 
     if (!serviceToken) {
       return of({
@@ -70,14 +65,10 @@ export class ServiceJwtInterceptor implements NestInterceptor {
       decodedData = this.jwtService.decode(serviceToken);
       const secret = this.resolveSecret(decodedData.aud);
 
-      console.log(
-        messagePattern,
-        'secret___ ',
-        serviceToken.slice(0, 50),
+      this.jwtService.verify(String(serviceToken), {
         secret,
-      );
-
-      this.jwtService.verify(serviceToken, { secret });
+        algorithms: ['HS256'],
+      });
     } catch (err) {
       console.log((err as Error).message);
 
@@ -118,11 +109,11 @@ export class ServiceJwtInterceptor implements NestInterceptor {
 
     const patternSet = new Set<string>(
       scope
-        .map((s: { messagePattern?: string }) => s.messagePattern)
+        .map((s: string) => {
+          return s;
+        })
         .filter((v): v is string => typeof v === 'string'),
     );
-
-    // console.log(patternSet, messagePattern[0]);
 
     return patternSet.has(messagePattern[0]);
   }

@@ -28,7 +28,7 @@ export class PermissionsRegistrar implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     try {
       const { permissions } = await this.permissionClient.getPermissionList(
-        '5555555',
+        'service',
       );
 
       const permissionsList = this.extractPermissionsFromControllers();
@@ -41,7 +41,7 @@ export class PermissionsRegistrar implements OnModuleInit {
       if (updatedPermissions.length > 0) {
         await this.permissionClient.registerPermissions(
           { permissions: updatedPermissions },
-          '0000',
+          'service',
         );
       }
 
@@ -124,7 +124,8 @@ export class PermissionsRegistrar implements OnModuleInit {
     type: string;
   }> {
     // Оптимизация: строим Map для быстрого поиска по messagePattern
-    const existingMap = new Map<string, typeof existingPermissions[0]>();
+    const existingMap = new Map<string, (typeof existingPermissions)[0]>();
+
     for (const p of existingPermissions) {
       existingMap.set(p.messagePattern, p);
     }

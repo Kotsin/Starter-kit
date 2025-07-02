@@ -478,14 +478,9 @@ export class AuthService {
           '0000',
         );
 
-      const permissions = permissionsResult.permissions.map((k) => ({
-        id: k.id,
-        method: k.method,
-        messagePattern: k.messagePattern,
-        alias: k.alias,
-        isPublic: k.isPublic,
-        type: k.type,
-      }));
+      const permissions = permissionsResult.permissions.map(
+        (k) => k.messagePattern,
+      );
 
       const serviceJwt = await this.serviceJwtGenerator.generateServiceJwt({
         subject: session.userId,
