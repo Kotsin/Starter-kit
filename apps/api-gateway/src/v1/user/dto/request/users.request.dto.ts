@@ -1,27 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString, IsUUID, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, IsUUID, ValidateNested, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
+import { TwoFaCodesDto } from '../../../../dto/base.dto';
 
-export class UpdatePermissionDto {
-  @ApiProperty({
-    description: 'Array of permissions to update 2FA confirmation methods for',
-    example: [
-      {
-        permissionId: 'f8775333-a4b4-495b-a040-2c52ab5767ef',
-        confirmationMethods: ['c1e2d3f4-5678-1234-9abc-1234567890ab', 'b2c3d4e5-6789-2345-0bcd-2345678901bc'],
-      },
-      {
-        permissionId: 'a1234567-b89c-1234-d567-890123456789',
-        confirmationMethods: [],
-      },
-    ],
-  })
-  @IsNotEmpty()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Permission2FAUpdate)
-  readonly permissions!: Permission2FAUpdate[];
-}
+// --- DTOs for 2FA Permissions Update ---
 
 export class Permission2FAUpdate {
   @ApiProperty({
@@ -43,6 +25,39 @@ export class Permission2FAUpdate {
   confirmationMethods!: string[];
 }
 
+export class UpdatePermissionDto {
+  @ApiProperty({
+    description: 'Array of permissions to update 2FA confirmation methods for',
+    example: [
+      {
+        permissionId: 'f8775333-a4b4-495b-a040-2c52ab5767ef',
+        confirmationMethods: ['c1e2d3f4-5678-1234-9abc-1234567890ab'],
+      },
+    ],
+  })
+  @IsNotEmpty()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Permission2FAUpdate)
+  readonly permissions!: Permission2FAUpdate[];
+
+  @ApiPropertyOptional({
+    description: 'Optional 2FA codes for confirmation',
+    type: () => TwoFaCodesDto,
+    example: {
+      emailCode: 0,
+      phoneCode: 894987,
+      googleCode: 0,
+    },
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TwoFaCodesDto)
+  readonly twoFaCodes?: TwoFaCodesDto;
+}
+
+// --- DTOs for Confirmation Codes Request ---
+
 export class CreateConfirmationCodesDto {
   @ApiProperty({
     description: 'Id of user permission (endpoint)',
@@ -51,7 +66,23 @@ export class CreateConfirmationCodesDto {
   @IsNotEmpty()
   @IsUUID()
   readonly permissionId!: string;
+
+  @ApiPropertyOptional({
+    description: 'Optional 2FA codes for confirmation',
+    type: () => TwoFaCodesDto,
+    example: {
+      emailCode: 0,
+      phoneCode: 894987,
+      googleCode: 0,
+    },
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TwoFaCodesDto)
+  readonly twoFaCodes?: TwoFaCodesDto;
 }
+
+// --- Error/Success Response DTOs ---
 
 export class ErrorResponseDto {
   @ApiProperty({ example: false, description: 'Operation failed' })

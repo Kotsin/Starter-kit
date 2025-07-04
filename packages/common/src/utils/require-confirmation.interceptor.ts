@@ -140,7 +140,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
         if (!method) continue;
 
-        const expectedCode = confirmationCodes?.[`${method}Code`];
+        const expectedCode = confirmationCodes?.[method];
 
         if (!expectedCode) {
           return this.errorResponse(AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE);

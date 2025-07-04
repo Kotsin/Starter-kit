@@ -57,9 +57,6 @@ export class AuthService {
     private readonly serviceJwtGenerator: ServiceJwtGenerator,
   ) {}
 
-  /**
-   * Аутентификация пользователя с автоматическим выбором стратегии
-   */
   async authenticate(credentials: AuthCredentials): Promise<any> {
     try {
       const result = await this.authStrategyFactory.authenticate(credentials);
@@ -91,14 +88,6 @@ export class AuthService {
       };
     }
   }
-
-  /**
-   * Аутентификация с нативными учетными данными (email/password)
-   */
-  async authenticateNative(credentials: INativeAuthCredentials): Promise<any> {
-    return this.authenticate(credentials);
-  }
-
   /**
    * Аутентификация с OAuth учетными данными
    */
@@ -192,11 +181,10 @@ export class AuthService {
    * @return {Promise<ISessionCreateResponse>} An object with the following properties:
    *
    */
-  public async createSession(
+  private async createSession(
     data: ISessionCreateRequest,
   ): Promise<ISessionCreateResponse> {
     try {
-      // Check active sessions limit
       const activeSessions = await this.sessionRepo.count({
         where: { userId: data.userId, status: SessionStatus.ACTIVE },
       });
@@ -251,8 +239,6 @@ export class AuthService {
         status: true,
         message: 'Session created successfully',
         sessionId: session.id,
-        error: null,
-        errorCode: null,
       };
     } catch (error) {
       let errorCode = AUTH_ERROR_CODES.SESSION_CREATION_FAILED;

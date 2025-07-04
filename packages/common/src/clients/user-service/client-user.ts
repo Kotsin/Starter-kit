@@ -311,7 +311,7 @@ export class UserClient {
   ): Promise<any> {
     return await firstValueFrom(
       this.userClientProxy.send(
-        UserClientPatterns.CREATE_2FA_PERMISSIONS,
+        UserClientPatterns.UPDATE_2FA_PERMISSIONS,
         await createRmqMessage(traceId, serviceToken, request),
       ),
     );

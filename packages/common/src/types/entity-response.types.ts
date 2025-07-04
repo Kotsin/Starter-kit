@@ -19,4 +19,10 @@ export interface IRequest {
   limit?: number;
   page?: number;
   serviceId?: string;
+  twoFaCodes?: ITwoFACodes[];
+}
+
+export interface ITwoFACodes {
+  phone: string;
+  email: string;
 }

@@ -88,32 +88,6 @@ export class AuthController {
   }
 
   @ControllerMeta({
-    name: 'Create session',
-    description: 'Create a new user session',
-    isPublic: false,
-    type: ControllerType.WRITE,
-  })
-  @MessagePattern(AuthClientPatterns.SESSION_CREATE)
-  public async createSession(
-    data: ISessionCreateRequest,
-  ): Promise<ISessionCreateResponse> {
-    return await this.authService.createSession(data);
-  }
-
-  @ControllerMeta({
-    name: 'Create tokens',
-    description: 'Create access and refresh tokens',
-    isPublic: false,
-    type: ControllerType.WRITE,
-  })
-  @MessagePattern(AuthClientPatterns.TOKENS_CREATE)
-  public async createTokens(
-    data: ITokenCreateRequest,
-  ): Promise<ITokenCreateResponse> {
-    return await this.authService.createTokens(data);
-  }
-
-  @ControllerMeta({
     name: 'Verify token',
     description: 'Verify access token',
     isPublic: false,
