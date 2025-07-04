@@ -17,6 +17,14 @@ export interface ISessionCreateRequest extends IRequest {
   city?: string;
 }
 
+export interface IUpdate2faPermissionsRequest extends IRequest {
+  userId: string;
+  permissions: Array<{
+    permissionId: string;
+    confirmationMethods: string[];
+  }>;
+}
+
 export interface ITerminateAllRequest extends IRequest {
   userId: string;
 }

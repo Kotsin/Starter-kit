@@ -4,6 +4,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Patch,
   Post,
   UseGuards,
   UseInterceptors,
@@ -13,6 +14,7 @@ import {
   ApiHeader,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -24,6 +26,7 @@ import {
 } from '@crypton-nestjs-kit/common';
 import { RedisStore } from 'cache-manager-redis-yet';
 import { RedisClientType } from 'redis';
+import { UsersMeResponseDto } from 'src/dto/user-me-respone.dto';
 
 import { ApiKey } from '../../decorators/api-key.decorator';
 import { Authorization } from '../../decorators/authorization.decorator';
@@ -31,8 +34,11 @@ import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-r
 import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
-import { UsersMeResponseDto } from '../../dto/user-me-respone.dto';
 
+import {
+  ErrorResponseDto,
+  SuccessResponseDto,
+} from './dto/request/users.request.dto';
 import {
   CreateConfirmationCodesDto,
   UpdatePermissionDto,
@@ -52,12 +58,22 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Setup user confirmation for endpoints' })
   @ApiOkResponse({
-    description: 'User info',
+    description: 'Result of operation',
     type: UsersMeResponseDto,
   })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden or permissions not created',
+    type: ErrorResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+    type: ErrorResponseDto,
+  })
   @Authorization(true)
-  @Post('confirmations/2fa')
-  async updatePermissions(
+  @Patch('confirmations/2fa')
+  async updateTwoFaConfirmation(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
     @ServiceTokenFromRequest() serviceToken: string,
@@ -68,25 +84,29 @@ export class UserController {
       serviceToken,
       {
         userId,
-        twoFaPermissions: [
-          {
-            permissionId: body.permissionId,
-            confirmationMethodId: body.confirmationMethodId,
-          },
-        ],
+        permissions: body.permissions,
       },
     );
 
     if (!data.status) {
-      throw new CustomError(
-        ExtendedHttpStatus.FORBIDDEN,
-        "Permissions don't created",
-      );
+      return {
+        success: false,
+        message: data.message || "Permissions don't created",
+        error: data.error || 'FORBIDDEN',
+        data: data,
+        timestamp: Date.now(),
+        path: '/v1/users/confirmations/2fa',
+        method: 'PATCH',
+      };
     }
 
     return {
-      message: 'User found',
+      success: true,
+      message: '2FA permissions updated',
       data,
+      timestamp: Date.now(),
+      path: '/v1/users/confirmations/2fa',
+      method: 'PATCH',
     };
   }
 
@@ -102,7 +122,7 @@ export class UserController {
     type: UsersMeResponseDto,
   })
   @Authorization(true)
-  @Get('confirmationMethods')
+  @Get('confirmation-methods')
   async getConfirmationsMethods(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,

@@ -13,6 +13,7 @@ import {
   IGetUserByIdRequest,
   IGetUserByIdResponse,
   IGetUserByLoginRequest,
+  IUpdate2faPermissionsRequest,
   UserClientPatterns,
 } from '@crypton-nestjs-kit/common';
 
@@ -63,13 +64,26 @@ export class UserController {
   }
 
   @ControllerMeta({
+    name: 'Create 2FA permissions',
+    description: 'Create user two-factor authentication permissions',
+    isPublic: true,
+    type: ControllerType.WRITE,
+  })
+  @MessagePattern(UserClientPatterns.CREATE_2FA_PERMISSIONS)
+  public async createTwoFaPermissions(request: any): Promise<any> {
+    return await this.userService.createTwoFaPermissions(request);
+  }
+
+  @ControllerMeta({
     name: 'Update 2FA permissions',
     description: 'Update user two-factor authentication permissions',
     isPublic: true,
     type: ControllerType.WRITE,
   })
   @MessagePattern(UserClientPatterns.UPDATE_2FA_PERMISSIONS)
-  public async updateTwoFaPermissions(request: any): Promise<any> {
+  public async updateTwoFaPermissions(
+    request: IUpdate2faPermissionsRequest,
+  ): Promise<any> {
     return await this.userService.updateTwoFaPermissions(request);
   }
 

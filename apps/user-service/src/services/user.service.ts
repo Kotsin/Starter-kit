@@ -19,6 +19,7 @@ import {
   INativeLoginRequest,
   INativeLoginResponse,
   ISessionCreateRequest,
+  IUpdate2faPermissionsRequest,
   LoginMethod,
   TwoFactorPermissionsEntity,
   UserEntity,
@@ -165,7 +166,7 @@ export class UserService implements OnModuleInit {
     return isUpdated.some((updated) => updated);
   }
 
-  public async updateTwoFaPermissions(request: any): Promise<any> {
+  public async createTwoFaPermissions(request: any): Promise<any> {
     try {
       const permissions = request.twoFaPermissions.map((permission: any) => {
         return {
@@ -184,6 +185,68 @@ export class UserService implements OnModuleInit {
       return {
         status: true,
         message: 'Permissions created',
+      };
+    } catch (e) {
+      return {
+        status: false,
+        error: e.message,
+        message: 'Failed to update two-factor authentication permissions',
+      };
+    }
+  }
+
+  public async updateTwoFaPermissions(
+    request: IUpdate2faPermissionsRequest,
+  ): Promise<any> {
+    try {
+      const { userId, permissions } = request;
+      const upsertEntities: Array<any> = [];
+      const deleteConditions: Array<{
+        permissionId: string;
+        keepIds: string[];
+      }> = [];
+
+      for (const perm of permissions) {
+        const { permissionId, confirmationMethods } = perm;
+
+        if (confirmationMethods && confirmationMethods.length > 0) {
+          upsertEntities.push(
+            ...confirmationMethods.map((confirmationMethodId) => ({
+              user: userId,
+              permission: permissionId,
+              confirmationMethod: confirmationMethodId,
+            })),
+          );
+          deleteConditions.push({ permissionId, keepIds: confirmationMethods });
+        } else {
+          await this.twoFactorPermissionsRepo.delete({
+            user: { id: userId },
+            permission: { id: permissionId },
+          });
+        }
+      }
+
+      if (upsertEntities.length > 0) {
+        await this.twoFactorPermissionsRepo.upsert(upsertEntities, [
+          'user',
+          'permission',
+          'confirmationMethod',
+        ]);
+      }
+
+      for (const { permissionId, keepIds } of deleteConditions) {
+        await this.twoFactorPermissionsRepo
+          .createQueryBuilder()
+          .delete()
+          .where('user_id = :userId', { userId })
+          .andWhere('permission_id = :permissionId', { permissionId })
+          .andWhere('confirmation_method_id NOT IN (:...ids)', { ids: keepIds })
+          .execute();
+      }
+
+      return {
+        status: true,
+        message: '2FA permissions updated',
       };
     } catch (e) {
       return {

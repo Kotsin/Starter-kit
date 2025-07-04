@@ -2,7 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
-import { IRequest, IResponse, User } from '../../types';
+import {
+  IRequest,
+  IResponse,
+  IUpdate2faPermissionsRequest,
+  User,
+} from '../../types';
 import { createRmqMessage } from '../../utils';
 
 export const USER_INJECT_TOKEN = 'USER_SERVICE';
@@ -279,14 +284,34 @@ export class UserClient {
    * @param request - Request data for updating 2FA permissions.
    * @returns Update result.
    */
-  async updateTwoFaPermissions(
+  async createTwoFaPermissions(
     traceId: string,
     serviceToken: string,
     request: any,
   ): Promise<any> {
     return await firstValueFrom(
       this.userClientProxy.send(
-        UserClientPatterns.UPDATE_2FA_PERMISSIONS,
+        UserClientPatterns.CREATE_2FA_PERMISSIONS,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
+
+  /**
+   * Updates two-factor authentication permissions for a user.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @param request - Request data for updating 2FA permissions.
+   * @returns Update result.
+   */
+  async updateTwoFaPermissions(
+    traceId: string,
+    serviceToken: string,
+    request: IUpdate2faPermissionsRequest,
+  ): Promise<any> {
+    return await firstValueFrom(
+      this.userClientProxy.send(
+        UserClientPatterns.CREATE_2FA_PERMISSIONS,
         await createRmqMessage(traceId, serviceToken, request),
       ),
     );
@@ -296,6 +321,7 @@ export class UserClient {
 export enum UserClientPatterns {
   GET_ME = 'get:me',
   RESET_CONFIRMATION_CODE = 'confirmation:code:reset',
+  CREATE_2FA_PERMISSIONS = '2fa:permissions:create',
   UPDATE_2FA_PERMISSIONS = '2fa:permissions:update',
   GET_CONFIRMATION_METHODS = 'confirmation:methods:list',
   GET_USER_BY_ID = 'user:get:by_id',
