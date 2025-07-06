@@ -11,9 +11,11 @@ import {
   decrypt,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
+  IAuthenticateNative,
   ICachedSessionData,
   IDeleteSessionRequest,
   INativeAuthCredentials,
+  INativeLoginResponse,
   IOAuthAuthCredentials,
   ISessionCreateRequest,
   ISessionCreateResponse,
@@ -98,24 +100,19 @@ export class AuthService {
   /**
    * Полная аутентификация с созданием сессии и токенов
    */
-  async authenticateAndCreateSession(
-    credentials: AuthCredentials,
-    sessionData: {
-      userAgent?: string;
-      userIp?: string;
-      fingerprint?: string;
-      country?: string;
-      city?: string;
-      traceId?: string;
-    },
-  ): Promise<any> {
+  async authenticateNative(
+    data: IAuthenticateNative,
+  ): Promise<INativeLoginResponse> {
     try {
+      const { credentials, sessionData, traceId } = data;
       const authResult = await this.authenticate(credentials);
 
       if (!authResult.status || !authResult.user) {
         return {
           status: false,
           message: authResult.message,
+          user: null,
+          tokens: null,
           error: authResult.error,
           errorCode: authResult.errorCode,
         };
@@ -128,7 +125,7 @@ export class AuthService {
         fingerprint: sessionData.fingerprint,
         country: sessionData.country,
         city: sessionData.city,
-        traceId: sessionData.traceId || 'auth-session-trace',
+        traceId: traceId || 'auth-session-trace',
       };
       const sessionResponse = await this.createSession(sessionRequest);
 
@@ -136,6 +133,8 @@ export class AuthService {
         return {
           status: false,
           message: sessionResponse.message,
+          user: null,
+          tokens: null,
           error: sessionResponse.error,
           errorCode: sessionResponse.errorCode,
         };
@@ -151,6 +150,8 @@ export class AuthService {
         return {
           status: false,
           message: tokenResponse.message,
+          user: null,
+          tokens: null,
           error: tokenResponse.error,
           errorCode: tokenResponse.errorCode,
         };
@@ -168,6 +169,8 @@ export class AuthService {
         message:
           error.message ||
           AuthErrorMessages[AUTH_ERROR_CODES.AUTHENTICATION_FAILED],
+        user: null,
+        tokens: null,
         error: error.message,
         errorCode: AUTH_ERROR_CODES.AUTHENTICATION_FAILED,
       };

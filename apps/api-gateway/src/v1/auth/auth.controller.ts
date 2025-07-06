@@ -99,7 +99,7 @@ export class AuthController {
     @CorrelationIdFromRequest() trace_id: string,
     @Body() body: RegisterDtoRequest,
   ): Promise<IRegistrationResponse> {
-    const userData = await this.userClient.findOrCreateUser(
+    const userData = await this.userClient.ensureUserExists(
       {
         password: body.password,
         login: body.login,

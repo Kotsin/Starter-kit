@@ -1,6 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString, IsUUID, ValidateNested, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
+
 import { TwoFaCodesDto } from '../../../../dto/base.dto';
 
 // --- DTOs for 2FA Permissions Update ---
@@ -15,7 +23,8 @@ export class Permission2FAUpdate {
   permissionId!: string;
 
   @ApiProperty({
-    description: 'Array of confirmation method IDs for this permission. If empty, all 2FA for this permission will be removed.',
+    description:
+      'Array of confirmation method IDs for this permission. If empty, all 2FA for this permission will be removed.',
     example: ['c1e2d3f4-5678-1234-9abc-1234567890ab'],
     required: true,
     type: [String],
@@ -45,9 +54,9 @@ export class UpdatePermissionDto {
     description: 'Optional 2FA codes for confirmation',
     type: () => TwoFaCodesDto,
     example: {
-      emailCode: 0,
-      phoneCode: 894987,
-      googleCode: 0,
+      emailCode: 0o00000,
+      phoneCode: 0o00000,
+      googleCode: 0o00000,
     },
   })
   @IsOptional()
@@ -71,9 +80,9 @@ export class CreateConfirmationCodesDto {
     description: 'Optional 2FA codes for confirmation',
     type: () => TwoFaCodesDto,
     example: {
-      emailCode: 0,
-      phoneCode: 894987,
-      googleCode: 0,
+      emailCode: 0o00000,
+      phoneCode: 0o00000,
+      googleCode: 0o00000,
     },
   })
   @IsOptional()
@@ -91,7 +100,10 @@ export class ErrorResponseDto {
   @ApiProperty({ example: 'Error message', description: 'Error message' })
   readonly message: string;
 
-  @ApiPropertyOptional({ description: 'Error code or details', example: 'FORBIDDEN' })
+  @ApiPropertyOptional({
+    description: 'Error code or details',
+    example: 'FORBIDDEN',
+  })
   readonly error?: string;
 
   @ApiPropertyOptional({ description: 'Additional error data' })
@@ -102,16 +114,25 @@ export class SuccessResponseDto {
   @ApiProperty({ example: true, description: 'Operation successful' })
   readonly success: true;
 
-  @ApiProperty({ example: 'Operation completed', description: 'Success message' })
+  @ApiProperty({
+    example: 'Operation completed',
+    description: 'Success message',
+  })
   readonly message: string;
 
   @ApiPropertyOptional({ description: 'Returned data' })
   readonly data?: any;
 
-  @ApiProperty({ example: Date.now(), description: 'Timestamp of the response' })
+  @ApiProperty({
+    example: Date.now(),
+    description: 'Timestamp of the response',
+  })
   readonly timestamp: number;
 
-  @ApiProperty({ example: '/v1/users/confirmations/2fa', description: 'Request path' })
+  @ApiProperty({
+    example: '/v1/users/confirmations/2fa',
+    description: 'Request path',
+  })
   readonly path: string;
 
   @ApiProperty({ example: 'PATCH', description: 'HTTP method' })

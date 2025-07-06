@@ -1,6 +1,16 @@
 import { TimePeriod } from '../../../utils';
 import { IRequest } from '../../entity-response.types';
-import { INativeAuthCredentials } from '../auth-strategy.interface';
+import {
+  AuthCredentials,
+  INativeAuthCredentials,
+} from '../auth-strategy.interface';
+import { ISession } from '../response/auth.response.interface';
+
+export interface IAuthenticateNative extends IRequest {
+  credentials: AuthCredentials;
+  sessionData: Partial<ISession>;
+  traceId?: string;
+}
 
 // ================== 2FA / Permissions ==================
 /**
@@ -106,7 +116,8 @@ export interface ITokensData {
 /**
  * Request to verify a token
  */
-export interface ITokenVerifyRequest extends Omit<ISessionCreateRequest, 'userId'> {
+export interface ITokenVerifyRequest
+  extends Omit<ISessionCreateRequest, 'userId'> {
   token: string;
   isRejectDifferentIp?: boolean;
 }

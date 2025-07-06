@@ -6,7 +6,9 @@ import {
   ControllerType,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
+  IAuthenticateNative,
   INativeAuthCredentials,
+  INativeLoginResponse,
   IOAuthAuthCredentials,
   ISessionCreateRequest,
   ISessionCreateResponse,
@@ -45,46 +47,14 @@ export class AuthController {
     needsPermission: false,
   })
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_NATIVE)
-  public async authenticateNative(data: {
-    credentials: INativeAuthCredentials;
-    sessionData: {
-      userAgent?: string;
-      userIp?: string;
-      fingerprint?: string;
-      country?: string;
-      city?: string;
-    };
-    traceId?: string;
-  }): Promise<void> {
+  public async authenticateNative(
+    data: IAuthenticateNative,
+  ): Promise<INativeLoginResponse> {
     try {
-      return await this.authService.authenticateAndCreateSession(
-        data.credentials,
-        data.sessionData,
-      );
+      return await this.authService.authenticateNative(data);
     } catch (e) {
       console.log(e.message);
     }
-  }
-
-  /**
-   * OAuth authentication
-   */
-  @ControllerMeta({
-    name: 'OAuth authentication',
-    description: 'Authenticate user using OAuth provider',
-    isPublic: true,
-    type: ControllerType.WRITE,
-    needsPermission: false,
-  })
-  @MessagePattern(AuthClientPatterns.AUTHENTICATE_SOCIAL)
-  public async authenticateOAuth(data: {
-    credentials: IOAuthAuthCredentials;
-    sessionData: ISessionData;
-  }) {
-    return await this.authService.authenticateAndCreateSession(
-      data.credentials,
-      data.sessionData,
-    );
   }
 
   @ControllerMeta({

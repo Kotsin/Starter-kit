@@ -6,6 +6,8 @@ import {
   IRequest,
   IResponse,
   IUpdate2faPermissionsRequest,
+  IGetTwoFaPermissionsRequest,
+  IGetTwoFaPermissionsResponse,
   User,
 } from '../../types';
 import { createRmqMessage } from '../../utils';
@@ -204,7 +206,7 @@ export class UserClient {
    * @param serviceToken - Token for zero-trust authorization between services.
    * @returns User creation or lookup result.
    */
-  async findOrCreateUser(
+  async ensureUserExists(
     request: IFindOrCreateUserRequest,
     traceId: string,
     serviceToken: string,
@@ -316,6 +318,26 @@ export class UserClient {
       ),
     );
   }
+
+  /**
+   * Returns list of two-factor authentication permissions for a user.
+   * @param request - Request data containing user ID.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @returns List of 2FA permissions with confirmation methods.
+   */
+  async getTwoFaPermissionsList(
+    request: IGetTwoFaPermissionsRequest,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<IGetTwoFaPermissionsResponse> {
+    return await firstValueFrom(
+      this.userClientProxy.send(
+        UserClientPatterns.GET_2FA_PERMISSIONS_LIST,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
 }
 
 export enum UserClientPatterns {
@@ -323,6 +345,7 @@ export enum UserClientPatterns {
   RESET_CONFIRMATION_CODE = 'confirmation:code:reset',
   CREATE_2FA_PERMISSIONS = '2fa:permissions:create',
   UPDATE_2FA_PERMISSIONS = '2fa:permissions:update',
+  GET_2FA_PERMISSIONS_LIST = '2fa:permissions:list',
   GET_CONFIRMATION_METHODS = 'confirmation:methods:list',
   GET_USER_BY_ID = 'user:get:by_id',
   GET_USER_BY_ID_SERVICE = 'user:get:by_service',
@@ -390,58 +413,7 @@ export interface ICreateConfirmationCodesResponse extends IResponse {
   readonly confirmationMethods: string[];
 }
 
-export interface INativeLoginRequest extends IRequest {
-  login: string;
-  password: string;
-  userAgent: string;
-  userIp: string;
-  fingerprint: string;
-  twoFaCodes?: ITwoFaCodes;
-  country?: string;
-  city?: string;
-}
-
-export interface ITwoFaCodes {
-  emailCode: number;
-  phoneCode: number;
-  googleCode: number;
-}
-
-export interface ITokens {
-  readonly accessToken: string;
-  readonly refreshToken: string;
-}
-
-export interface INativeLoginResponse extends IResponse {
-  readonly user: IUser;
-  readonly tokens: ITokens;
-}
-
 export interface IFindOrCreateUserResponse extends IResponse {
   readonly user: IUser;
   readonly created?: boolean;
 }
-
-// --- ADMIN ---
-
-export interface INotifyUsersRequest extends IRequest {
-  ref_code?: number;
-  dateTo: string;
-  dateFrom: string;
-  message: { en: string; ru: string };
-  url: string;
-  limit?: number;
-  page?: number;
-}
-
-export type INotifyUsersResponse = IResponse;
-
-export interface INotifyInactiveUsersRequest extends IRequest {
-  id: string;
-  dateFrom: string;
-  dateTo: string;
-  message: { en: string; ru: string };
-  url: string;
-}
-
-export type INotifyInactiveUsersResponse = IResponse;

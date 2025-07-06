@@ -10,6 +10,8 @@ import {
   IFindOrCreateUserResponse,
   IGetMeRequest,
   IGetMeResponse,
+  IGetTwoFaPermissionsRequest,
+  IGetTwoFaPermissionsResponse,
   IGetUserByIdRequest,
   IGetUserByIdResponse,
   IGetUserByLoginRequest,
@@ -27,7 +29,7 @@ export class UserController {
     name: 'Get my profile',
     description: 'Get the current user profile',
     isPublic: true,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
   })
   @MessagePattern(UserClientPatterns.GET_ME)
   public async getMe(request: IGetMeRequest): Promise<IGetMeResponse> {
@@ -38,7 +40,7 @@ export class UserController {
     name: 'Get confirmation methods',
     description: 'Get available user confirmation methods',
     isPublic: true,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
   })
   @MessagePattern(UserClientPatterns.GET_CONFIRMATION_METHODS)
   public async getUserConfirmationMethods(request: any): Promise<any> {
@@ -88,6 +90,20 @@ export class UserController {
   }
 
   @ControllerMeta({
+    name: 'Get 2FA permissions list',
+    description:
+      'Get list of user two-factor authentication permissions with confirmation methods',
+    isPublic: true,
+    type: ControllerType.READ,
+  })
+  @MessagePattern(UserClientPatterns.GET_2FA_PERMISSIONS_LIST)
+  public async getTwoFaPermissionsList(
+    request: IGetTwoFaPermissionsRequest,
+  ): Promise<IGetTwoFaPermissionsResponse> {
+    return await this.userService.getTwoFaPermissionsList(request);
+  }
+
+  @ControllerMeta({
     name: 'Find or create user',
     description: 'Find or create a user',
     isPublic: false,
@@ -95,10 +111,10 @@ export class UserController {
     needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.FIND_OR_CREATE_USER)
-  public async findOrCreateUser(
+  public async ensureUserExists(
     data: IFindOrCreateUserRequest,
   ): Promise<IFindOrCreateUserResponse> {
-    return await this.userService.findOrCreateUser(data);
+    return await this.userService.ensureUserExists(data);
   }
 
   @ControllerMeta({
@@ -121,8 +137,9 @@ export class UserController {
   @ControllerMeta({
     name: 'Confirm registration',
     description: 'Confirm user registration',
-    isPublic: true,
+    isPublic: false,
     type: ControllerType.WRITE,
+    needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.REGISTRATION_CONFIRM)
   public async registrationConfirm(
@@ -135,7 +152,7 @@ export class UserController {
     name: 'Get user by ID',
     description: 'Get user by identifier',
     isPublic: false,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
   })
   @MessagePattern(UserClientPatterns.GET_USER_BY_ID)
   public async getUserById(
@@ -148,7 +165,7 @@ export class UserController {
     name: 'Get user by ID (service)',
     description: 'Get user by identifier (for services)',
     isPublic: false,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
     needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.GET_USER_BY_ID_SERVICE)
@@ -162,7 +179,7 @@ export class UserController {
     name: 'Get user by login',
     description: 'Get user by login',
     isPublic: false,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
   })
   @MessagePattern(UserClientPatterns.GET_USER_BY_LOGIN)
   public async getUserByLogin(
@@ -175,7 +192,7 @@ export class UserController {
     name: 'Get user by login (secure)',
     description: 'Get user by login (secure)',
     isPublic: false,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
     needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.GET_USERS_BY_LOGIN_SECURE)
@@ -189,7 +206,7 @@ export class UserController {
     name: 'Get permissions by role',
     description: 'Get permissions by user role',
     isPublic: true,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
     needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_ROLE)
@@ -204,7 +221,7 @@ export class UserController {
     name: 'Get permissions by pattern',
     description: 'Get permissions by pattern',
     isPublic: false,
-    type: ControllerType.WRITE,
+    type: ControllerType.READ,
     needsPermission: false,
   })
   @MessagePattern(UserClientPatterns.GET_PERMISSIONS_BY_PATTERN)
