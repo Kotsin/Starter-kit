@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { LoginMethod, ControllerType } from '@crypton-nestjs-kit/common';
+import { ControllerType, LoginMethod } from '@crypton-nestjs-kit/common';
 
 import { BaseDto } from '../../../../dto/response.dto';
 
@@ -80,11 +80,11 @@ export class TwoFaPermissionsResponseDto extends BaseDto {
     description: 'Array of 2FA permissions with their confirmation methods',
     type: [TwoFaPermissionDto],
   })
-  readonly twoFaPermissions: TwoFaPermissionDto[];
+  readonly data: TwoFaPermissionDto[];
 
   @ApiProperty({
     description: 'Pagination meta',
     type: TwoFaPermissionsMetaDto,
   })
   readonly meta: TwoFaPermissionsMetaDto;
-} 
+}

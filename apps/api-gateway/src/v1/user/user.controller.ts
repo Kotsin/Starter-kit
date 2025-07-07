@@ -35,6 +35,7 @@ import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-r
 import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
+import { PaginationQueryDto } from '../../dto/base.dto';
 
 import { ErrorResponseDto } from './dto/request/users.request.dto';
 import {
@@ -42,20 +43,6 @@ import {
   UpdatePermissionDto,
 } from './dto/request/users.request.dto';
 import { TwoFaPermissionsResponseDto } from './dto/response/twofa-permissions.response.dto';
-
-export class TwoFaPermissionsQueryDto {
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  limit?: number = 10;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page?: number = 1;
-}
 
 @ApiTags('User')
 @Controller('v1/users')
@@ -260,12 +247,11 @@ export class UserController {
   @Authorization(true)
   @Get('2fa-permissions')
   async getTwoFaPermissionsList(
+    @Query() query: PaginationQueryDto,
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
     @ServiceTokenFromRequest() serviceToken: string,
-    @Query() query: TwoFaPermissionsQueryDto,
   ): Promise<TwoFaPermissionsResponseDto> {
-    console.log(query);
     const { limit = 10, page = 1 } = query;
     const data = await this.userClient.getTwoFaPermissionsList(
       { userId, limit, page },

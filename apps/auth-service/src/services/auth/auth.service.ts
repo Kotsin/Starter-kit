@@ -3,18 +3,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  ApiKeyType,
   AUTH_ERROR_CODES,
   AuthCredentials,
   AuthenticationError,
   AuthErrorMessages,
-  decrypt,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
   IAuthenticateNative,
   ICachedSessionData,
   IDeleteSessionRequest,
-  INativeAuthCredentials,
   INativeLoginResponse,
   IOAuthAuthCredentials,
   ISessionCreateRequest,
@@ -268,7 +265,7 @@ export class AuthService {
    * @param {ITokenCreateRequest} data
    * @return {Promise<ITokenCreateResponse>} An object with the following properties:
    */
-  public async createTokens(
+  private async createTokens(
     data: ITokenCreateRequest,
   ): Promise<ITokenCreateResponse> {
     try {
