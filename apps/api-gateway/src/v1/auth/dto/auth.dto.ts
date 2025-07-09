@@ -22,9 +22,10 @@ import { TwoFaCodesDto } from '../../../dto/base.dto';
 import { ErrorResponseDto } from '../../../dto/error-response-dto';
 import { BaseDto } from '../../../dto/response.dto';
 import { UserDto } from '../../user/dto/user.dto';
+import { isAddress } from 'ethers';
 
-@ValidatorConstraint({ name: 'isPhoneOrEmail', async: false })
-export class IsPhoneOrEmailConstraint implements ValidatorConstraintInterface {
+@ValidatorConstraint({ name: 'isValidLoginIdentifier', async: false })
+export class IsValidLoginIdentifierConstraint implements ValidatorConstraintInterface {
   validate(login: any, args: ValidationArguments) {
     if (login === undefined) {
       return false;
@@ -32,7 +33,8 @@ export class IsPhoneOrEmailConstraint implements ValidatorConstraintInterface {
 
     return (
       validator.isEmail(login) ||
-      validator.isMobilePhone(login, 'any', { strictMode: false })
+      validator.isMobilePhone(login, 'any', { strictMode: false }) ||
+      isAddress(login)
     );
   }
 
@@ -40,19 +42,19 @@ export class IsPhoneOrEmailConstraint implements ValidatorConstraintInterface {
     if (!!!args.value) {
       return 'The field is required';
     } else {
-      return 'Login must be a phone number or email';
+      return 'Login must be a valid email, phone number, or wallet address';
     }
   }
 }
 
-export function IsPhoneOrEmail(validationOptions?: any) {
+export function IsValidLoginIdentifier(validationOptions?: any) {
   return function (object: any, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: IsPhoneOrEmailConstraint,
+      validator: IsValidLoginIdentifierConstraint,
     });
   };
 }
@@ -60,13 +62,13 @@ export function IsPhoneOrEmail(validationOptions?: any) {
 export class RegisterDtoRequest {
   @ApiProperty({
     description:
-      'User login. Should be a string containing alphanumeric characters and underscores, between 4 and 20 characters.',
+      'User login. Can be an email address, phone number, or wallet address.',
     example: '88005553535',
   })
   @IsNotEmpty({ message: 'Login cannot be empty' })
   @IsString({ message: 'Login must be a string' })
   @Length(4, 50, { message: 'Login must be between 4 and 50 characters long' })
-  @IsPhoneOrEmail({ message: 'Phone number or email incorrect' })
+  @IsValidLoginIdentifier({ message: 'Invalid login format - must be email, phone number, or wallet address' })
   readonly login!: string;
 
   @ApiProperty({
@@ -167,16 +169,44 @@ export class SigninSolanaDtoRequest {
   readonly signature!: string;
 }
 
+export class Web3NonceRequestDto {
+  @ApiProperty({
+    description: 'Ethereum wallet address',
+    example: '0x1234567890123456789012345678901234567890',
+  })
+  @IsNotEmpty({ message: 'Wallet address cannot be empty' })
+  @IsString({ message: 'Wallet address must be a string' })
+  readonly walletAddress!: string;
+}
+
+export class Web3AuthRequestDto {
+  @ApiProperty({
+    description: 'Ethereum wallet address',
+    example: '0x1234567890123456789012345678901234567890',
+  })
+  @IsNotEmpty({ message: 'Wallet address cannot be empty' })
+  @IsString({ message: 'Wallet address must be a string' })
+  readonly walletAddress!: string;
+
+  @ApiProperty({
+    description: 'Message signature from wallet',
+    example: '0x...',
+  })
+  @IsNotEmpty({ message: 'Signature cannot be empty' })
+  @IsString({ message: 'Signature must be a string' })
+  readonly signature!: string;
+}
+
 export class RegisterConfirmRequestDTO {
   @ApiProperty({
     description:
-      'User login. Should be a string containing alphanumeric characters and underscores, between 4 and 20 characters.',
+      'User login. Can be an email address, phone number, or wallet address.',
     example: 'user_name123',
   })
   @IsNotEmpty({ message: 'Login cannot be empty' })
   @IsString({ message: 'Login must be a string' })
   @Length(4, 50, { message: 'Login must be between 4 and 50 characters long' })
-  @IsPhoneOrEmail({ message: 'Phone number or email incorrect' })
+  @IsValidLoginIdentifier({ message: 'Invalid login format - must be email, phone number, or wallet address' })
   readonly login!: string;
 
   @ApiProperty({

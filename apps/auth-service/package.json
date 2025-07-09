@@ -38,6 +38,7 @@
     "cache-manager-redis-yet": "^4.2.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "ethers": "^6.15.0",
     "express": "^4.19.2",
     "install": "^0.13.0",
     "nestjs-throttler": "^0.3.0",

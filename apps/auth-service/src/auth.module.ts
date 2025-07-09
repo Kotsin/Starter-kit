@@ -32,6 +32,7 @@ import { AuthService } from './services/auth/auth.service';
 import { AuthStrategyFactory } from './services/auth/auth-strategy-factory.service';
 // Стратегии
 import { NativeStrategy } from './services/auth/strategies/native.strategy';
+import { Web3Strategy } from './services/auth/strategies/web3.strategy';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { NativeStrategy } from './services/auth/strategies/native.strategy';
     ApiKeyService,
     // Strategy's
     NativeStrategy,
+    Web3Strategy,
     // Use cases
     ServiceJwtGenerator,
     {

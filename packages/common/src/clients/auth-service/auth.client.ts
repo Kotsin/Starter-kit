@@ -98,6 +98,46 @@ export class AuthClient {
   }
 
   /**
+   * WEB3 authentication using wallet signature.
+   * @param request - WEB3 credentials and session data.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @returns Authentication result with session data.
+   */
+  async authenticateWeb3(
+    request: any,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<ISessionCreateResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.AUTHENTICATE_WEB3,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
+
+  /**
+   * Generates a nonce for WEB3 authentication.
+   * @param request - WEB3 nonce generation request data.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @returns WEB3 nonce generation result.
+   */
+  async generateWeb3Nonce(
+    request: { walletAddress: string },
+    traceId: string,
+    serviceToken: string,
+  ): Promise<{ status: boolean; message: string; data?: { message: string } }> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.GENERATE_WEB3_NONCE,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
+
+  /**
    * Creates a new session based on the provided request data.
    * @param request - Session creation request data.
    * @param traceId - Trace identifier for request tracing in the system.
@@ -389,6 +429,8 @@ export class AuthClient {
 export enum AuthClientPatterns {
   AUTHENTICATE_NATIVE = 'auth:native',
   AUTHENTICATE_SOCIAL = 'auth:social',
+  AUTHENTICATE_WEB3 = 'auth:web3',
+  GENERATE_WEB3_NONCE = 'auth:web3:nonce',
   SESSION_CREATE = 'session:create',
   TOKENS_CREATE = 'tokens:create',
   TOKEN_VERIFY = 'token:verify',

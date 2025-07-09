@@ -9,12 +9,14 @@ import {
 // import { AppleOAuthStrategy } from '../strategies/apple-oauth.strategy';
 // import { GoogleOAuthStrategy } from '../strategies/google-oauth.strategy';
 import { NativeStrategy } from './strategies/native.strategy';
+import { Web3Strategy } from './strategies/web3.strategy';
 // import { TwitterOAuthStrategy } from '../strategies/twitter-oauth.strategy';
 
 @Injectable()
 export class AuthStrategyFactory {
   constructor(
-    private readonly nativeStrategy: NativeStrategy, // private readonly googleOAuthStrategy: GoogleOAuthStrategy, // private readonly appleOAuthStrategy: AppleOAuthStrategy, // private readonly twitterOAuthStrategy: TwitterOAuthStrategy,
+    private readonly nativeStrategy: NativeStrategy,
+    private readonly web3Strategy: Web3Strategy, 
   ) {}
 
   /**
@@ -24,6 +26,8 @@ export class AuthStrategyFactory {
     switch (strategyType) {
       case AuthStrategyType.NATIVE:
         return this.nativeStrategy;
+      case AuthStrategyType.WEB3:
+        return this.web3Strategy;
       // case AuthStrategyType.GOOGLE:
       //   return this.googleOAuthStrategy;
       // case AuthStrategyType.APPLE:
@@ -41,6 +45,10 @@ export class AuthStrategyFactory {
   createStrategyFromCredentials(credentials: AuthCredentials): IAuthStrategy {
     if ('loginType' in credentials && 'password' in credentials) {
       return this.createStrategy(AuthStrategyType.NATIVE);
+    }
+
+    if ('walletAddress' in credentials && 'signature' in credentials) {
+      return this.createStrategy(AuthStrategyType.WEB3);
     }
 
     if ('provider' in credentials && 'accessToken' in credentials) {

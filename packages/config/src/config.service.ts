@@ -168,6 +168,16 @@ export class ConfigService {
         siteKey: process.env.CAPTCHA_SITE_KEY || '',
         enabled: process.env.CAPTCHA_ENABLED === 'true',
       },
+      web3: {
+        chainId: Number(env.WEB3_CHAIN_ID || 1),
+        domain: {
+          name: env.WEB3_DOMAIN_NAME || 'Crypton Auth',
+          version: env.WEB3_DOMAIN_VERSION || '1',
+        },
+        nonce: {
+          expirationTime: Number(env.WEB3_NONCE_EXPIRATION || 300000),
+        },
+      },
     };
   }
 

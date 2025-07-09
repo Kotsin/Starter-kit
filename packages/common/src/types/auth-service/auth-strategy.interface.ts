@@ -28,11 +28,17 @@ export interface IOAuthAuthCredentials {
   refreshToken?: string;
 }
 
-export type AuthCredentials = INativeAuthCredentials | IOAuthAuthCredentials;
+export interface IWeb3AuthCredentials {
+  walletAddress: string;
+  signature: string;
+}
+
+export type AuthCredentials = INativeAuthCredentials | IOAuthAuthCredentials | IWeb3AuthCredentials;
 
 export enum AuthStrategyType {
   NATIVE = 'native',
   GOOGLE = 'google',
   APPLE = 'apple',
   TWITTER = 'twitter',
+  WEB3 = 'web3',
 }

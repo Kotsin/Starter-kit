@@ -70,7 +70,6 @@ export class ServiceJwtInterceptor implements NestInterceptor {
         algorithms: ['HS256'],
       });
     } catch (err) {
-      console.log((err as Error).message);
 
       return of({
         status: false,

@@ -117,4 +117,14 @@ export const DEFAULT_CONFIG: ConfigData = {
     siteKey: '',
     enabled: false,
   },
+  web3: {
+    chainId: 1,
+    domain: {
+      name: 'Crypton Auth',
+      version: '1',
+    },
+    nonce: {
+      expirationTime: 300000,
+    },
+  },
 };

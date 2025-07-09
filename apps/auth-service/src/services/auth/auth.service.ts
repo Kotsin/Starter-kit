@@ -41,6 +41,7 @@ import { ConfigService } from '@crypton-nestjs-kit/config';
 import { In, LessThan, Repository } from 'typeorm';
 
 import { AuthStrategyFactory } from './auth-strategy-factory.service';
+import { Web3Strategy } from './strategies/web3.strategy';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +56,7 @@ export class AuthService {
     private readonly permissionClient: PermissionClient,
     private readonly authStrategyFactory: AuthStrategyFactory,
     private readonly serviceJwtGenerator: ServiceJwtGenerator,
+    private readonly web3Strategy: Web3Strategy,
   ) {}
 
   /**
@@ -183,6 +185,20 @@ export class AuthService {
         errorCode: AUTH_ERROR_CODES.AUTHENTICATION_FAILED,
       };
     }
+  }
+
+  /**
+   * Generates a nonce for Web3 authentication
+   */
+  public async generateWeb3Nonce(walletAddress: string): Promise<{
+    status: boolean;
+    message: string;
+    nonce?: string;
+    data?: { message: string };
+    error?: string;
+    errorCode?: AUTH_ERROR_CODES;
+  }> {
+    return await this.web3Strategy.generateNonce(walletAddress);
   }
 
   /**

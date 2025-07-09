@@ -72,6 +72,17 @@ export interface ThrottlerConfig {
   limit: number;
 }
 
+export interface Web3Config {
+  chainId: number;
+  domain: {
+    name: string;
+    version: string;
+  };
+  nonce: {
+    expirationTime: number;
+  };
+}
+
 export interface ConfigData {
   env: string;
 
@@ -125,4 +136,6 @@ export interface ConfigData {
     siteKey: string;
     enabled: boolean;
   };
+
+  web3: Web3Config;
 }

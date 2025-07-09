@@ -37,6 +37,8 @@ import {
   RefreshTokenDtoRequest,
   RegisterConfirmRequestDTO,
   RegisterDtoRequest,
+  Web3NonceRequestDto,
+  Web3AuthRequestDto,
 } from './dto/auth.dto';
 import {
   AccountConfirmationFailedException,
@@ -333,6 +335,142 @@ export class AuthController {
     return {
       message: 'Token successfully refreshed',
       tokens: result.tokens,
+    };
+  }
+
+  /**
+   * Generate nonce for WEB3 authentication
+   *
+   * @param body - WEB3 nonce request data
+   * @param traceId - Request tracking identifier
+   * @returns Generated nonce message
+   */
+  @ApiOperation({
+    summary: 'Generate WEB3 nonce',
+    description: `
+      Generates a nonce message for WEB3 wallet authentication.
+      - Creates unique nonce for wallet address
+      - Returns message to be signed by wallet
+      - Nonce expires after 5 minutes
+      - Required before WEB3 authentication
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Nonce generated successfully',
+    schema: {
+      properties: {
+        message: { type: 'string', example: 'Nonce generated successfully' },
+        data: {
+          type: 'object',
+          properties: {
+            message: { type: 'string', example: 'Sign this message to authenticate...' },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid wallet address',
+  })
+  @Post('web3/nonce')
+  async generateWeb3Nonce(
+    @Body() body: Web3NonceRequestDto,
+    @CorrelationIdFromRequest() traceId: string,
+  ): Promise<{ message: string; data: { message: string } }> {
+    const result = await this.authClient.generateWeb3Nonce(
+      { walletAddress: body.walletAddress },
+      traceId,
+      'api-gateway',
+    );
+
+    if (!result.status) {
+      throw new AuthenticationFailedException();
+    }
+
+    return {
+      message: 'Nonce generated successfully',
+      data: { message: result.message },
+    };
+  }
+
+  /**
+   * Authenticate user with WEB3 wallet signature
+   *
+   * @param traceId - Request tracking identifier
+   * @param requestIp - User's IP address
+   * @param user_agent - User's browser/client information
+   * @param body - WEB3 authentication credentials
+   * @param headers - Request headers containing security information
+   * @returns Authentication result with tokens
+   */
+  @ApiOperation({
+    summary: 'WEB3 wallet authentication',
+    description: `
+      Authenticates user using wallet signature.
+      - Verifies wallet signature against nonce
+      - Auto-registers new users
+      - Creates user session
+      - Returns access tokens
+      - No captcha or 2FA required
+      
+      Successful authentication provides access and refresh tokens.
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully authenticated',
+    schema: {
+      properties: {
+        message: { type: 'string', example: 'User successfully authenticated' },
+        tokens: {
+          type: 'object',
+          properties: {
+            accessToken: { type: 'string' },
+            refreshToken: { type: 'string' },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Invalid signature or expired nonce',
+  })
+  @Post('web3/signin')
+  async authenticateWeb3(
+    @CorrelationIdFromRequest() traceId: string,
+    @RequestIpFromRequest() requestIp: string,
+    @RequestUserAgentFromRequest() user_agent: string,
+    @Body() body: Web3AuthRequestDto,
+    @Headers() headers: Record<string, string>,
+  ): Promise<IAuthResponse> {
+    const userData = await this.authClient.authenticateWeb3(
+      {
+        credentials: {
+          walletAddress: body.walletAddress,
+          signature: body.signature,
+        },
+        sessionData: {
+          userAgent: user_agent,
+          userIp: requestIp,
+          fingerprint: headers['fingerprint'] || '',
+          country: headers['cf-ipcountry'] || '',
+          city: headers['cf-ipcity'] || '',
+        },
+      },
+      traceId,
+      'api-gateway',
+    );
+
+    if (!userData.status) {
+      throw new AuthenticationFailedException();
+    }
+
+    return {
+      message: 'User successfully authenticated',
+      tokens: userData['tokens'],
     };
   }
 

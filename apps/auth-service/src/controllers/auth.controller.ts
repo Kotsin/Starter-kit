@@ -25,6 +25,7 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  IWeb3AuthCredentials,
   Permission,
 } from '@crypton-nestjs-kit/common';
 
@@ -85,6 +86,42 @@ export class AuthController {
       data.credentials,
       data.sessionData,
     );
+  }
+
+  /**
+   * Web3 authentication
+   */
+  @ControllerMeta({
+    name: 'Web3 authentication',
+    description: 'Authenticate user using Web3 wallet signature',
+    isPublic: true,
+    type: ControllerType.WRITE,
+    needsPermission: false,
+  })
+  @MessagePattern(AuthClientPatterns.AUTHENTICATE_WEB3)
+  public async authenticateWeb3(data: {
+    credentials: IWeb3AuthCredentials;
+    sessionData: ISessionData;
+  }) {
+    return await this.authService.authenticateAndCreateSession(
+      data.credentials,
+      data.sessionData,
+    );
+  }
+
+  /**
+   * Generate Web3 nonce
+   */
+  @ControllerMeta({
+    name: 'Generate Web3 nonce',
+    description: 'Generate a nonce for Web3 authentication',
+    isPublic: true,
+    type: ControllerType.WRITE,
+    needsPermission: false,
+  })
+  @MessagePattern(AuthClientPatterns.GENERATE_WEB3_NONCE)
+  public async generateWeb3Nonce(data: { walletAddress: string }) {
+    return await this.authService.generateWeb3Nonce(data.walletAddress);
   }
 
   @ControllerMeta({

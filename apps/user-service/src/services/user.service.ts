@@ -278,8 +278,15 @@ export class UserService implements OnModuleInit {
           user: existingUser,
         };
       }
-
+      // TODO: добавить ACTIVE сразу в дату вместо двух входов в БД
+      // сделать отдельный приватный метод для активации юзера, чекнуть статус по отношению к loginType
       const newUser = await this.createUser(data);
+
+      if(data.loginType === LoginMethod.WEB3) {
+        await this.userRepo.update(newUser.id, {
+          status: UserStatus.ACTIVE,
+        });
+      }
 
       return {
         status: true,

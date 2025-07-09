@@ -18,6 +18,7 @@ export enum LoginMethod {
   TELEGRAM = 'telegram',
   GOOGLE = 'google',
   TWITTER = 'twitter',
+  WEB3 = 'web3',
 }
 
 @Entity('UserLoginMethods')
