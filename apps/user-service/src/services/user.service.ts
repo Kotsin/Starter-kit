@@ -2,23 +2,22 @@ import { Cache } from '@nestjs/cache-manager';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  ApiKeyType,
   AuthClient,
-  comparePassword,
-  decrypt,
-  DefaultRole,
+  ControllerType,
   hashPassword,
   ICreateConfirmationCodesResponse,
   IFindOrCreateUserRequest,
   IFindOrCreateUserResponse,
   IGetMeRequest,
   IGetMeResponse,
+  IGetTwoFaPermissionsRequest,
+  IGetTwoFaPermissionsResponse,
   IGetUserByIdRequest,
   IGetUserByIdResponse,
   IGetUserByLoginRequest,
-  INativeLoginRequest,
-  INativeLoginResponse,
-  ISessionCreateRequest,
+  IResponse,
+  ITwoFaPermission,
+  IUpdate2faPermissionsRequest,
   LoginMethod,
   TwoFactorPermissionsEntity,
   UserEntity,
@@ -81,91 +80,7 @@ export class UserService implements OnModuleInit {
     }
   }
 
-  public async registerPermissions(request: any): Promise<any> {
-    try {
-      await this.permissionRepo.upsert(request.permissions, [
-        'messagePattern',
-        'method',
-      ]);
-
-      await this.updateDefaultRolePermissions(request.permissions);
-
-      return {
-        status: true,
-        message: 'Permissions added',
-      };
-    } catch (e) {
-      return {
-        error: e.message,
-        status: false,
-        message: 'Permissions adding failed',
-        user: null,
-      };
-    }
-  }
-
-  public async getPermissionList(): Promise<any> {
-    try {
-      const permissions = await this.permissionRepo.find();
-
-      if (permissions.length === 0) {
-        return {
-          status: false,
-          message: 'Permissions not found',
-          permissions: [],
-        };
-      }
-
-      return {
-        status: true,
-        message: 'Permissions added',
-        permissions,
-      };
-    } catch (e) {
-      return {
-        error: e.message,
-        status: false,
-        message: 'Permissions not found',
-        permissions: [],
-      };
-    }
-  }
-
-  private async updateDefaultRolePermissions(
-    permissions: PermissionEntity[],
-  ): Promise<boolean> {
-    const default_roles = await this.roleRepo.find({
-      where: { name: In(Object.keys(DefaultRole)) },
-      relations: ['permissions'],
-    });
-
-    const isUpdated = await Promise.all(
-      default_roles.map(async (role) => {
-        const newPermissions = permissions.filter(
-          (permission) =>
-            !role.permissions.some((p) => p.alias === permission.alias),
-        );
-
-        if (newPermissions.length === 0) {
-          return false;
-        }
-
-        role.permissions.push(
-          ...newPermissions.map((permission) =>
-            this.permissionRepo.create(permission),
-          ),
-        );
-
-        await this.roleRepo.save(role);
-
-        return true;
-      }),
-    );
-
-    return isUpdated.some((updated) => updated);
-  }
-
-  public async updateTwoFaPermissions(request: any): Promise<any> {
+  public async createTwoFaPermissions(request: any): Promise<any> {
     try {
       const permissions = request.twoFaPermissions.map((permission: any) => {
         return {
@@ -190,6 +105,161 @@ export class UserService implements OnModuleInit {
         status: false,
         error: e.message,
         message: 'Failed to update two-factor authentication permissions',
+      };
+    }
+  }
+
+  public async updateTwoFaPermissions(
+    request: IUpdate2faPermissionsRequest,
+  ): Promise<IResponse> {
+    try {
+      const { userId, permissions } = request;
+      const upsertEntities: Array<any> = [];
+      const deleteConditions: Array<{
+        permissionId: string;
+        keepIds: string[];
+      }> = [];
+
+      for (const perm of permissions) {
+        const { permissionId, confirmationMethods } = perm;
+
+        if (confirmationMethods && confirmationMethods.length > 0) {
+          upsertEntities.push(
+            ...confirmationMethods.map((confirmationMethodId) => ({
+              user: userId,
+              permission: permissionId,
+              confirmationMethod: confirmationMethodId,
+            })),
+          );
+          deleteConditions.push({ permissionId, keepIds: confirmationMethods });
+        } else {
+          await this.twoFactorPermissionsRepo.delete({
+            user: { id: userId },
+            permission: { id: permissionId },
+          });
+        }
+      }
+
+      if (upsertEntities.length > 0) {
+        await this.twoFactorPermissionsRepo.upsert(upsertEntities, [
+          'user',
+          'permission',
+          'confirmationMethod',
+        ]);
+      }
+
+      for (const { permissionId, keepIds } of deleteConditions) {
+        await this.twoFactorPermissionsRepo
+          .createQueryBuilder()
+          .delete()
+          .where('user_id = :userId', { userId })
+          .andWhere('permission_id = :permissionId', { permissionId })
+          .andWhere('confirmation_method_id NOT IN (:...ids)', { ids: keepIds })
+          .execute();
+      }
+
+      return {
+        status: true,
+        message: '2FA permissions updated',
+      };
+    } catch (e) {
+      return {
+        status: false,
+        error: e.message,
+        message: 'Failed to update two-factor authentication permissions',
+      };
+    }
+  }
+
+  /**
+   * Returns all available permissions for the user, with 2FA confirmation methods if configured.
+   * Supports pagination.
+   */
+  public async getTwoFaPermissionsList(
+    request: IGetTwoFaPermissionsRequest,
+  ): Promise<IGetTwoFaPermissionsResponse> {
+    try {
+      const { userId, limit = 10, page = 1 } = request;
+      const cacheKey = `twofa_permissions_v2:${userId}:${limit}:${page}`;
+      const cachedResult =
+        await this.cacheManager.get<IGetTwoFaPermissionsResponse>(cacheKey);
+
+      if (cachedResult) return cachedResult;
+
+      const user = await this.userRepo.findOne({
+        where: { id: userId },
+        relations: ['roles', 'roles.role', 'roles.role.permissions'],
+      });
+
+      if (!user) {
+        return {
+          status: false,
+          message: 'User not found',
+          twoFaPermissions: [],
+          meta: { total: 0, page, limit },
+        };
+      }
+
+      // 2. Собираем все permissions по ролям
+      const rolePermissions = user.roles
+        .flatMap((ur: any) => ur.role?.permissions || [])
+        .filter(Boolean);
+
+      const allPermissionsMap = new Map<string, PermissionEntity>();
+
+      [...rolePermissions].forEach((perm: PermissionEntity) => {
+        if (perm.type === ControllerType.WRITE) {
+          allPermissionsMap.set(perm.id, perm);
+        }
+      });
+      const allPermissions = Array.from(allPermissionsMap.values());
+      const twoFaEntities = await this.twoFactorPermissionsRepo.find({
+        where: { user: { id: userId } },
+        relations: ['permission', 'confirmationMethod'],
+      });
+      const twoFaMap = new Map<string, { id: string; method: LoginMethod }[]>();
+
+      for (const tfp of twoFaEntities) {
+        if (!tfp.permission?.id || !tfp.confirmationMethod) continue;
+
+        if (!twoFaMap.has(tfp.permission.id)) {
+          twoFaMap.set(tfp.permission.id, []);
+        }
+
+        twoFaMap.get(tfp.permission.id)!.push({
+          id: tfp.confirmationMethod.id,
+          method: tfp.confirmationMethod.method,
+        });
+      }
+      // 8. Формируем итоговый массив с пагинацией
+      const total = allPermissions.length;
+      const paged = allPermissions.slice((page - 1) * limit, page * limit);
+      const twoFaPermissions: ITwoFaPermission[] = paged.map((perm) => ({
+        id: perm.id,
+        method: perm.method,
+        nameCode: perm.messagePattern,
+        alias: perm.alias,
+        description: perm.description,
+        type: perm.type,
+        confirmationMethods: twoFaMap.get(perm.id) || [],
+      }));
+      const result: IGetTwoFaPermissionsResponse = {
+        status: true,
+        message: '2FA permissions retrieved successfully',
+        twoFaPermissions,
+        meta: { total, page, limit },
+      };
+
+      await this.cacheManager.set(cacheKey, result, 120);
+
+      return result;
+    } catch (e) {
+      return {
+        status: false,
+        error: e.message,
+        message: 'Failed to retrieve 2FA permissions',
+        twoFaPermissions: [],
+        meta: { total: 0, page: 1, limit: 20 },
       };
     }
   }
@@ -261,7 +331,7 @@ export class UserService implements OnModuleInit {
     }
   }
 
-  public async findOrCreateUser(
+  public async ensureUserExists(
     data: IFindOrCreateUserRequest,
   ): Promise<IFindOrCreateUserResponse> {
     try {
@@ -542,23 +612,6 @@ export class UserService implements OnModuleInit {
       return true;
     } catch (e) {
       return false;
-    }
-  }
-
-  public async regenerateConfirmationCode(
-    userId: string,
-    verificationMethod: string,
-  ): Promise<any> {
-    const { affected } = await this.userLoginMethods.update(
-      { userId: userId, login: verificationMethod },
-      {
-        code: randomstring.generate({ length: 6, charset: 'numeric' }),
-        codeLifetime: new Date(Date.now() + 5 * 60 * 1000),
-      },
-    );
-
-    if (affected == 0) {
-      throw new Error('Code reset failed');
     }
   }
 

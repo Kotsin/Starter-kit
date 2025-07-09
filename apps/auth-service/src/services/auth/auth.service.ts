@@ -3,17 +3,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  ApiKeyType,
   AUTH_ERROR_CODES,
   AuthCredentials,
   AuthenticationError,
   AuthErrorMessages,
-  decrypt,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
+  IAuthenticateNative,
   ICachedSessionData,
   IDeleteSessionRequest,
-  INativeAuthCredentials,
+  INativeLoginResponse,
   IOAuthAuthCredentials,
   ISessionCreateRequest,
   ISessionCreateResponse,
@@ -59,9 +58,6 @@ export class AuthService {
     private readonly web3Strategy: Web3Strategy,
   ) {}
 
-  /**
-   * Аутентификация пользователя с автоматическим выбором стратегии
-   */
   async authenticate(credentials: AuthCredentials): Promise<any> {
     try {
       const result = await this.authStrategyFactory.authenticate(credentials);
@@ -93,14 +89,6 @@ export class AuthService {
       };
     }
   }
-
-  /**
-   * Аутентификация с нативными учетными данными (email/password)
-   */
-  async authenticateNative(credentials: INativeAuthCredentials): Promise<any> {
-    return this.authenticate(credentials);
-  }
-
   /**
    * Аутентификация с OAuth учетными данными
    */
@@ -111,24 +99,19 @@ export class AuthService {
   /**
    * Полная аутентификация с созданием сессии и токенов
    */
-  async authenticateAndCreateSession(
-    credentials: AuthCredentials,
-    sessionData: {
-      userAgent?: string;
-      userIp?: string;
-      fingerprint?: string;
-      country?: string;
-      city?: string;
-      traceId?: string;
-    },
-  ): Promise<any> {
+  async authenticateNative(
+    data: IAuthenticateNative,
+  ): Promise<INativeLoginResponse> {
     try {
+      const { credentials, sessionData, traceId } = data;
       const authResult = await this.authenticate(credentials);
 
       if (!authResult.status || !authResult.user) {
         return {
           status: false,
           message: authResult.message,
+          user: null,
+          tokens: null,
           error: authResult.error,
           errorCode: authResult.errorCode,
         };
@@ -141,7 +124,7 @@ export class AuthService {
         fingerprint: sessionData.fingerprint,
         country: sessionData.country,
         city: sessionData.city,
-        traceId: sessionData.traceId || 'auth-session-trace',
+        traceId: traceId || 'auth-session-trace',
       };
       const sessionResponse = await this.createSession(sessionRequest);
 
@@ -149,6 +132,8 @@ export class AuthService {
         return {
           status: false,
           message: sessionResponse.message,
+          user: null,
+          tokens: null,
           error: sessionResponse.error,
           errorCode: sessionResponse.errorCode,
         };
@@ -164,6 +149,8 @@ export class AuthService {
         return {
           status: false,
           message: tokenResponse.message,
+          user: null,
+          tokens: null,
           error: tokenResponse.error,
           errorCode: tokenResponse.errorCode,
         };
@@ -181,6 +168,8 @@ export class AuthService {
         message:
           error.message ||
           AuthErrorMessages[AUTH_ERROR_CODES.AUTHENTICATION_FAILED],
+        user: null,
+        tokens: null,
         error: error.message,
         errorCode: AUTH_ERROR_CODES.AUTHENTICATION_FAILED,
       };
@@ -208,11 +197,10 @@ export class AuthService {
    * @return {Promise<ISessionCreateResponse>} An object with the following properties:
    *
    */
-  public async createSession(
+  private async createSession(
     data: ISessionCreateRequest,
   ): Promise<ISessionCreateResponse> {
     try {
-      // Check active sessions limit
       const activeSessions = await this.sessionRepo.count({
         where: { userId: data.userId, status: SessionStatus.ACTIVE },
       });
@@ -267,8 +255,6 @@ export class AuthService {
         status: true,
         message: 'Session created successfully',
         sessionId: session.id,
-        error: null,
-        errorCode: null,
       };
     } catch (error) {
       let errorCode = AUTH_ERROR_CODES.SESSION_CREATION_FAILED;
@@ -295,7 +281,7 @@ export class AuthService {
    * @param {ITokenCreateRequest} data
    * @return {Promise<ITokenCreateResponse>} An object with the following properties:
    */
-  public async createTokens(
+  private async createTokens(
     data: ITokenCreateRequest,
   ): Promise<ITokenCreateResponse> {
     try {

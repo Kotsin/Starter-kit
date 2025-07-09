@@ -39,7 +39,7 @@ export class NativeStrategy implements IAuthStrategy {
 
       if (!userResult.user) {
         throw new AuthenticationError(
-          'User not found',
+          AuthErrorMessages[AUTH_ERROR_CODES.USER_NOT_FOUND],
           AUTH_ERROR_CODES.USER_NOT_FOUND,
         );
       }

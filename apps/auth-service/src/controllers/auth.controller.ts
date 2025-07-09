@@ -6,7 +6,9 @@ import {
   ControllerType,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
+  IAuthenticateNative,
   INativeAuthCredentials,
+  INativeLoginResponse,
   IOAuthAuthCredentials,
   ISessionCreateRequest,
   ISessionCreateResponse,
@@ -46,108 +48,14 @@ export class AuthController {
     needsPermission: false,
   })
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_NATIVE)
-  public async authenticateNative(data: {
-    credentials: INativeAuthCredentials;
-    sessionData: {
-      userAgent?: string;
-      userIp?: string;
-      fingerprint?: string;
-      country?: string;
-      city?: string;
-    };
-    traceId?: string;
-  }): Promise<void> {
+  public async authenticateNative(
+    data: IAuthenticateNative,
+  ): Promise<INativeLoginResponse> {
     try {
-      return await this.authService.authenticateAndCreateSession(
-        data.credentials,
-        data.sessionData,
-      );
+      return await this.authService.authenticateNative(data);
     } catch (e) {
       console.log(e.message);
     }
-  }
-
-  /**
-   * OAuth authentication
-   */
-  @ControllerMeta({
-    name: 'OAuth authentication',
-    description: 'Authenticate user using OAuth provider',
-    isPublic: true,
-    type: ControllerType.WRITE,
-    needsPermission: false,
-  })
-  @MessagePattern(AuthClientPatterns.AUTHENTICATE_SOCIAL)
-  public async authenticateOAuth(data: {
-    credentials: IOAuthAuthCredentials;
-    sessionData: ISessionData;
-  }) {
-    return await this.authService.authenticateAndCreateSession(
-      data.credentials,
-      data.sessionData,
-    );
-  }
-
-  /**
-   * Web3 authentication
-   */
-  @ControllerMeta({
-    name: 'Web3 authentication',
-    description: 'Authenticate user using Web3 wallet signature',
-    isPublic: true,
-    type: ControllerType.WRITE,
-    needsPermission: false,
-  })
-  @MessagePattern(AuthClientPatterns.AUTHENTICATE_WEB3)
-  public async authenticateWeb3(data: {
-    credentials: IWeb3AuthCredentials;
-    sessionData: ISessionData;
-  }) {
-    return await this.authService.authenticateAndCreateSession(
-      data.credentials,
-      data.sessionData,
-    );
-  }
-
-  /**
-   * Generate Web3 nonce
-   */
-  @ControllerMeta({
-    name: 'Generate Web3 nonce',
-    description: 'Generate a nonce for Web3 authentication',
-    isPublic: true,
-    type: ControllerType.WRITE,
-    needsPermission: false,
-  })
-  @MessagePattern(AuthClientPatterns.GENERATE_WEB3_NONCE)
-  public async generateWeb3Nonce(data: { walletAddress: string }) {
-    return await this.authService.generateWeb3Nonce(data.walletAddress);
-  }
-
-  @ControllerMeta({
-    name: 'Create session',
-    description: 'Create a new user session',
-    isPublic: false,
-    type: ControllerType.WRITE,
-  })
-  @MessagePattern(AuthClientPatterns.SESSION_CREATE)
-  public async createSession(
-    data: ISessionCreateRequest,
-  ): Promise<ISessionCreateResponse> {
-    return await this.authService.createSession(data);
-  }
-
-  @ControllerMeta({
-    name: 'Create tokens',
-    description: 'Create access and refresh tokens',
-    isPublic: false,
-    type: ControllerType.WRITE,
-  })
-  @MessagePattern(AuthClientPatterns.TOKENS_CREATE)
-  public async createTokens(
-    data: ITokenCreateRequest,
-  ): Promise<ITokenCreateResponse> {
-    return await this.authService.createTokens(data);
   }
 
   @ControllerMeta({
@@ -203,6 +111,41 @@ export class AuthController {
     data: ITerminateSessionRequest,
   ): Promise<ITerminateSessionResponse> {
     return await this.authService.terminateSession(data);
+  }
+
+  /**
+   * Web3 authentication
+   */
+  @ControllerMeta({
+    name: 'Web3 authentication',
+    description: 'Authenticate user using Web3 wallet signature',
+    isPublic: true,
+    type: ControllerType.WRITE,
+    needsPermission: false,
+  })
+  @MessagePattern(AuthClientPatterns.AUTHENTICATE_WEB3)
+  public async authenticateWeb3(data: {
+    credentials: IWeb3AuthCredentials;
+    sessionData: ISessionData;
+  }) {
+    return await this.authService.authenticateNative(
+      data
+    );
+  }
+
+  /**
+   * Generate Web3 nonce
+   */
+  @ControllerMeta({
+    name: 'Generate Web3 nonce',
+    description: 'Generate a nonce for Web3 authentication',
+    isPublic: true,
+    type: ControllerType.WRITE,
+    needsPermission: false,
+  })
+  @MessagePattern(AuthClientPatterns.GENERATE_WEB3_NONCE)
+  public async generateWeb3Nonce(data: { walletAddress: string }) {
+    return await this.authService.generateWeb3Nonce(data.walletAddress);
   }
 
   @ControllerMeta({

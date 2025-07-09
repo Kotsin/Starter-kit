@@ -2,35 +2,16 @@ import { Cache } from '@nestjs/cache-manager';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  ApiKeyType,
-  AuthClient,
-  comparePassword,
-  decrypt,
   DefaultRole,
-  hashPassword,
-  ICreateConfirmationCodesResponse,
-  IFindOrCreateUserRequest,
-  IFindOrCreateUserResponse,
-  IGetMeRequest,
-  IGetMeResponse,
-  IGetUserByIdRequest,
-  IGetUserByIdResponse,
-  IGetUserByLoginRequest,
-  INativeLoginRequest,
-  INativeLoginResponse,
-  ISessionCreateRequest,
-  LoginMethod,
   TwoFactorPermissionsEntity,
   UserEntity,
   UserLoginMethodsEntity,
-  UserStatus,
 } from '@crypton-nestjs-kit/common';
 import { PermissionEntity } from '@crypton-nestjs-kit/common/build/entities/user/permissions.entity';
 import { RoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/role.entity';
 import { UserRoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/user-role.entity';
 import { In, Repository } from 'typeorm';
 import { v4 } from 'uuid';
-import { uuid } from 'uuidv4';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const randomstring = require('randomstring');
 
@@ -123,10 +104,15 @@ export class PermissionService implements OnModuleInit {
         if (role.name == 'USER') {
         }
 
-        const newPermissions = permissions.filter(
-          (permission) =>
-            !role.permissions.some((p) => p.method === permission.method),
-        );
+        const newPermissions = permissions.filter((permission) => {
+          if (role.name == 'USER' && permission.isPublic) {
+            return !role.permissions.some(
+              (p) => p.method === permission.method,
+            );
+          }
+
+          return false;
+        });
 
         if (newPermissions.length === 0) {
           return false;

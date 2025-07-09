@@ -1,4 +1,4 @@
-import { ITwoFaCodes } from '../../clients';
+import { ITwoFaCodes } from './response/auth.response.interface';
 
 export interface IAuthStrategy {
   authenticate?: (credentials: any, traceId?: string) => Promise<IAuthResult>;

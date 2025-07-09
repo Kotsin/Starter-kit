@@ -1,5 +1,22 @@
+import { IUser } from '../../../clients';
 import { IResponse } from '../../response.interface';
 import { ITokensData } from '../request/auth.request.interface';
+
+export interface ITwoFaCodes {
+  emailCode: number;
+  phoneCode: number;
+  googleCode: number;
+}
+
+export interface ITokens {
+  readonly accessToken: string;
+  readonly refreshToken: string;
+}
+
+export interface INativeLoginResponse extends IResponse {
+  readonly user: IUser;
+  readonly tokens: ITokens;
+}
 
 export interface ISessionCreateResponse extends IResponse {
   sessionId: string | null;

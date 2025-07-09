@@ -4,8 +4,9 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Patch,
   Post,
-  UseGuards,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import {
@@ -13,6 +14,7 @@ import {
   ApiHeader,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -23,20 +25,25 @@ import {
   UserClient,
 } from '@crypton-nestjs-kit/common';
 import { RedisStore } from 'cache-manager-redis-yet';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, Min } from 'class-validator';
 import { RedisClientType } from 'redis';
+import { UsersMeResponseDto } from 'src/dto/user-me-respone.dto';
 
-import { ApiKey } from '../../decorators/api-key.decorator';
 import { Authorization } from '../../decorators/authorization.decorator';
 import { CorrelationIdFromRequest } from '../../decorators/correlation-id-from-request.decorator';
 import { ServiceTokenFromRequest } from '../../decorators/service-token-from-request.decorator';
 import { UserIdFromRequest } from '../../decorators/user-id-from-request.decorator';
 import { UserRoleFromRequest } from '../../decorators/user-role-from-request';
-import { UsersMeResponseDto } from '../../dto/user-me-respone.dto';
+import { PaginationQueryDto } from '../../dto/base.dto';
 
+import { ErrorResponseDto } from './dto/request/users.request.dto';
 import {
   CreateConfirmationCodesDto,
   UpdatePermissionDto,
 } from './dto/request/users.request.dto';
+import { TwoFaPermissionsResponseDto } from './dto/response/twofa-permissions.response.dto';
+
 @ApiTags('User')
 @Controller('v1/users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -52,12 +59,22 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Setup user confirmation for endpoints' })
   @ApiOkResponse({
-    description: 'User info',
+    description: 'Result of operation',
     type: UsersMeResponseDto,
   })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden or permissions not created',
+    type: ErrorResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+    type: ErrorResponseDto,
+  })
   @Authorization(true)
-  @Post('confirmations/2fa')
-  async updatePermissions(
+  @Patch('confirmations/2fa')
+  async updateTwoFaConfirmation(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
     @ServiceTokenFromRequest() serviceToken: string,
@@ -68,24 +85,19 @@ export class UserController {
       serviceToken,
       {
         userId,
-        twoFaPermissions: [
-          {
-            permissionId: body.permissionId,
-            confirmationMethodId: body.confirmationMethodId,
-          },
-        ],
+        permissions: body.permissions,
       },
     );
 
     if (!data.status) {
-      throw new CustomError(
-        ExtendedHttpStatus.FORBIDDEN,
-        "Permissions don't created",
-      );
+      return {
+        success: false,
+        data: data,
+      };
     }
 
     return {
-      message: 'User found',
+      success: true,
       data,
     };
   }
@@ -102,7 +114,7 @@ export class UserController {
     type: UsersMeResponseDto,
   })
   @Authorization(true)
-  @Get('confirmationMethods')
+  @Get('confirmation-methods')
   async getConfirmationsMethods(
     @UserIdFromRequest() userId: string,
     @CorrelationIdFromRequest() traceId: string,
@@ -210,6 +222,55 @@ export class UserController {
       message: 'User found',
       data,
     };
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get user two-factor authentication permissions list',
+    description:
+      'Returns all available permissions for the user, with 2FA confirmation methods if configured. Supports pagination.',
+  })
+  @ApiOkResponse({
+    description: 'List of 2FA permissions with confirmation methods',
+    type: TwoFaPermissionsResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found',
+    type: ErrorResponseDto,
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden',
+    type: ErrorResponseDto,
+  })
+  @Authorization(true)
+  @Get('2fa-permissions')
+  async getTwoFaPermissionsList(
+    @Query() query: PaginationQueryDto,
+    @UserIdFromRequest() userId: string,
+    @CorrelationIdFromRequest() traceId: string,
+    @ServiceTokenFromRequest() serviceToken: string,
+  ): Promise<TwoFaPermissionsResponseDto> {
+    const { limit = 10, page = 1 } = query;
+    const data = await this.userClient.getTwoFaPermissionsList(
+      { userId, limit, page },
+      traceId,
+      serviceToken,
+    );
+
+    if (!data.status) {
+      throw new CustomError(
+        ExtendedHttpStatus.NOT_FOUND,
+        'Failed to retrieve 2FA permissions',
+      );
+    }
+
+    return new TwoFaPermissionsResponseDto({
+      success: true,
+      message: data.message,
+      data: { twoFaPermissions: data.twoFaPermissions, meta: data.meta },
+    });
   }
 
   @ApiOperation({ summary: 'Get info about user' })

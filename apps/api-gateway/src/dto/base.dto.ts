@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsInt, IsNumber, IsOptional, Min } from 'class-validator';
 
 export class TwoFaCodesDto {
   @ApiProperty({
@@ -25,4 +26,30 @@ export class TwoFaCodesDto {
   @IsOptional()
   @IsNumber()
   readonly googleCode!: number;
+}
+
+export class PaginationQueryDto {
+  @ApiProperty({
+    description: 'Number of items per page',
+    example: 10,
+    required: false,
+    default: 10,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  limit?: number = 10;
+
+  @ApiProperty({
+    description: 'Page number for pagination',
+    example: 1,
+    required: false,
+    default: 1,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number = 1;
 }

@@ -95,6 +95,8 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       const confirmationCodes =
         rpcData?.twoFaCodes || rpcData?.credentials?.twoFaCodes;
 
+      console.log('confirmationCodes', confirmationCodes);
+
       if (!userId && !login) {
         return this.errorResponse(AUTH_ERROR_CODES.INVALID_CREDENTIALS);
       }

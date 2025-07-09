@@ -116,12 +116,16 @@ export class SessionsController {
     @Param('id') id: string,
     @Body() body: TerminateSessionDto,
   ): Promise<{ message: string }> {
-    await this.authClient.terminateSessionById(traceId, serviceToken, {
-      userId,
-      sessionId: id,
-    });
+    const data = await this.authClient.terminateSessionById(
+      traceId,
+      serviceToken,
+      {
+        userId,
+        sessionId: id,
+      },
+    );
 
-    return { message: 'Session terminated successfully' };
+    return data;
   }
 
   @ApiOperation({

@@ -17,11 +17,3 @@ export interface User {
   updatedAt: Date;
   deletedAt: Date | null;
 }
-
-export interface ICreateExperienceAccrualHistoryRequest {
-  experienceId: string;
-  userId: string;
-  amount: number;
-  source?: string;
-  source_id?: string;
-}
