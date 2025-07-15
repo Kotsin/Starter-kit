@@ -348,15 +348,8 @@ export class UserService implements OnModuleInit {
           user: existingUser,
         };
       }
-      // TODO: добавить ACTIVE сразу в дату вместо двух входов в БД
-      // сделать отдельный приватный метод для активации юзера, чекнуть статус по отношению к loginType
-      const newUser = await this.createUser(data);
 
-      if(data.loginType === LoginMethod.WEB3) {
-        await this.userRepo.update(newUser.id, {
-          status: UserStatus.ACTIVE,
-        });
-      }
+      const newUser = await this.createUser(data);
 
       return {
         status: true,
@@ -531,13 +524,15 @@ export class UserService implements OnModuleInit {
       code: randomstring.generate({ length: 6, charset: 'numeric' }),
       codeLifetime: new Date(Date.now() + 5 * 60 * 1000),
     });
-
+    
+    const userStatus = this.getUserStatusByLoginType(data.loginType);
     const newUser = this.userRepo.create({
       id: userId,
       username,
       referralCode: referralCode,
       password: await hashPassword(data.password),
       loginMethods: [loginMethod],
+      status: userStatus,
     });
 
     const userRole = this.userRoleRepo.create({
@@ -556,6 +551,15 @@ export class UserService implements OnModuleInit {
       login: data.login,
       createdAt: newUser.createdAt,
     };
+  }
+
+  private getUserStatusByLoginType(loginType: string): UserStatus {
+    switch (loginType.toUpperCase()) {
+      case 'WEB3':
+        return UserStatus.ACTIVE;
+      default:
+        return UserStatus.INACTIVE;
+    }
   }
 
   private async activateUser(userId: string): Promise<any> {
