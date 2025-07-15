@@ -122,6 +122,7 @@ export class AuthController {
     isPublic: true,
     type: ControllerType.WRITE,
     needsPermission: false,
+    needsConfirmation: false,
   })
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_WEB3)
   public async authenticateWeb3(data: {
@@ -142,6 +143,7 @@ export class AuthController {
     isPublic: true,
     type: ControllerType.WRITE,
     needsPermission: false,
+    needsConfirmation: false,
   })
   @MessagePattern(AuthClientPatterns.GENERATE_WEB3_NONCE)
   public async generateWeb3Nonce(data: { walletAddress: string }) {

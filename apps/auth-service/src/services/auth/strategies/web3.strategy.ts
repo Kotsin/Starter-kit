@@ -40,25 +40,20 @@ export class Web3Strategy implements IAuthStrategy {
 
       // получаем nonce из кэша
       const nonceKey = `web3:nonce:${walletAddress.toLowerCase()}`;
-      const cachedMessage = await this.cacheManager.get<string>(nonceKey);
+      const message = await this.cacheManager.get<{ message: any }>(nonceKey);
 
-      if (!cachedMessage) {
+      if (!message) {
         throw new AuthenticationError(
           'Nonce not found or expired',
           AUTH_ERROR_CODES.INVALID_CREDENTIALS,
         );
       }
 
-      // парсим данные nonce из кэша
-      const messageData = JSON.parse(cachedMessage); // TODO: возможно запутался в структурах
-      const { nonce, message: originalMessage } = messageData;
-
       // проверяем подпись
       const isValidSignature = await this.verifyEIP712Signature(
         walletAddress,
-        originalMessage,
+        message,
         signature,
-        nonce,
       );
 
       // если подпись не валидна, то выбрасываем ошибку
@@ -83,11 +78,11 @@ export class Web3Strategy implements IAuthStrategy {
       });
 
       // ищем или создаем пользователя
-      const userResult = await this.userClient.findOrCreateUser(
+      const userResult = await this.userClient.ensureUserExists(
         {
           login: walletAddress.toLowerCase(),
           loginType: LoginMethod.WEB3,
-          password: '', // нет пароля для веб3 аутентификации?
+          password: 'web3',
         },
         traceId,
         serviceToken,
@@ -138,7 +133,7 @@ export class Web3Strategy implements IAuthStrategy {
     status: boolean;
     message: string;
     nonce?: string;
-    data?: { message: string };
+    data?: { message: any };
     error?: string;
     errorCode?: AUTH_ERROR_CODES;
   }> {
@@ -178,28 +173,21 @@ export class Web3Strategy implements IAuthStrategy {
         address: walletAddress,
       };
 
-      const message = JSON.stringify({ // TODO: отдать структуру в виде объекта, а не строки
+      const message = {
         domain,
         types,
         primaryType: 'Authentication',
-        message: values,
-      });
-
-      const messageKey = `web3:nonce:${walletAddress.toLowerCase()}`;
-      const messageData = {
-        nonce,
-        message,
-        timestamp,
-        walletAddress: walletAddress.toLowerCase(),
+        values,
       };
 
-      await this.cacheManager.set(messageKey, JSON.stringify(messageData), web3Config.nonce.expirationTime);
+      const messageKey = `web3:nonce:${walletAddress.toLowerCase()}`;
+
+      await this.cacheManager.set(messageKey, message, web3Config.nonce.expirationTime);
 
       return {
         status: true,
         message: 'Nonce generated successfully',
-        nonce: nonce.toString(),
-        data: { message },
+        data: { message: message },
       };
     } catch (error) {
       let errorCode = AUTH_ERROR_CODES.AUTHENTICATION_FAILED;
@@ -224,25 +212,19 @@ export class Web3Strategy implements IAuthStrategy {
    */
   private async verifyEIP712Signature(
     walletAddress: string,
-    message: string,
+    message: any,
     signature: string,
-    expectedNonce: number,
   ): Promise<boolean> {
     try {
-      const structuredData = JSON.parse(message);
 
-      if (structuredData.message.nonce !== expectedNonce) {
-        return false;
-      }
-
-      if (structuredData.message.address.toLowerCase() !== walletAddress.toLowerCase()) {
+      if (message.values.address.toLowerCase() !== walletAddress.toLowerCase()) {
         return false;
       }
 
       const recoveredAddress = ethers.verifyTypedData(
-        structuredData.domain,
-        structuredData.types,
-        structuredData.message,
+        message.domain,
+        message.types,
+        message.values,
         signature,
       );
 

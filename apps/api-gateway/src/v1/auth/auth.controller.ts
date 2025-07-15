@@ -391,7 +391,7 @@ export class AuthController {
 
     return {
       message: 'Nonce generated successfully',
-      data: { message: result.message },
+      data: { message: result.data.message },
     };
   }
 
