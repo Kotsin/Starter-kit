@@ -7,12 +7,28 @@ export async function createRmqMessage(
   request?: any,
   opts?: RmqRecordOptions,
 ): Promise<any> {
-  return new RmqRecordBuilder(request)
+  const headers = {
+    traceId,
+    'x-service-token': serviceToken,
+  };
+  let messageBody: any;
+
+  if (
+    request !== undefined &&
+    request !== null &&
+    typeof request === 'object'
+  ) {
+    messageBody = {
+      ...request,
+      traceId,
+    };
+  } else {
+    messageBody = request;
+  }
+
+  return new RmqRecordBuilder(messageBody)
     .setOptions({
-      headers: {
-        traceId,
-        'x-service-token': serviceToken,
-      },
+      headers,
       ...opts,
     })
     .build();

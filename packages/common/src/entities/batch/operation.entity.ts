@@ -8,9 +8,9 @@ import {
 } from 'typeorm';
 
 import { UserOperationTypeEnum } from '../../enums';
-import { BatchOperationStatus } from '../../types';
+import { BatchOperationStatus } from '../../interfaces';
 
-@Entity('BatchOperation')
+@Entity('BatchOperations')
 export class OperationEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;

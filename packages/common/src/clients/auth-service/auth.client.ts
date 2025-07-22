@@ -3,13 +3,13 @@ import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 import {
-  ApiKeyValidateDto,
-  CreateApiKeyDto,
   IActiveSessionsRequest,
   IActiveSessionsResponse,
   IApiKeyCreateResponse,
   IApiKeyListResponse,
   IApiKeyRemoveResponse,
+  IApiKeyValidateData,
+  ICreateApiKeyData,
   INativeLogin,
   ISessionCreateRequest,
   ISessionCreateResponse,
@@ -27,8 +27,15 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
-  UpdateApiKeyDto,
-} from '../../types';
+  IUpdateApiKeyData,
+  IUserRegistrationRequest,
+  IUserRegistrationResponse,
+} from '../../interfaces';
+import {
+  IGetInvitationsRequest,
+  IGetInvitationsResponse,
+  IUseInvitationResponse,
+} from '../../interfaces/auth-service/invitation.interface';
 import { createRmqMessage } from '../../utils';
 
 export const AUTH_INJECT_TOKEN = 'AUTH_SERVICE';
@@ -72,6 +79,26 @@ export class AuthClient {
     return await firstValueFrom(
       this.authClientProxy.send(
         AuthClientPatterns.AUTHENTICATE_NATIVE,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
+
+  /**
+   * Finds or creates a user by login and password.
+   * @param request - Request data for user creation or lookup.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @returns User creation or lookup result.
+   */
+  async registerUser(
+    request: IUserRegistrationRequest,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<IUserRegistrationResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        AuthClientPatterns.USER_REGISTER,
         await createRmqMessage(traceId, serviceToken, request),
       ),
     );
@@ -290,7 +317,7 @@ export class AuthClient {
    * @returns API key creation result.
    */
   async apiKeyCreate(
-    request: CreateApiKeyDto,
+    request: ICreateApiKeyData,
     traceId: string,
     serviceToken: string,
   ): Promise<IApiKeyCreateResponse> {
@@ -310,7 +337,7 @@ export class AuthClient {
    * @returns API key update result.
    */
   async apiKeyUpdate(
-    request: { userId: string; id: string; dto: UpdateApiKeyDto },
+    request: { userId: string; id: string; dto: IUpdateApiKeyData },
     traceId: string,
     serviceToken: string,
   ): Promise<IApiKeyCreateResponse> {
@@ -368,7 +395,7 @@ export class AuthClient {
    * @returns API key validation result.
    */
   async apiKeyValidate(
-    request: ApiKeyValidateDto,
+    request: IApiKeyValidateData,
     traceId: string,
     serviceToken: string,
   ): Promise<{
@@ -384,11 +411,92 @@ export class AuthClient {
       ),
     );
   }
+
+  /**
+   * Создать инвайт
+   */
+  async createInvitation(
+    request: any,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<any> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        InvitationClientPatterns.INVITATION_CREATE,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
+
+  /**
+   * Получить список инвайтов
+   */
+  async getInvitations(
+    filter: IGetInvitationsRequest,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<IGetInvitationsResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        InvitationClientPatterns.INVITATION_LIST,
+        await createRmqMessage(traceId, serviceToken, filter),
+      ),
+    );
+  }
+
+  /**
+   * Получить инвайт по коду
+   */
+  async getInvitationByCode(
+    code: string,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<IUseInvitationResponse> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        InvitationClientPatterns.INVITATION_GET_BY_CODE,
+        await createRmqMessage(traceId, serviceToken, { code }),
+      ),
+    );
+  }
+
+  /**
+   * Отменить инвайт
+   */
+  async cancelInvitation(
+    data: { id: string; userId: string },
+    traceId: string,
+    serviceToken: string,
+  ): Promise<any> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        InvitationClientPatterns.INVITATION_CANCEL,
+        await createRmqMessage(traceId, serviceToken, data),
+      ),
+    );
+  }
+
+  /**
+   * Использовать инвайт
+   */
+  async useInvitation(
+    data: { code: string; usedBy: string },
+    traceId: string,
+    serviceToken: string,
+  ): Promise<any> {
+    return await firstValueFrom(
+      this.authClientProxy.send(
+        InvitationClientPatterns.INVITATION_USE,
+        await createRmqMessage(traceId, serviceToken, data),
+      ),
+    );
+  }
 }
 
 export enum AuthClientPatterns {
   AUTHENTICATE_NATIVE = 'auth:native',
   AUTHENTICATE_SOCIAL = 'auth:social',
+  USER_REGISTER = 'user:register',
   SESSION_CREATE = 'session:create',
   TOKENS_CREATE = 'tokens:create',
   TOKEN_VERIFY = 'token:verify',
@@ -403,4 +511,11 @@ export enum AuthClientPatterns {
   API_KEY_DELETE = 'api_key:delete',
   API_KEY_LIST = 'api_key:get:list',
   API_KEY_VALIDATE = 'api-key:validate',
+}
+export enum InvitationClientPatterns {
+  INVITATION_CREATE = 'invitation:create',
+  INVITATION_LIST = 'invitation:list',
+  INVITATION_GET_BY_CODE = 'invitation:get:by_code',
+  INVITATION_CANCEL = 'invitation:cancel',
+  INVITATION_USE = 'invitation:use',
 }

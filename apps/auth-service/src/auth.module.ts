@@ -7,6 +7,7 @@ import {
   ApiKeyEntity,
   ClientPermissionModule,
   ClientUserModule,
+  InvitationEntity,
   loadPermissionClientOptions,
   loadUserClientOptions,
   PermissionsRegistrarModule,
@@ -27,11 +28,13 @@ import { RedisClientOptions } from 'redis';
 
 import { ApiKeyController } from './controllers/api-key.controller';
 import { AuthController } from './controllers/auth.controller';
+import { InvitationController } from './controllers/invitation.controller';
 import { ApiKeyService } from './services/api-key/api-key.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthStrategyFactory } from './services/auth/auth-strategy-factory.service';
 // Стратегии
 import { NativeStrategy } from './services/auth/strategies/native.strategy';
+import { InvitationService } from './services/invitation/invitation.service';
 
 @Module({
   imports: [
@@ -40,9 +43,9 @@ import { NativeStrategy } from './services/auth/strategies/native.strategy';
     AppLoggerModule,
     ClientUserModule.forRoot(loadUserClientOptions()),
     ClientPermissionModule.forRoot(loadPermissionClientOptions()),
-    TypeOrmModule.forFeature([SessionEntity, ApiKeyEntity]),
+    TypeOrmModule.forFeature([SessionEntity, ApiKeyEntity, InvitationEntity]),
     DBModule.forRoot({
-      entities: [SessionEntity, ApiKeyEntity],
+      entities: [SessionEntity, ApiKeyEntity, InvitationEntity],
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -68,11 +71,12 @@ import { NativeStrategy } from './services/auth/strategies/native.strategy';
       },
     }),
   ],
-  controllers: [AuthController, ApiKeyController],
+  controllers: [AuthController, ApiKeyController, InvitationController],
   providers: [
     AuthStrategyFactory,
     AuthService,
     ApiKeyService,
+    InvitationService,
     // Strategy's
     NativeStrategy,
     // Use cases

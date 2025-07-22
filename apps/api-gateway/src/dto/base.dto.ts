@@ -9,7 +9,7 @@ export class TwoFaCodesDto {
   })
   @IsOptional()
   @IsNumber()
-  readonly emailCode!: number;
+  readonly email!: number;
 
   @ApiProperty({
     description: 'Phone 2fa code if security mode setups',
@@ -17,15 +17,7 @@ export class TwoFaCodesDto {
   })
   @IsOptional()
   @IsNumber()
-  readonly phoneCode!: number;
-
-  @ApiProperty({
-    description: 'Google 2fa code if security mode setups',
-    example: 0o00000,
-  })
-  @IsOptional()
-  @IsNumber()
-  readonly googleCode!: number;
+  readonly phone!: number;
 }
 
 export class PaginationQueryDto {

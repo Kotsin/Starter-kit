@@ -18,7 +18,7 @@ import {
   TwoFactorPermissionsEntity,
   UserClient,
   UserEntity,
-  UserLoginMethodsEntity,
+  UserEntryMethodsEntity,
   UserRoleEntity,
 } from '@crypton-nestjs-kit/common';
 import { ConfigModule, ConfigService } from '@crypton-nestjs-kit/config';
@@ -40,7 +40,7 @@ import { UserService } from './services/user.service';
     ClientPermissionModule.forRoot(loadPermissionClientOptions()),
     TypeOrmModule.forFeature([
       UserEntity,
-      UserLoginMethodsEntity,
+      UserEntryMethodsEntity,
       RoleEntity,
       UserRoleEntity,
       PermissionEntity,
@@ -49,7 +49,7 @@ import { UserService } from './services/user.service';
     DBModule.forRoot({
       entities: [
         UserEntity,
-        UserLoginMethodsEntity,
+        UserEntryMethodsEntity,
         RoleEntity,
         UserRoleEntity,
         PermissionEntity,

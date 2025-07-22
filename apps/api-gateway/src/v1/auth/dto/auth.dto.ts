@@ -84,6 +84,26 @@ export class RegisterDtoRequest {
       'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
   })
   readonly password!: string;
+
+  @ApiProperty({
+    description:
+      'Invitation code (optional, required if system is in invite-only mode)',
+    example: 'INVITE1234',
+    required: false,
+  })
+  @IsOptional()
+  @IsString({ message: 'Invitation code must be a string' })
+  readonly invitationCode?: string;
+
+  @ApiProperty({
+    description:
+      'Referral code (optional, required if system is in invite-only mode)',
+    example: 'REFERRAL1234',
+    required: false,
+  })
+  @IsOptional()
+  @IsString({ message: 'Referral code must be a string' })
+  readonly referralCode?: string;
 }
 
 export class CaptchaDto {
@@ -100,9 +120,9 @@ export class AuthDtoRequest extends RegisterDtoRequest {
   @ApiProperty({
     description: '2FA codes object. Is it setting up.',
     example: {
-      emailCode: 0o00000,
-      phoneCode: 0o00000,
-      googleCode: 0o00000,
+      email: 0o00000,
+      phone: 0o00000,
+      google: 0o00000,
     },
   })
   @IsOptional()

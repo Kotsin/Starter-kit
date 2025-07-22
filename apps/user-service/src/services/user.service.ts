@@ -3,13 +3,16 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   AuthClient,
+  AUTH_ERROR_CODES,
   ControllerType,
+  DefaultRole,
   hashPassword,
   ICreateConfirmationCodesResponse,
   IFindOrCreateUserRequest,
   IFindOrCreateUserResponse,
   IGetMeRequest,
   IGetMeResponse,
+  IGetRoleByUserIdResponse,
   IGetTwoFaPermissionsRequest,
   IGetTwoFaPermissionsResponse,
   IGetUserByIdRequest,
@@ -21,7 +24,7 @@ import {
   LoginMethod,
   TwoFactorPermissionsEntity,
   UserEntity,
-  UserLoginMethodsEntity,
+  UserEntryMethodsEntity,
   UserStatus,
 } from '@crypton-nestjs-kit/common';
 import { PermissionEntity } from '@crypton-nestjs-kit/common/build/entities/user/permissions.entity';
@@ -54,12 +57,12 @@ const filterUser = (user: any) => {
 };
 
 @Injectable()
-export class UserService implements OnModuleInit {
+export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
-    @InjectRepository(UserLoginMethodsEntity)
-    private readonly userLoginMethods: Repository<UserLoginMethodsEntity>,
+    @InjectRepository(UserEntryMethodsEntity)
+    private readonly userLoginMethods: Repository<UserEntryMethodsEntity>,
     @InjectRepository(RoleEntity)
     private readonly roleRepo: Repository<RoleEntity>,
     @InjectRepository(UserRoleEntity)
@@ -71,14 +74,6 @@ export class UserService implements OnModuleInit {
     private readonly cacheManager: Cache,
     private readonly authClient: AuthClient,
   ) {}
-
-  async onModuleInit(): Promise<void> {
-    const defaultRoles = await this.findDefaultRole();
-
-    if (defaultRoles.length < 1) {
-      await this.createDefaultRole();
-    }
-  }
 
   public async createTwoFaPermissions(request: any): Promise<any> {
     try {
@@ -498,10 +493,18 @@ export class UserService implements OnModuleInit {
   }
 
   private async createUser(data: IFindOrCreateUserRequest): Promise<any> {
-    const role = await this.roleRepo.findOne({ where: { name: 'USER' } });
+    const where: any = {};
+
+    if (data.roleId) {
+      where.id = data.roleId;
+    } else {
+      where.name = DefaultRole.USER;
+    }
+
+    const role = await this.roleRepo.findOne({ where });
 
     if (!role) {
-      throw new Error('Role "USER" not found');
+      throw new Error('Role not found');
     }
 
     const USERNAME_PREFIX = 'user_';
@@ -531,6 +534,7 @@ export class UserService implements OnModuleInit {
       referralCode: referralCode,
       password: await hashPassword(data.password),
       loginMethods: [loginMethod],
+      invitedById: data.invitedBy,
     });
 
     const userRole = this.userRoleRepo.create({
@@ -783,6 +787,64 @@ export class UserService implements OnModuleInit {
     }
   }
 
+  public async getRoleByUserId(userId: string): Promise<IGetRoleByUserIdResponse> {
+    try {
+      const user = await this.userRepo.findOne({
+        where: { id: userId },
+        relations: ['roles.role'],
+      });
+
+      if (!user) {
+        return {
+          status: false,
+          message: 'User not found',
+          roles: null,
+          errorCode: AUTH_ERROR_CODES.USER_NOT_FOUND,
+        };
+      }
+
+      return {
+        status: true,
+        message: 'Role found',
+        roles: user.roles.map(userRole => userRole.role),
+      };
+    } catch (e) {
+      return {
+        status: false,
+        message: 'Role not found',
+        roles: null,
+      };
+    }
+  }
+
+  public async getRoleById(data: { roleId: string }): Promise<any> {
+    try {
+      const role = await this.roleRepo.findOne({
+        where: { id: data.roleId },
+      });
+
+      if (!role) {
+        return {
+          status: false,
+          message: 'Role not found',
+          role: null,
+        };
+      }
+
+      return {
+        status: true,
+        message: 'Role found',
+        role: role,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        message: 'Role not found',
+        role: null,
+      };
+    }
+  }
+
   public async getPermissionsByRole(data: {
     roleId: string;
     type?: string;
@@ -902,19 +964,5 @@ export class UserService implements OnModuleInit {
         name: In(['USER', 'SUPER_ADMIN', 'ADMIN']),
       },
     });
-  }
-
-  private async createDefaultRole(): Promise<void> {
-    const defaultRoles = ['USER', 'SUPER_ADMIN', 'ADMIN'];
-
-    const rolesEntities = defaultRoles.map((role) => {
-      return RoleEntity.create({
-        id: v4(),
-        name: role,
-        description: role.toLowerCase(),
-      });
-    });
-
-    await this.roleRepo.save(rolesEntities);
   }
 }

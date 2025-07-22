@@ -2,8 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
-import { IResponse } from '../../types';
-import { BatchOperation } from '../../types/batch-service';
+import { BatchOperation, IResponse } from '../../interfaces';
 
 export const BATCH_INJECT_TOKEN = 'BATCH_SERVICE';
 

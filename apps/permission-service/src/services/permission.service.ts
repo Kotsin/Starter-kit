@@ -3,13 +3,11 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   DefaultRole,
+  PermissionEntity,
+  RoleEntity,
   TwoFactorPermissionsEntity,
-  UserEntity,
-  UserLoginMethodsEntity,
+  UserEntryMethodsEntity,
 } from '@crypton-nestjs-kit/common';
-import { PermissionEntity } from '@crypton-nestjs-kit/common/build/entities/user/permissions.entity';
-import { RoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/role.entity';
-import { UserRoleEntity } from '@crypton-nestjs-kit/common/build/entities/user/user-role.entity';
 import { In, Repository } from 'typeorm';
 import { v4 } from 'uuid';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -18,14 +16,10 @@ const randomstring = require('randomstring');
 @Injectable()
 export class PermissionService implements OnModuleInit {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>,
-    @InjectRepository(UserLoginMethodsEntity)
-    private readonly userLoginMethods: Repository<UserLoginMethodsEntity>,
+    @InjectRepository(UserEntryMethodsEntity)
+    private readonly userLoginMethods: Repository<UserEntryMethodsEntity>,
     @InjectRepository(RoleEntity)
     private readonly roleRepo: Repository<RoleEntity>,
-    @InjectRepository(UserRoleEntity)
-    private readonly userRoleRepo: Repository<UserRoleEntity>,
     @InjectRepository(PermissionEntity)
     private readonly permissionRepo: Repository<PermissionEntity>,
     @InjectRepository(TwoFactorPermissionsEntity)
@@ -35,6 +29,8 @@ export class PermissionService implements OnModuleInit {
 
   async onModuleInit(): Promise<void> {
     const defaultRoles = await this.findDefaultRole();
+
+    console.log(defaultRoles);
 
     if (defaultRoles.length < 1) {
       await this.createDefaultRole();
@@ -101,11 +97,8 @@ export class PermissionService implements OnModuleInit {
 
     const isUpdated = await Promise.all(
       default_roles.map(async (role) => {
-        if (role.name == 'USER') {
-        }
-
         const newPermissions = permissions.filter((permission) => {
-          if (role.name == 'USER' && permission.isPublic) {
+          if (permission.isPublic) {
             return !role.permissions.some(
               (p) => p.method === permission.method,
             );
@@ -283,19 +276,21 @@ export class PermissionService implements OnModuleInit {
   private async findDefaultRole(): Promise<RoleEntity[]> {
     return await this.roleRepo.find({
       where: {
-        name: In(['USER', 'SUPER_ADMIN', 'ADMIN']),
+        name: In(Object.keys(DefaultRole)),
       },
     });
   }
 
   private async createDefaultRole(): Promise<void> {
-    const defaultRoles = ['USER', 'SUPER_ADMIN', 'ADMIN'];
+    const defaultRoles = Object.keys(DefaultRole);
 
     const rolesEntities = defaultRoles.map((role) => {
       return RoleEntity.create({
         id: v4(),
-        name: role,
+        name: DefaultRole[role],
         description: role.toLowerCase(),
+        level: 0,
+        createdBy: 'system',
       });
     });
 

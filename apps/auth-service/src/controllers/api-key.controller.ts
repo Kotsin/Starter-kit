@@ -2,16 +2,16 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   API_KEY_ERROR_CODES,
-  ApiKeyValidateDto,
   AuthClientPatterns,
   ControllerMeta,
   ControllerType,
-  CreateApiKeyDto,
   IApiKeyCreateResponse,
   IApiKeyListResponse,
   IApiKeyRemoveResponse,
   IApiKeyUpdateResponse,
-  UpdateApiKeyDto,
+  IApiKeyValidateData,
+  ICreateApiKeyData,
+  IUpdateApiKeyData,
 } from '@crypton-nestjs-kit/common';
 
 import { ApiKeyService } from '../services/api-key/api-key.service';
@@ -28,7 +28,7 @@ export class ApiKeyController {
   })
   @MessagePattern(AuthClientPatterns.API_KEY_CREATE)
   async create(
-    @Payload() dto: CreateApiKeyDto,
+    @Payload() dto: ICreateApiKeyData,
   ): Promise<IApiKeyCreateResponse> {
     try {
       const result = await this.apiKeyService.createApiKey(dto);
@@ -93,7 +93,7 @@ export class ApiKeyController {
   })
   @MessagePattern(AuthClientPatterns.API_KEY_UPDATE)
   async update(
-    @Payload() data: { id: string; userId: string; dto: UpdateApiKeyDto },
+    @Payload() data: { id: string; userId: string; dto: IUpdateApiKeyData },
   ): Promise<IApiKeyUpdateResponse> {
     try {
       const result = await this.apiKeyService.updateApiKey(
@@ -152,7 +152,7 @@ export class ApiKeyController {
     needsPermission: false,
   })
   @MessagePattern(AuthClientPatterns.API_KEY_VALIDATE)
-  async validate(@Payload() data: ApiKeyValidateDto): Promise<{
+  async validate(@Payload() data: IApiKeyValidateData): Promise<{
     status: boolean;
     message: string;
     serviceToken: string;

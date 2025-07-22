@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { ServiceStatus, ServiceType } from '../../types';
+import { ServiceStatus, ServiceType } from '../../interfaces';
 
 @Entity('Service')
 export class ServiceEntity extends BaseEntity {

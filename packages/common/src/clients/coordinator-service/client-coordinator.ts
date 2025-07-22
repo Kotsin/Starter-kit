@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
-import { IResponse, Service, ServiceType } from '../../types';
+import { IResponse, Service, ServiceType } from '../../interfaces';
 
 export const COORDINATOR_INJECT_TOKEN = 'COORDINATOR_SERVICE';
 

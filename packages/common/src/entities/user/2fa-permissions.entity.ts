@@ -9,9 +9,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { UserEntryMethodsEntity } from './entry-method.entity';
 import { PermissionEntity } from './permissions.entity';
 import { UserEntity } from './user.entity';
-import { UserLoginMethodsEntity } from './user-login-method.entity';
 
 @Unique(['user', 'permission', 'confirmationMethod'])
 @Entity('TwoFactorPermissions')
@@ -30,12 +30,12 @@ export class TwoFactorPermissionsEntity extends BaseEntity {
   @JoinColumn({ name: 'permission_id' })
   public permission!: PermissionEntity;
 
-  @ManyToOne(() => UserLoginMethodsEntity, {
+  @ManyToOne(() => UserEntryMethodsEntity, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   @JoinColumn({ name: 'confirmation_method_id' })
-  public confirmationMethod!: UserLoginMethodsEntity;
+  public confirmationMethod!: UserEntryMethodsEntity;
 
   @CreateDateColumn({
     type: 'timestamptz',

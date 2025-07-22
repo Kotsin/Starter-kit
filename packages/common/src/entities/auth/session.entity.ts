@@ -13,7 +13,7 @@ export enum SessionStatus {
   INACTIVE = 'inactive',
 }
 
-@Entity('Session')
+@Entity('Sessions')
 export class SessionEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;

@@ -95,8 +95,6 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
       const confirmationCodes =
         rpcData?.twoFaCodes || rpcData?.credentials?.twoFaCodes;
 
-      console.log('confirmationCodes', confirmationCodes);
-
       if (!userId && !login) {
         return this.errorResponse(AUTH_ERROR_CODES.INVALID_CREDENTIALS);
       }
@@ -142,7 +140,7 @@ export class RequireConfirmationInterceptor implements NestInterceptor {
 
         if (!method) continue;
 
-        const expectedCode = confirmationCodes?.[`${method}Code`];
+        const expectedCode = confirmationCodes?.[`${method}`];
 
         if (!expectedCode) {
           return this.errorResponse(AUTH_ERROR_CODES.MISSING_CONFIRMATION_CODE);

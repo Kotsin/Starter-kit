@@ -3495,6 +3495,132 @@
         "hash": "sha512-e5+YUKENATs1JgYHMzTr2MW/NDcXGfYFAuOQU8gJgF/kEh4EqKgfGrfLI67bMD4tbhZVlkigz/9YYwWcbOFthg=="
       }
     },
+    "npm:@inquirer/checkbox": {
+      "type": "npm",
+      "name": "npm:@inquirer/checkbox",
+      "data": {
+        "version": "4.2.0",
+        "packageName": "@inquirer/checkbox",
+        "hash": "sha512-fdSw07FLJEU5vbpOPzXo5c6xmMGDzbZE2+niuDHX5N6mc6V0Ebso/q3xiHra4D73+PMsC8MJmcaZKuAAoaQsSA=="
+      }
+    },
+    "npm:@inquirer/confirm": {
+      "type": "npm",
+      "name": "npm:@inquirer/confirm",
+      "data": {
+        "version": "5.1.14",
+        "packageName": "@inquirer/confirm",
+        "hash": "sha512-5yR4IBfe0kXe59r1YCTG8WXkUbl7Z35HK87Sw+WUyGD8wNUx7JvY7laahzeytyE1oLn74bQnL7hstctQxisQ8Q=="
+      }
+    },
+    "npm:@inquirer/core": {
+      "type": "npm",
+      "name": "npm:@inquirer/core",
+      "data": {
+        "version": "10.1.15",
+        "packageName": "@inquirer/core",
+        "hash": "sha512-8xrp836RZvKkpNbVvgWUlxjT4CraKk2q+I3Ksy+seI2zkcE+y6wNs1BVhgcv8VyImFecUhdQrYLdW32pAjwBdA=="
+      }
+    },
+    "npm:@inquirer/editor": {
+      "type": "npm",
+      "name": "npm:@inquirer/editor",
+      "data": {
+        "version": "4.2.15",
+        "packageName": "@inquirer/editor",
+        "hash": "sha512-wst31XT8DnGOSS4nNJDIklGKnf+8shuauVrWzgKegWUe28zfCftcWZ2vktGdzJgcylWSS2SrDnYUb6alZcwnCQ=="
+      }
+    },
+    "npm:@inquirer/expand": {
+      "type": "npm",
+      "name": "npm:@inquirer/expand",
+      "data": {
+        "version": "4.0.17",
+        "packageName": "@inquirer/expand",
+        "hash": "sha512-PSqy9VmJx/VbE3CT453yOfNa+PykpKg/0SYP7odez1/NWBGuDXgPhp4AeGYYKjhLn5lUUavVS/JbeYMPdH50Mw=="
+      }
+    },
+    "npm:@inquirer/figures": {
+      "type": "npm",
+      "name": "npm:@inquirer/figures",
+      "data": {
+        "version": "1.0.13",
+        "packageName": "@inquirer/figures",
+        "hash": "sha512-lGPVU3yO9ZNqA7vTYz26jny41lE7yoQansmqdMLBEfqaGsmdg7V3W9mK9Pvb5IL4EVZ9GnSDGMO/cJXud5dMaw=="
+      }
+    },
+    "npm:@inquirer/input": {
+      "type": "npm",
+      "name": "npm:@inquirer/input",
+      "data": {
+        "version": "4.2.1",
+        "packageName": "@inquirer/input",
+        "hash": "sha512-tVC+O1rBl0lJpoUZv4xY+WGWY8V5b0zxU1XDsMsIHYregdh7bN5X5QnIONNBAl0K765FYlAfNHS2Bhn7SSOVow=="
+      }
+    },
+    "npm:@inquirer/number": {
+      "type": "npm",
+      "name": "npm:@inquirer/number",
+      "data": {
+        "version": "3.0.17",
+        "packageName": "@inquirer/number",
+        "hash": "sha512-GcvGHkyIgfZgVnnimURdOueMk0CztycfC8NZTiIY9arIAkeOgt6zG57G+7vC59Jns3UX27LMkPKnKWAOF5xEYg=="
+      }
+    },
+    "npm:@inquirer/password": {
+      "type": "npm",
+      "name": "npm:@inquirer/password",
+      "data": {
+        "version": "4.0.17",
+        "packageName": "@inquirer/password",
+        "hash": "sha512-DJolTnNeZ00E1+1TW+8614F7rOJJCM4y4BAGQ3Gq6kQIG+OJ4zr3GLjIjVVJCbKsk2jmkmv6v2kQuN/vriHdZA=="
+      }
+    },
+    "npm:@inquirer/prompts": {
+      "type": "npm",
+      "name": "npm:@inquirer/prompts",
+      "data": {
+        "version": "7.7.0",
+        "packageName": "@inquirer/prompts",
+        "hash": "sha512-8/7fOJA/Q5qqxznIvYjEvUCeRE6pncc1OHEmeA5JdNIKfOBC3a0EE5lFBofTWK/WXKfsjMkIz28y/uL6A3frYA=="
+      }
+    },
+    "npm:@inquirer/rawlist": {
+      "type": "npm",
+      "name": "npm:@inquirer/rawlist",
+      "data": {
+        "version": "4.1.5",
+        "packageName": "@inquirer/rawlist",
+        "hash": "sha512-R5qMyGJqtDdi4Ht521iAkNqyB6p2UPuZUbMifakg1sWtu24gc2Z8CJuw8rP081OckNDMgtDCuLe42Q2Kr3BolA=="
+      }
+    },
+    "npm:@inquirer/search": {
+      "type": "npm",
+      "name": "npm:@inquirer/search",
+      "data": {
+        "version": "3.0.17",
+        "packageName": "@inquirer/search",
+        "hash": "sha512-CuBU4BAGFqRYors4TNCYzy9X3DpKtgIW4Boi0WNkm4Ei1hvY9acxKdBdyqzqBCEe4YxSdaQQsasJlFlUJNgojw=="
+      }
+    },
+    "npm:@inquirer/select": {
+      "type": "npm",
+      "name": "npm:@inquirer/select",
+      "data": {
+        "version": "4.3.0",
+        "packageName": "@inquirer/select",
+        "hash": "sha512-dY4sPBAfGH6Cv435gOSbNbMsLd6v1ItNmhjsLY+LTY4h8L+SAOERL2L/VtvjZFSVpVcY4dcu8fo6Uq8H8vNvzQ=="
+      }
+    },
+    "npm:@inquirer/type": {
+      "type": "npm",
+      "name": "npm:@inquirer/type",
+      "data": {
+        "version": "3.0.8",
+        "packageName": "@inquirer/type",
+        "hash": "sha512-lg9Whz8onIHRthWaN1Q9EGLa/0LFJjyM8mEUbL1eTi6yMGvBf8gvyDLtxSXztQsxMvhxxNpJYrwa1YHdq+w4Jw=="
+      }
+    },
     "npm:@ioredis/commands": {
       "type": "npm",
       "name": "npm:@ioredis/commands",
@@ -10047,6 +10173,15 @@
         "hash": "sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g=="
       }
     },
+    "npm:inquirer": {
+      "type": "npm",
+      "name": "npm:inquirer",
+      "data": {
+        "version": "12.8.1",
+        "packageName": "inquirer",
+        "hash": "sha512-V83Rix1Y6tuhhzIQsdcb1TfX2b/FTcIajK+c9qDokEf60h4ESU3L8A00IHAypVLCMena9yBnZYFS2vABYGMohA=="
+      }
+    },
     "npm:inquirer@8.2.4": {
       "type": "npm",
       "name": "npm:inquirer@8.2.4",
@@ -12072,6 +12207,15 @@
         "hash": "sha512-avsJQhyd+680gKXyG/sQc0nXaC6rBkPOfyHYcFb9+hdkqQkR9bdnkJ0AMZhke0oesPqIO+mFFJ+IdBc7mst4IA=="
       }
     },
+    "npm:mute-stream@2.0.0": {
+      "type": "npm",
+      "name": "npm:mute-stream@2.0.0",
+      "data": {
+        "version": "2.0.0",
+        "packageName": "mute-stream",
+        "hash": "sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA=="
+      }
+    },
     "npm:mz": {
       "type": "npm",
       "name": "npm:mz",
@@ -13798,6 +13942,15 @@
         "version": "3.0.0",
         "packageName": "run-async",
         "hash": "sha512-540WwVDOMxA6dN6We19EcT9sc3hkXPw5mzRNGM3FkdN/vtE9NFvj5lFAPNwUDmJjXidm3v7TC1cTE7t17Ulm1Q=="
+      }
+    },
+    "npm:run-async@4.0.5": {
+      "type": "npm",
+      "name": "npm:run-async@4.0.5",
+      "data": {
+        "version": "4.0.5",
+        "packageName": "run-async",
+        "hash": "sha512-oN9GTgxUNDBumHTTDmQ8dep6VIJbgj9S3dPP+9XylVLIK4xB9XTXtKWROd5pnhdXR9k0EgO1JRcNh0T+Ny2FsA=="
       }
     },
     "npm:run-parallel": {
@@ -16130,6 +16283,15 @@
         "packageName": "yocto-queue",
         "hash": "sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg=="
       }
+    },
+    "npm:yoctocolors-cjs": {
+      "type": "npm",
+      "name": "npm:yoctocolors-cjs",
+      "data": {
+        "version": "2.1.2",
+        "packageName": "yoctocolors-cjs",
+        "hash": "sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA=="
+      }
     }
   },
   "dependencies": {
@@ -16187,6 +16349,11 @@
       {
         "source": "@crypton-nestjs-kit/coordinator-service",
         "target": "npm:axios",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/coordinator-service",
+        "target": "npm:dotenv@16.4.7",
         "type": "static"
       },
       {
@@ -16278,6 +16445,11 @@
       },
       {
         "source": "@crypton-nestjs-kit/notification-gateway",
+        "target": "npm:dotenv@16.4.7",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/notification-gateway",
         "target": "npm:redis",
         "type": "static"
       },
@@ -16341,6 +16513,11 @@
       {
         "source": "@crypton-nestjs-kit/settings",
         "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/settings",
+        "target": "npm:@types/node@20.19.1",
         "type": "static"
       },
       {
@@ -16452,17 +16629,57 @@
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@nestjs/cli@10.4.9",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@nestjs/schematics@10.2.3",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@nestjs/testing@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
         "target": "npm:@types/eslint-plugin-prettier",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
-        "target": "npm:@typescript-eslint/eslint-plugin",
+        "target": "npm:@types/express@4.17.23",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
-        "target": "npm:@typescript-eslint/parser",
+        "target": "npm:@types/jsonwebtoken@9.0.10",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@types/supertest@6.0.3",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@typescript-eslint/eslint-plugin@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:concurrently@8.2.2",
         "type": "static"
       },
       {
@@ -16472,12 +16689,32 @@
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
-        "target": "npm:eslint-config-prettier",
+        "target": "npm:dotenv@16.4.7",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:dotenv-cli@7.4.4",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:eslint@8.57.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:eslint-config-prettier@8.10.0",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
         "target": "npm:eslint-plugin-import",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:eslint-plugin-prettier@4.2.1",
         "type": "static"
       },
       {
@@ -16492,7 +16729,27 @@
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:nodemon@3.1.10",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:prettier@2.8.8",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
         "target": "npm:rimraf",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:supertest@7.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:ts-jest",
         "type": "static"
       },
       {
@@ -16517,12 +16774,27 @@
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@nestjs/common@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@nestjs/core@10.4.15",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
         "target": "npm:@nestjs/microservices",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/permission-service",
         "target": "npm:@nestjs/platform-express",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:@nestjs/swagger@7.3.1",
         "type": "static"
       },
       {
@@ -16603,6 +16875,11 @@
       {
         "source": "@crypton-nestjs-kit/permission-service",
         "target": "npm:reflect-metadata",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/permission-service",
+        "target": "npm:rxjs@7.8.1",
         "type": "static"
       },
       {
@@ -16711,6 +16988,11 @@
       },
       {
         "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:@types/node@18.19.112",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
         "target": "npm:@types/supertest@6.0.3",
         "type": "static"
       },
@@ -16727,6 +17009,11 @@
       {
         "source": "@crypton-nestjs-kit/batch-service",
         "target": "npm:@typescript-eslint/parser@5.62.0",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:dotenv@16.4.7",
         "type": "static"
       },
       {
@@ -16772,6 +17059,11 @@
       {
         "source": "@crypton-nestjs-kit/batch-service",
         "target": "npm:supertest@7.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/batch-service",
+        "target": "npm:ts-jest",
         "type": "static"
       },
       {
@@ -16913,12 +17205,22 @@
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/express@4.17.23",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
         "target": "npm:@types/jest",
         "type": "static"
       },
       {
         "source": "@crypton-nestjs-kit/auth-service",
         "target": "npm:@types/jsonwebtoken@8.5.9",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/auth-service",
+        "target": "npm:@types/node@20.19.1",
         "type": "static"
       },
       {
@@ -17280,6 +17582,11 @@
       },
       {
         "source": "@crypton-nestjs-kit/database",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/database",
         "target": "npm:@types/uuid@9.0.8",
         "type": "static"
       },
@@ -17392,6 +17699,21 @@
       },
       {
         "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@types/express@4.17.23",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@types/jsonwebtoken@9.0.10",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
         "target": "npm:@types/supertest@6.0.3",
         "type": "static"
       },
@@ -17413,6 +17735,11 @@
       {
         "source": "@crypton-nestjs-kit/user-service",
         "target": "npm:copyfiles",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:dotenv@16.4.7",
         "type": "static"
       },
       {
@@ -17468,6 +17795,11 @@
       {
         "source": "@crypton-nestjs-kit/user-service",
         "target": "npm:supertest@7.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/user-service",
+        "target": "npm:ts-jest",
         "type": "static"
       },
       {
@@ -17669,7 +18001,22 @@
       },
       {
         "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/express@4.17.23",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
         "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/jsonwebtoken@9.0.10",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:@types/node@20.19.1",
         "type": "static"
       },
       {
@@ -17695,6 +18042,11 @@
       {
         "source": "@crypton-nestjs-kit/gateway",
         "target": "npm:copyfiles",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:dotenv@16.4.7",
         "type": "static"
       },
       {
@@ -17750,6 +18102,11 @@
       {
         "source": "@crypton-nestjs-kit/gateway",
         "target": "npm:supertest@7.1.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/gateway",
+        "target": "npm:ts-jest",
         "type": "static"
       },
       {
@@ -18001,7 +18358,17 @@
       },
       {
         "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@types/express@5.0.3",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
         "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/common",
+        "target": "npm:@types/node@20.19.1",
         "type": "static"
       },
       {
@@ -18178,6 +18545,11 @@
       },
       {
         "source": "@crypton-nestjs-kit/config",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/config",
         "target": "npm:@types/uuid@9.0.8",
         "type": "static"
       },
@@ -18280,7 +18652,17 @@
       },
       {
         "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@types/express@4.17.23",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
         "target": "npm:@types/jest",
+        "type": "static"
+      },
+      {
+        "source": "@crypton-nestjs-kit/logger",
+        "target": "npm:@types/node@20.19.1",
         "type": "static"
       },
       {
@@ -21838,6 +22220,347 @@
       {
         "source": "npm:@humanwhocodes/config-array",
         "target": "npm:minimatch@3.1.2",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/checkbox": [
+      {
+        "source": "npm:@inquirer/checkbox",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/checkbox",
+        "target": "npm:@inquirer/figures",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/checkbox",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/checkbox",
+        "target": "npm:ansi-escapes",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/checkbox",
+        "target": "npm:yoctocolors-cjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/checkbox",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/confirm": [
+      {
+        "source": "npm:@inquirer/confirm",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/confirm",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/confirm",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/core": [
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:@inquirer/figures",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:ansi-escapes",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:cli-width@4.1.0",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:mute-stream@2.0.0",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:signal-exit@4.1.0",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:wrap-ansi@6.2.0",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:yoctocolors-cjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/core",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/editor": [
+      {
+        "source": "npm:@inquirer/editor",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/editor",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/editor",
+        "target": "npm:external-editor",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/editor",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/expand": [
+      {
+        "source": "npm:@inquirer/expand",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/expand",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/expand",
+        "target": "npm:yoctocolors-cjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/expand",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/input": [
+      {
+        "source": "npm:@inquirer/input",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/input",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/input",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/number": [
+      {
+        "source": "npm:@inquirer/number",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/number",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/number",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/password": [
+      {
+        "source": "npm:@inquirer/password",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/password",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/password",
+        "target": "npm:ansi-escapes",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/password",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/prompts": [
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/checkbox",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/confirm",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/editor",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/expand",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/input",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/number",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/password",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/rawlist",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/search",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@inquirer/select",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/prompts",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/rawlist": [
+      {
+        "source": "npm:@inquirer/rawlist",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/rawlist",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/rawlist",
+        "target": "npm:yoctocolors-cjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/rawlist",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/search": [
+      {
+        "source": "npm:@inquirer/search",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/search",
+        "target": "npm:@inquirer/figures",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/search",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/search",
+        "target": "npm:yoctocolors-cjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/search",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/select": [
+      {
+        "source": "npm:@inquirer/select",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/select",
+        "target": "npm:@inquirer/figures",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/select",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/select",
+        "target": "npm:ansi-escapes",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/select",
+        "target": "npm:yoctocolors-cjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@inquirer/select",
+        "target": "npm:@types/node@20.19.1",
+        "type": "static"
+      }
+    ],
+    "npm:@inquirer/type": [
+      {
+        "source": "npm:@inquirer/type",
+        "target": "npm:@types/node@20.19.1",
         "type": "static"
       }
     ],
@@ -31251,6 +31974,48 @@
       {
         "source": "npm:inflight",
         "target": "npm:wrappy",
+        "type": "static"
+      }
+    ],
+    "npm:inquirer": [
+      {
+        "source": "npm:inquirer",
+        "target": "npm:@inquirer/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:inquirer",
+        "target": "npm:@inquirer/prompts",
+        "type": "static"
+      },
+      {
+        "source": "npm:inquirer",
+        "target": "npm:@inquirer/type",
+        "type": "static"
+      },
+      {
+        "source": "npm:inquirer",
+        "target": "npm:ansi-escapes",
+        "type": "static"
+      },
+      {
+        "source": "npm:inquirer",
+        "target": "npm:mute-stream@2.0.0",
+        "type": "static"
+      },
+      {
+        "source": "npm:inquirer",
+        "target": "npm:run-async@4.0.5",
+        "type": "static"
+      },
+      {
+        "source": "npm:inquirer",
+        "target": "npm:rxjs@7.8.2",
+        "type": "static"
+      },
+      {
+        "source": "npm:inquirer",
+        "target": "npm:@types/node@20.19.1",
         "type": "static"
       }
     ],

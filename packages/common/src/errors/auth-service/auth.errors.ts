@@ -9,6 +9,7 @@ export enum AUTH_ERROR_CODES {
   SESSION_LIMIT_EXCEEDED = 'AUTH_006',
   USER_NOT_FOUND = 'AUTH_007',
   PERMISSION_DENIED = 'AUTH_008',
+  USER_ALREADY_EXISTS = 'AUTH_009',
   // Сессии
   SESSION_CREATION_FAILED = 'AUTH_101',
   SESSION_TERMINATION_FAILED = 'AUTH_102',
@@ -29,6 +30,15 @@ export enum AUTH_ERROR_CODES {
   EXPIRED_CONFIRMATION_CODE = 'AUTH_404',
   // Accsess
   ACCESS_DENIED = 'AUTH_501',
+  // Invitation
+  INVITATION_NOT_FOUND = 'AUTH_601',
+  INVITATION_EXPIRED = 'AUTH_602',
+  INVITATION_ALREADY_USED = 'AUTH_603',
+  INVITATION_NOT_ACTIVE = 'AUTH_604',
+  INVITATION_NOT_VALID = 'AUTH_605',
+  INVITATION_ROLE_NOT_FOUND = 'AUTH_606',
+  INVITATION_ALREADY_EXISTS = 'AUTH_607',
+  INVITATION_EXPIRED_AT_NOT_VALID = 'AUTH_608',
 }
 
 export const AuthErrorMessages: Record<AUTH_ERROR_CODES, string> = {
@@ -41,6 +51,7 @@ export const AuthErrorMessages: Record<AUTH_ERROR_CODES, string> = {
   [AUTH_ERROR_CODES.SESSION_LIMIT_EXCEEDED]: 'Session limit exceeded',
   [AUTH_ERROR_CODES.USER_NOT_FOUND]: 'User not found',
   [AUTH_ERROR_CODES.PERMISSION_DENIED]: 'Permission denied',
+  [AUTH_ERROR_CODES.USER_ALREADY_EXISTS]: 'User already exists',
   [AUTH_ERROR_CODES.SESSION_CREATION_FAILED]: 'Session creation failed',
   [AUTH_ERROR_CODES.SESSION_TERMINATION_FAILED]: 'Session termination failed',
   [AUTH_ERROR_CODES.SESSIONS_TERMINATION_FAILED]: 'Sessions termination failed',
@@ -57,4 +68,13 @@ export const AuthErrorMessages: Record<AUTH_ERROR_CODES, string> = {
   [AUTH_ERROR_CODES.INVALID_CONFIRMATION_CODE]: 'Invalid confirmation code',
   [AUTH_ERROR_CODES.EXPIRED_CONFIRMATION_CODE]: 'Confirmation code is expired',
   [AUTH_ERROR_CODES.ACCESS_DENIED]: 'Access denied',
+  [AUTH_ERROR_CODES.INVITATION_NOT_FOUND]: 'Invitation not found',
+  [AUTH_ERROR_CODES.INVITATION_EXPIRED]: 'Invitation expired',
+  [AUTH_ERROR_CODES.INVITATION_ALREADY_USED]: 'Invitation already used',
+  [AUTH_ERROR_CODES.INVITATION_NOT_ACTIVE]: 'Invitation not active',
+  [AUTH_ERROR_CODES.INVITATION_NOT_VALID]: 'Invitation not valid',
+  [AUTH_ERROR_CODES.INVITATION_ROLE_NOT_FOUND]: 'Invitation role not found',
+  [AUTH_ERROR_CODES.INVITATION_ALREADY_EXISTS]: 'Invitation already exists',
+  [AUTH_ERROR_CODES.INVITATION_EXPIRED_AT_NOT_VALID]:
+    'Invitation expired at not valid',
 };

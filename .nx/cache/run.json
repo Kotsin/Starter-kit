@@ -1,8 +1,8 @@
 {
   "run": {
     "command": "nx run @crypton-nestjs-kit/common:build",
-    "startTime": "2025-07-07T11:32:40.553Z",
-    "endTime": "2025-07-07T11:32:47.592Z",
+    "startTime": "2025-07-22T17:19:59.367Z",
+    "endTime": "2025-07-22T17:20:17.956Z",
     "inner": false
   },
   "tasks": [
@@ -10,9 +10,9 @@
       "taskId": "@crypton-nestjs-kit/config:build",
       "target": "build",
       "projectName": "@crypton-nestjs-kit/config",
-      "hash": "5571101689839392893",
-      "startTime": "2025-07-07T11:32:40.566Z",
-      "endTime": "2025-07-07T11:32:40.576Z",
+      "hash": "8000472737136503614",
+      "startTime": "2025-07-22T17:19:59.382Z",
+      "endTime": "2025-07-22T17:19:59.395Z",
       "params": "",
       "cacheStatus": "local-cache-hit",
       "status": 0
@@ -21,9 +21,9 @@
       "taskId": "@crypton-nestjs-kit/common:build",
       "target": "build",
       "projectName": "@crypton-nestjs-kit/common",
-      "hash": "6861396561287348339",
-      "startTime": "2025-07-07T11:32:40.581Z",
-      "endTime": "2025-07-07T11:32:47.591Z",
+      "hash": "17531958673755962674",
+      "startTime": "2025-07-22T17:19:59.400Z",
+      "endTime": "2025-07-22T17:20:17.955Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

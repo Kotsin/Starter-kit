@@ -10,6 +10,7 @@ import {
   IFindOrCreateUserResponse,
   IGetMeRequest,
   IGetMeResponse,
+  IGetRoleByUserIdResponse,
   IGetTwoFaPermissionsRequest,
   IGetTwoFaPermissionsResponse,
   IGetUserByIdRequest,
@@ -200,6 +201,32 @@ export class UserController {
     data: IGetUserByLoginRequest,
   ): Promise<IGetUserByIdResponse> {
     return await this.userService.getUserByLoginSecure(data);
+  }
+
+  @ControllerMeta({
+    name: 'Get role by user ID',
+    description: 'Get role by user ID',
+    isPublic: false,
+    type: ControllerType.READ,
+    needsPermission: false,
+  })
+  @MessagePattern(UserClientPatterns.GET_ROLE_BY_USER_ID)
+  public async getRoleByUserId(
+    userId: string,
+  ): Promise<IGetRoleByUserIdResponse> {
+    return await this.userService.getRoleByUserId(userId);
+  }
+
+  @ControllerMeta({
+    name: 'Get role by ID',
+    description: 'Get role by ID',
+    isPublic: false,
+    type: ControllerType.READ,
+    needsPermission: false,
+  })
+  @MessagePattern(UserClientPatterns.GET_ROLE_BY_ID)
+  public async getRoleById(data: { roleId: string }): Promise<any> {
+    return await this.userService.getRoleById(data);
   }
 
   @ControllerMeta({
