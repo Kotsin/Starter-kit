@@ -6,37 +6,84 @@
 
 ## Overview
 
-The Authentication Service is a crucial microservice component of our system, responsible for handling user authentication and authorization. Built with NestJS, it provides secure authentication mechanisms including OAuth2 support for multiple providers (Google, Twitter, Apple) and JWT-based authentication.
+The Authentication Service is a microservice component built with NestJS, responsible for handling user authentication, authorization, and session management. It provides a flexible and extensible authentication system with support for multiple authentication strategies, API key management, and invitation system.
 
-## Features
+## 🚀 Features
 
-- 🔐 Multiple authentication strategies:
-  - JWT-based authentication
-  - Google OAuth2
-  - Twitter OAuth
+### Core Authentication
+- 🔐 **Multiple Authentication Strategies**:
+  - Native authentication (email/password)
+  - Google OAuth2 integration
   - Apple Sign-in
-- 🚀 High performance with Redis caching
-- 🔄 Database replication support
-- 🛡️ Rate limiting protection
-- 📝 Swagger API documentation
-- 🔍 Comprehensive logging system
+  - Twitter OAuth
+- 🏭 **Strategy Factory Pattern** - Automatic strategy selection based on credentials
+- 🔑 **JWT-based Token Management** with access and refresh tokens
+- 📱 **Session Management** with device fingerprinting and multi-device support
 
-## Prerequisites
+### API Key Management
+- 🔑 **API Key Creation** and management
+- 📋 **API Key Validation** and authentication
+- 🔄 **API Key Updates** and permissions
+- 🗑️ **API Key Deletion** and cleanup
 
-- Node.js (LTS version)
-- PNPM package manager
-- PostgreSQL database
-- Redis (for caching)
-- RabbitMQ (for microservice communication)
+### Invitation System
+- 📧 **Invitation Creation** with customizable codes
+- 📋 **Invitation Management** (list, cancel, validate)
+- 🔗 **Invitation-based Registration** flow
+- ⏰ **Invitation Expiration** handling
 
-## Installation
+### Security & Performance
+- 🛡️ **Rate Limiting** and brute force protection
+- 🔒 **Session Security** with IP tracking and device fingerprinting
+- ⚡ **Redis Caching** for high performance
+- 🔄 **Database Replication** support
+- 📊 **Comprehensive Logging** and monitoring
 
-1. Install dependencies:
+## 🏗️ Architecture
+
+### Microservice Architecture
+The service is designed as a microservice using RabbitMQ for communication:
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   API Gateway   │───▶│  Auth Service   │───▶│  User Service   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                              │
+                              ▼
+                       ┌─────────────────┐
+                       │ Permission Svc  │
+                       └─────────────────┘
+```
+
+### Strategy Pattern Implementation
+The authentication system uses the Strategy pattern for flexible authentication:
+
+```typescript
+// Automatic strategy selection
+const result = await authService.authenticate({
+  credentials: { email: 'user@example.com', password: 'password' },
+  sessionData: { userAgent: '...', userIp: '...', fingerprint: '...' }
+});
+```
+
+## 📋 Prerequisites
+
+- **Node.js** (LTS version 20+)
+- **PNPM** package manager
+- **PostgreSQL** database (15+)
+- **Redis** (for caching and session storage)
+- **RabbitMQ** (for microservice communication)
+
+## 🛠️ Installation
+
+1. **Install dependencies**:
 ```bash
 pnpm install
 ```
 
-2. Create and configure your `.env` file based on the template below:
+2. **Environment Configuration**:
+Create `.env` file based on the template:
+
 ```env
 # Environment
 NODE_ENV=local
@@ -44,7 +91,7 @@ NODE_ENV=local
 # Authentication Configuration
 AUTH_ACCESS_TOKEN_EXPIRES_IN=900000
 AUTH_REFRESH_TOKEN_EXPIRES_IN=86400000
-AUTH_TOKEN_SECRET=your_secret_key
+AUTH_TOKEN_SECRET=your_secret_key_here
 AUTH_SESSION_CACHE_TTL=3600000
 AUTH_MAX_SESSIONS_PER_USER=5
 
@@ -77,90 +124,225 @@ AUTH_SERVICE_RMQ_QUEUE=auth
 USER_SERVICE_RMQ_URL=amqp://@localhost:5672
 USER_SERVICE_RMQ_QUEUE=user
 
+# Registration Process
+INVITATION_REQUIRED=true
+
 # Logging
 LOG_LEVEL=info
 ```
 
-## Running the Application
+## 🚀 Running the Application
 
-### Using Docker
-
-The easiest way to run the service is using Docker:
+### Using Docker (Recommended)
 
 ```bash
-# Start the service and dependencies
+# Start the service with dependencies
 docker compose up
 
 # Run in detached mode
 docker compose up -d
+
+# View logs
+docker compose logs -f auth-service
 ```
 
 ### Local Development
 
 ```bash
-# Development mode
+# Development mode with hot reload
 pnpm run start:dev
 
 # Debug mode
 pnpm run start:debug
 
-# Production mode
+# Production build
 pnpm run build
 pnpm run start:prod
+
+# Test mode
+pnpm run start:test
 ```
 
-## API Documentation
+## 📚 API Documentation
 
-Once the service is running, you can access the Swagger API documentation at:
-```
-http://localhost:3000/api/docs
-```
+### Authentication Endpoints
 
-## Testing
+| Pattern | Description | Type |
+|---------|-------------|------|
+| `auth.user.register` | User registration | WRITE |
+| `auth.authenticate.native` | Native authentication | WRITE |
+| `auth.token.verify` | Verify access token | READ |
+| `auth.token.refresh` | Refresh access tokens | WRITE |
+| `auth.session.terminate.all` | Terminate all sessions | WRITE |
+| `auth.session.terminate` | Terminate specific session | WRITE |
+| `auth.session.active` | Get active sessions | READ |
+| `auth.session.history` | Get session history | READ |
+| `auth.session.until.date` | Get sessions until date | READ |
+
+### API Key Endpoints
+
+| Pattern | Description | Type |
+|---------|-------------|------|
+| `auth.api-key.create` | Create API key | WRITE |
+| `auth.api-key.list` | List API keys | READ |
+| `auth.api-key.get` | Get API key by ID | READ |
+| `auth.api-key.update` | Update API key | WRITE |
+| `auth.api-key.remove` | Remove API key | WRITE |
+| `auth.api-key.validate` | Validate API key | READ |
+
+### Invitation Endpoints
+
+| Pattern | Description | Type |
+|---------|-------------|------|
+| `invitation.create` | Create invitation | WRITE |
+| `invitation.list` | Get invitations | READ |
+| `invitation.get.by.code` | Get invitation by code | READ |
+| `invitation.cancel` | Cancel invitation | WRITE |
+
+## 🧪 Testing
 
 ```bash
-# Run tests
+# Run all tests
 pnpm run test
+
+# Run tests in watch mode
+pnpm run test:watch
+
+# Run tests with coverage
+pnpm run test:cov
 ```
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
-├── config/         # Configuration files and environment variables
-├── controllers/    # API endpoints and route handlers
-├── dto/           # Data Transfer Objects for request/response validation
-├── entities/      # Database entities and models
-├── guards/        # Authentication and authorization guards
-├── interfaces/    # TypeScript interfaces and types
-├── services/      # Business logic and service layer
-├── strategies/    # Authentication strategies implementation
-└── main.ts        # Application entry point
+├── auth.module.ts              # Main application module
+├── main.ts                     # Application entry point
+├── controllers/                # API endpoints and route handlers
+│   ├── auth.controller.ts      # Authentication endpoints
+│   ├── api-key.controller.ts   # API key management
+│   └── invitation.controller.ts # Invitation system
+└── services/                   # Business logic layer
+    ├── auth/                   # Authentication services
+    │   ├── auth.service.ts     # Main auth service
+    │   ├── auth-strategy-factory.service.ts # Strategy factory
+    │   └── strategies/         # Authentication strategies
+    │       ├── native.strategy.ts
+    │       ├── google-oauth.strategy.ts
+    │       ├── apple-oauth.strategy.ts
+    │       └── twitter-oauth.strategy.ts
+    ├── api-key/                # API key services
+    │   └── api-key.service.ts
+    └── invitation/             # Invitation services
+        └── invitation.service.ts
 ```
 
-## Available Scripts
+## 📦 Available Scripts
 
-- `pnpm run start:dev` - Start the application in development mode
-- `pnpm run start:debug` - Start the application in debug mode
-- `pnpm run build` - Build the application
-- `pnpm run start:prod` - Start the application in production mode
-- `pnpm run lint` - Run ESLint
-- `pnpm run format` - Format code using Prettier
-- `pnpm run test` - Run tests
+| Script | Description |
+|--------|-------------|
+| `pnpm run start:dev` | Start in development mode with hot reload |
+| `pnpm run start:debug` | Start in debug mode |
+| `pnpm run start:test` | Start in test mode |
+| `pnpm run build` | Build the application |
+| `pnpm run start:prod` | Start in production mode |
+| `pnpm run lint` | Run ESLint with auto-fix |
+| `pnpm run format` | Format code using Prettier |
+| `pnpm run test` | Run tests |
+| `pnpm run docs:generate` | Generate API documentation |
+| `pnpm run docs:serve` | Serve API documentation |
 
-## Dependencies
+## 🔧 Dependencies
 
-Key dependencies include:
-- NestJS framework and its modules
-- TypeORM for database operations
-- Passport.js for authentication
-- Redis for caching
-- RabbitMQ for message queuing
-- Winston for logging
+### Core Dependencies
+- **@nestjs/common** - NestJS core framework
+- **@nestjs/microservices** - Microservice support
+- **@nestjs/jwt** - JWT handling
+- **@nestjs/passport** - Authentication strategies
+- **@nestjs/typeorm** - Database ORM
+- **@nestjs/cache-manager** - Caching support
 
-For a complete list of dependencies, see `package.json`.
+### Authentication & Security
+- **passport** - Authentication middleware
+- **passport-google-oauth20** - Google OAuth strategy
+- **passport-apple** - Apple Sign-in strategy
+- **passport-twitter** - Twitter OAuth strategy
+- **bcrypt** - Password hashing
+- **nestjs-throttler** - Rate limiting
 
-## Contributing
+### Database & Caching
+- **typeorm** - Database ORM
+- **pg** - PostgreSQL driver
+- **redis** - Redis client
+- **cache-manager-redis-yet** - Redis cache store
+
+### Utilities
+- **axios** - HTTP client
+- **uuid** - UUID generation
+- **randomstring** - Random string generation
+- **class-validator** - Validation decorators
+- **class-transformer** - Object transformation
+
+## 🔐 Security Features
+
+### Authentication Security
+- **Password Hashing**: bcrypt with salt rounds
+- **JWT Signing**: HMAC-SHA256 with configurable secret
+- **Token Expiration**: Configurable access and refresh token TTL
+- **Session Management**: Device fingerprinting and IP tracking
+- **Rate Limiting**: Protection against brute force attacks
+
+### API Security
+- **API Key Validation**: Secure API key authentication
+- **Service Token Generation**: Internal service communication
+- **Permission-based Access**: Role and permission validation
+- **Request Validation**: Input sanitization and validation
+
+## 📊 Monitoring & Logging
+
+### Logging
+- **Structured Logging**: Winston-based logging system
+- **Request Tracing**: Correlation ID tracking
+- **Error Tracking**: Comprehensive error logging
+- **Performance Monitoring**: Request timing and metrics
+
+### Health Checks
+- **Database Connectivity**: PostgreSQL connection monitoring
+- **Redis Connectivity**: Cache service monitoring
+- **RabbitMQ Connectivity**: Message queue monitoring
+- **Service Health**: Overall service status
+
+## 🔄 Database Schema
+
+### Core Entities
+- **SessionEntity**: User session management
+- **ApiKeyEntity**: API key storage and validation
+- **InvitationEntity**: Invitation system management
+
+### Relationships
+- Sessions are linked to users via user ID
+- API keys are associated with specific users
+- Invitations can be created by users with appropriate permissions
+
+## 🚀 Deployment
+
+### Docker Deployment
+```bash
+# Build the image
+docker build -t auth-service .
+
+# Run the container
+docker run -d \
+  --name auth-service \
+  --env-file .env \
+  -p 3000:3000 \
+  auth-service
+```
+
+### Environment Variables
+All configuration is handled through environment variables. See the `.env` template above for required variables.
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -168,29 +350,69 @@ For a complete list of dependencies, see `package.json`.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Troubleshooting
+### Development Guidelines
+- Follow TypeScript best practices
+- Write comprehensive tests for new features
+- Update documentation for API changes
+- Use conventional commit messages
+- Ensure all tests pass before submitting PR
+
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-1. **Database Connection Issues**
-   - Verify database credentials in `.env`
-   - Ensure PostgreSQL is running
-   - Check network connectivity
+#### Database Connection Issues
+```bash
+# Check database connectivity
+pg_isready -h localhost -p 5432
 
-2. **Authentication Errors**
-   - Verify OAuth credentials
-   - Check JWT configuration
-   - Ensure Redis is running for session management
+# Verify environment variables
+echo $DB_HOST $DB_NAME $DB_USERNAME
+```
 
-3. **Performance Issues**
-   - Check Redis connection
-   - Verify database indexes
-   - Monitor RabbitMQ queue size
+#### Redis Connection Issues
+```bash
+# Test Redis connection
+redis-cli ping
 
-## License
+# Check Redis configuration
+redis-cli config get *
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+#### RabbitMQ Issues
+```bash
+# Check RabbitMQ status
+rabbitmqctl status
 
-## Support
+# Verify queue configuration
+rabbitmqctl list_queues
+```
 
-For support, please contact the development team or create an issue in the repository.
+#### Authentication Errors
+- Verify JWT secret configuration
+- Check OAuth provider credentials
+- Ensure Redis is running for session storage
+- Validate API key permissions
+
+### Performance Issues
+- Monitor Redis cache hit rates
+- Check database query performance
+- Verify RabbitMQ queue sizes
+- Review rate limiting configuration
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](../../LICENSE) file for details.
+
+## 📞 Support
+
+For support and questions:
+- Create an issue in the repository
+- Contact the development team
+- Check the [AUTH_STRATEGIES.md](./AUTH_STRATEGIES.md) for detailed authentication documentation
+
+## 🔗 Related Documentation
+
+- [Authentication Strategies](./AUTH_STRATEGIES.md) - Detailed strategy documentation
+- [API Documentation](../../docs/) - Complete API reference
+- [Microservice Architecture](../../README.md) - Overall system architecture

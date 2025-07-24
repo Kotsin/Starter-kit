@@ -26,7 +26,8 @@
     "rimraf": "^5.0.7",
     "ts-jest": "^29.1.2",
     "typescript": "^5.2.2",
-    "@compodoc/compodoc": "^1.1.23"
+    "@compodoc/compodoc": "^1.1.23",
+    "inquirer": "^12.8.1"
   },
   "pathMappings": {},
   "nxJsonPlugins": [],
@@ -38,52 +39,44 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "pnpm-workspace.yaml",
-        "hash": "1703770017953262486"
-      },
-      {
-        "file": ".husky/commit-msg",
-        "hash": "17193081696979627749"
-      },
-      {
-        "file": "scripts/check-nx-rules.js",
-        "hash": "4270992527004212063"
-      },
-      {
-        "file": "compodoc.json",
-        "hash": "1795656203220061925"
+        "file": "docs/.gitkeep",
+        "hash": "3244421341483603138"
       },
       {
         "file": ".prettierignore",
         "hash": "10293546368267736695"
       },
       {
-        "file": ".env.example",
-        "hash": "13047457774715171156"
+        "file": "pnpm-workspace.yaml",
+        "hash": "1703770017953262486"
       },
       {
-        "file": "docs/.gitkeep",
-        "hash": "3244421341483603138"
+        "file": "scripts/check-nx-rules.js",
+        "hash": "4270992527004212063"
+      },
+      {
+        "file": ".husky/pre-commit",
+        "hash": "10299363265911692728"
+      },
+      {
+        "file": ".eslintignore",
+        "hash": "4660892077869316414"
       },
       {
         "file": "README.md",
         "hash": "663114657474130960"
       },
       {
-        "file": "nx.json",
-        "hash": "17754476680881658738"
+        "file": ".env.example",
+        "hash": "13047457774715171156"
       },
       {
-        "file": ".eslintrc",
-        "hash": "6564936168741561034"
+        "file": "package.json",
+        "hash": "8900414215151410957"
       },
       {
         "file": ".prettierrc",
         "hash": "174943607064940844"
-      },
-      {
-        "file": ".eslintignore",
-        "hash": "4660892077869316414"
       },
       {
         "file": "tsconfig.json",
@@ -91,80 +84,109 @@
       },
       {
         "file": "pnpm-lock.yaml",
-        "hash": "15983870109924504303"
+        "hash": "2256045550155873440"
+      },
+      {
+        "file": ".eslintrc",
+        "hash": "6564936168741561034"
       },
       {
         "file": "commitlint.config.js",
         "hash": "15089399635272455297"
       },
       {
-        "file": "package.json",
-        "hash": "1802990334740806458"
-      },
-      {
-        "file": "docker-compose.yml",
-        "hash": "3809531596788652401"
+        "file": "compodoc.json",
+        "hash": "1795656203220061925"
       },
       {
         "file": ".gitignore",
         "hash": "6083886884481296167"
       },
       {
-        "file": ".husky/pre-commit",
-        "hash": "10299363265911692728"
+        "file": ".husky/commit-msg",
+        "hash": "17193081696979627749"
+      },
+      {
+        "file": "nx.json",
+        "hash": "17754476680881658738"
+      },
+      {
+        "file": "docker-compose.yml",
+        "hash": "3809531596788652401"
+      },
+      {
+        "file": "scripts/generate-microservice.js",
+        "hash": "17059564568466780222"
       }
     ],
     "projectFileMap": {
-      "@crypton-nestjs-kit/batch-service": [
+      "@crypton-nestjs-kit/user-service": [
         {
-          "file": "apps/batch-service/.dockerignore",
-          "hash": "5740037249133305333"
+          "file": "apps/user-service/.dockerignore",
+          "hash": "10261366091226277543"
         },
         {
-          "file": "apps/batch-service/.env.example",
-          "hash": "17229603336384604662"
+          "file": "apps/user-service/.env.example",
+          "hash": "15841696911245973166"
         },
         {
-          "file": "apps/batch-service/.eslintrc.js",
-          "hash": "3428559314374055786"
+          "file": "apps/user-service/.eslintrc.js",
+          "hash": "17009857754095399352"
         },
         {
-          "file": "apps/batch-service/.gitignore",
+          "file": "apps/user-service/.gitignore",
           "hash": "1545212619125482044"
         },
         {
-          "file": "apps/batch-service/.prettierrc",
+          "file": "apps/user-service/.prettierrc",
           "hash": "4808572120966128913"
         },
         {
-          "file": "apps/batch-service/README.md",
-          "hash": "16885832076152562690"
+          "file": "apps/user-service/Dockerfile",
+          "hash": "8413809494581712536"
         },
         {
-          "file": "apps/batch-service/nest-cli.json",
+          "file": "apps/user-service/README.md",
+          "hash": "17896459175792473804"
+        },
+        {
+          "file": "apps/user-service/docker-compose.yml",
+          "hash": "9469173400285883344"
+        },
+        {
+          "file": "apps/user-service/nest-cli.json",
           "hash": "11299044278503621101"
         },
         {
-          "file": "apps/batch-service/package.json",
-          "hash": "18060889149835742833",
+          "file": "apps/user-service/package.json",
+          "hash": "12205388860428081976",
           "deps": [
+            "npm:@compodoc/compodoc",
             "npm:@nestjs/cli@10.4.9",
             "npm:@nestjs/schematics@10.2.3",
             "npm:@nestjs/testing@10.4.15",
             "npm:@types/eslint-plugin-prettier",
+            "npm:@types/express@4.17.23",
+            "npm:@types/jsonwebtoken@9.0.10",
+            "npm:@types/node@20.19.1",
             "npm:@types/supertest@6.0.3",
-            "npm:@types/uuid@9.0.8",
             "npm:@typescript-eslint/eslint-plugin@5.62.0",
             "npm:@typescript-eslint/parser@5.62.0",
+            "npm:concurrently@8.2.2",
+            "npm:copyfiles",
+            "npm:dotenv@16.4.7",
             "npm:dotenv-cli@7.4.4",
             "npm:eslint@8.57.1",
             "npm:eslint-config-prettier@8.10.0",
             "npm:eslint-plugin-import",
             "npm:eslint-plugin-prettier@4.2.1",
             "npm:eslint-plugin-simple-import-sort",
+            "npm:nock",
+            "npm:nodemon@3.1.10",
             "npm:prettier@2.8.8",
-            "npm:rimraf@3.0.2",
+            "npm:rimraf",
             "npm:supertest@7.1.1",
+            "npm:ts-jest",
             "npm:ts-loader",
             "npm:ts-node",
             "npm:typescript",
@@ -173,97 +195,182 @@
             "npm:@nestjs/core@10.4.15",
             "npm:@nestjs/microservices",
             "npm:@nestjs/platform-express",
+            "npm:@nestjs/swagger@7.3.1",
+            "npm:@nestjs/terminus",
             "npm:@nestjs/typeorm",
+            "npm:@nestjs/jwt",
             "@crypton-nestjs-kit/common",
             "@crypton-nestjs-kit/config",
             "@crypton-nestjs-kit/database",
             "@crypton-nestjs-kit/logger",
-            "@crypton-nestjs-kit/settings",
+            "npm:axios",
+            "npm:cache-manager",
             "npm:cache-manager-redis-yet",
+            "npm:class-transformer",
+            "npm:class-validator",
+            "npm:express",
             "npm:pg",
             "npm:redis",
             "npm:reflect-metadata",
             "npm:rxjs@7.8.1",
             "npm:typeorm",
-            "npm:uuid"
+            "npm:url-join-ts",
+            "npm:uuid",
+            "npm:uuidv4",
+            "npm:winston"
           ]
         },
         {
-          "file": "apps/batch-service/src/batch.module.ts",
-          "hash": "7461112025001148720"
+          "file": "apps/user-service/src/controllers/user.controller.ts",
+          "hash": "3766332690380191047"
         },
         {
-          "file": "apps/batch-service/src/controllers/batch.controller.ts",
-          "hash": "10631247311331299656"
+          "file": "apps/user-service/src/database/migrations/1710000000000-add-invited-by-to-user.ts",
+          "hash": "13289462745209859428"
         },
         {
-          "file": "apps/batch-service/src/interfaces/batch.interface.ts",
-          "hash": "6779721643178874389"
+          "file": "apps/user-service/src/interfaces/index.ts",
+          "hash": "14946197316738457207"
         },
         {
-          "file": "apps/batch-service/src/main.ts",
-          "hash": "605834824509388263"
+          "file": "apps/user-service/src/interfaces/user.interface.ts",
+          "hash": "10493769972204129331"
         },
         {
-          "file": "apps/batch-service/src/services/batch.constants.ts",
-          "hash": "15016309228536002967"
+          "file": "apps/user-service/src/main.ts",
+          "hash": "8363016835359574878"
         },
         {
-          "file": "apps/batch-service/src/services/batch.service.ts",
-          "hash": "7382867679046395258"
+          "file": "apps/user-service/src/services/user.service.ts",
+          "hash": "6702731989725907812"
         },
         {
-          "file": "apps/batch-service/src/services/batch.worker.ts",
-          "hash": "5133599714230362469"
+          "file": "apps/user-service/src/user.module.ts",
+          "hash": "11415534942937004996"
         },
         {
-          "file": "apps/batch-service/src/services/worker.service.ts",
-          "hash": "17692385756062675659"
+          "file": "apps/user-service/tsconfig.build.json",
+          "hash": "276845246908739715"
         },
         {
-          "file": "apps/batch-service/src/utils/utils.ts",
-          "hash": "7441516150616625155"
-        },
-        {
-          "file": "apps/batch-service/tsconfig.build.json",
-          "hash": "13486305771528990272"
-        },
-        {
-          "file": "apps/batch-service/tsconfig.json",
-          "hash": "1266461945096300629"
+          "file": "apps/user-service/tsconfig.json",
+          "hash": "4085406884277372939"
         }
       ],
-      "@crypton-nestjs-kit/database": [
+      "@crypton-nestjs-kit/logger": [
         {
-          "file": "packages/database/.eslintrc.js",
+          "file": "packages/logger/.eslintrc.js",
           "hash": "5805275214944404113"
         },
         {
-          "file": "packages/database/.gitignore",
-          "hash": "672911037926083482"
-        },
-        {
-          "file": "packages/database/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "packages/database/.prettierrc",
+          "file": "packages/logger/.prettierrc",
           "hash": "4808572120966128913"
         },
         {
-          "file": "packages/database/jest.config.js",
+          "file": "packages/logger/jest.config.js",
           "hash": "1256365898827067825"
         },
         {
-          "file": "packages/database/package.json",
-          "hash": "14897775273192807294",
+          "file": "packages/logger/package.json",
+          "hash": "2236290059702246454",
           "deps": [
             "npm:@nestjs/common@10.4.15",
             "npm:@nestjs/config@3.2.2",
             "npm:@nestjs/core@10.4.15",
             "npm:@nestjs/testing@10.4.15",
+            "npm:@nestjs/typeorm",
+            "npm:@types/eslint-plugin-prettier",
+            "npm:@types/express@4.17.23",
+            "npm:@types/jest",
+            "npm:@types/node@20.19.1",
+            "npm:@types/uuid@9.0.8",
+            "npm:@typescript-eslint/eslint-plugin@5.62.0",
+            "npm:@typescript-eslint/parser@5.62.0",
+            "npm:@opentelemetry/api",
+            "npm:@opentelemetry/core@2.0.1",
+            "npm:@opentelemetry/propagator-jaeger",
+            "npm:eslint@8.57.1",
+            "npm:eslint-config-prettier@8.10.0",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-prettier@4.2.1",
+            "npm:eslint-plugin-simple-import-sort",
+            "npm:prettier@2.8.8",
+            "npm:express",
+            "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
+            "npm:tslib@2.8.1",
+            "npm:typeorm",
+            "npm:typescript",
+            "@crypton-nestjs-kit/config",
+            "@crypton-nestjs-kit/common",
+            "npm:@types/luxon@3.6.2",
+            "npm:luxon@3.6.1",
+            "npm:moment",
+            "npm:winston"
+          ]
+        },
+        {
+          "file": "packages/logger/src/index.ts",
+          "hash": "5136850600633699525"
+        },
+        {
+          "file": "packages/logger/src/interceptors/logging.interceptor.ts",
+          "hash": "13221537220781190782"
+        },
+        {
+          "file": "packages/logger/src/logger.middleware.ts",
+          "hash": "5028759679828998175"
+        },
+        {
+          "file": "packages/logger/src/logger.module.ts",
+          "hash": "13722525425234399057"
+        },
+        {
+          "file": "packages/logger/src/logger.service.ts",
+          "hash": "10683026098747570710"
+        },
+        {
+          "file": "packages/logger/src/loglevel.ts",
+          "hash": "14372657752409921850"
+        },
+        {
+          "file": "packages/logger/tsconfig.json",
+          "hash": "8294437799332674063"
+        }
+      ],
+      "@crypton-nestjs-kit/config": [
+        {
+          "file": "packages/config/.eslintrc.js",
+          "hash": "5805275214944404113"
+        },
+        {
+          "file": "packages/config/.gitignore",
+          "hash": "672911037926083482"
+        },
+        {
+          "file": "packages/config/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/config/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "packages/config/jest.config.js",
+          "hash": "1256365898827067825"
+        },
+        {
+          "file": "packages/config/package.json",
+          "hash": "10121674757891404517",
+          "deps": [
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/microservices",
+            "npm:@nestjs/config@3.2.2",
+            "npm:@nestjs/core@10.4.15",
+            "npm:@nestjs/testing@10.4.15",
             "npm:@types/eslint-plugin-prettier",
             "npm:@types/jest",
+            "npm:@types/node@20.19.1",
             "npm:@types/uuid@9.0.8",
             "npm:@typescript-eslint/eslint-plugin@5.62.0",
             "npm:@typescript-eslint/parser@5.62.0",
@@ -277,26 +384,119 @@
             "npm:rxjs@7.8.1",
             "npm:tslib@2.8.1",
             "npm:typescript",
-            "npm:@nestjs/typeorm",
-            "npm:typeorm",
-            "npm:uuid",
-            "@crypton-nestjs-kit/config"
+            "npm:uuid"
           ]
         },
         {
-          "file": "packages/database/src/db.interface.ts",
-          "hash": "6478891147157009501"
+          "file": "packages/config/src/config.default.ts",
+          "hash": "2063213510081599995"
         },
         {
-          "file": "packages/database/src/db.module.ts",
-          "hash": "7322094094041955914"
+          "file": "packages/config/src/config.interface.ts",
+          "hash": "16793077965068248892"
         },
         {
-          "file": "packages/database/src/index.ts",
-          "hash": "5402081641373161748"
+          "file": "packages/config/src/config.module.ts",
+          "hash": "1390726477728201836"
         },
         {
-          "file": "packages/database/tsconfig.json",
+          "file": "packages/config/src/config.service.ts",
+          "hash": "5537662474378052086"
+        },
+        {
+          "file": "packages/config/src/index.ts",
+          "hash": "1558983561062361818"
+        },
+        {
+          "file": "packages/config/tsconfig.json",
+          "hash": "8294437799332674063"
+        }
+      ],
+      "@crypton-nestjs-kit/settings": [
+        {
+          "file": "packages/global-settings/.eslintrc.js",
+          "hash": "3428559314374055786"
+        },
+        {
+          "file": "packages/global-settings/.gitignore",
+          "hash": "672911037926083482"
+        },
+        {
+          "file": "packages/global-settings/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/global-settings/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "packages/global-settings/README.md",
+          "hash": "4501775954294626685"
+        },
+        {
+          "file": "packages/global-settings/jest.config.js",
+          "hash": "1256365898827067825"
+        },
+        {
+          "file": "packages/global-settings/package.json",
+          "hash": "4429342253958991731",
+          "deps": [
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/config@3.2.2",
+            "npm:@nestjs/core@10.4.15",
+            "npm:@nestjs/microservices",
+            "npm:@nestjs/testing@10.4.15",
+            "npm:@types/eslint-plugin-prettier",
+            "npm:@types/jest",
+            "npm:@types/node@20.19.1",
+            "npm:@types/uuid@9.0.8",
+            "npm:@typescript-eslint/eslint-plugin@5.62.0",
+            "npm:@typescript-eslint/parser@5.62.0",
+            "@crypton-nestjs-kit/common",
+            "@crypton-nestjs-kit/config",
+            "@crypton-nestjs-kit/database",
+            "npm:eslint@8.57.1",
+            "npm:eslint-config-prettier@8.10.0",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-prettier@4.2.1",
+            "npm:eslint-plugin-simple-import-sort",
+            "npm:prettier@2.8.8",
+            "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
+            "npm:tslib@2.8.1",
+            "npm:typescript",
+            "npm:@nestjs/schedule",
+            "npm:@nestjs/typeorm",
+            "npm:typeorm",
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "packages/global-settings/src/index.ts",
+          "hash": "6517461792682388286"
+        },
+        {
+          "file": "packages/global-settings/src/settings.default.ts",
+          "hash": "7706869097100805266"
+        },
+        {
+          "file": "packages/global-settings/src/settings.entity.ts",
+          "hash": "15936853205961265167"
+        },
+        {
+          "file": "packages/global-settings/src/settings.interface.ts",
+          "hash": "5543324126539015322"
+        },
+        {
+          "file": "packages/global-settings/src/settings.module.ts",
+          "hash": "15851367752237391785"
+        },
+        {
+          "file": "packages/global-settings/src/settings.service.ts",
+          "hash": "12746127134933829077"
+        },
+        {
+          "file": "packages/global-settings/tsconfig.json",
           "hash": "8294437799332674063"
         }
       ],
@@ -383,6 +583,439 @@
           "hash": "16046449090432525065"
         }
       ],
+      "@crypton-nestjs-kit/common": [
+        {
+          "file": "packages/common/.eslintrc.js",
+          "hash": "6301319824584087331"
+        },
+        {
+          "file": "packages/common/.gitignore",
+          "hash": "1545212619125482044"
+        },
+        {
+          "file": "packages/common/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/common/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "packages/common/jest.config.js",
+          "hash": "1256365898827067825"
+        },
+        {
+          "file": "packages/common/package-lock.json",
+          "hash": "10615652422708614388"
+        },
+        {
+          "file": "packages/common/package.json",
+          "hash": "11727615907401928000",
+          "deps": [
+            "@crypton-nestjs-kit/config",
+            "npm:@nestjs/testing@10.4.15",
+            "npm:@types/eslint-plugin-prettier",
+            "npm:@types/express@5.0.3",
+            "npm:@types/jest",
+            "npm:@types/node@20.19.1",
+            "npm:@types/uuid@9.0.8",
+            "npm:@typescript-eslint/eslint-plugin@5.62.0",
+            "npm:@typescript-eslint/parser@5.62.0",
+            "npm:class-transformer",
+            "npm:class-validator",
+            "npm:eslint@8.57.1",
+            "npm:eslint-config-prettier@8.10.0",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-prettier@4.2.1",
+            "npm:eslint-plugin-simple-import-sort",
+            "npm:prettier@2.8.8",
+            "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
+            "npm:tslib@2.8.1",
+            "npm:typescript",
+            "npm:@nestjs/typeorm",
+            "npm:bcrypt",
+            "npm:typeorm",
+            "npm:uuid",
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/config@3.2.2",
+            "npm:@nestjs/core@10.4.15",
+            "npm:@nestjs/jwt",
+            "npm:@nestjs/microservices",
+            "npm:@nestjs/swagger@7.3.1",
+            "npm:@types/bcrypt",
+            "npm:redis"
+          ]
+        },
+        {
+          "file": "packages/common/src/clients/auth-service/auth-client.module.ts",
+          "hash": "6768198128722286774"
+        },
+        {
+          "file": "packages/common/src/clients/auth-service/auth.client.ts",
+          "hash": "1850820811748583722"
+        },
+        {
+          "file": "packages/common/src/clients/auth-service/index.ts",
+          "hash": "716459312345014541"
+        },
+        {
+          "file": "packages/common/src/clients/batch-service/client-batch.module.ts",
+          "hash": "4963112346591591443"
+        },
+        {
+          "file": "packages/common/src/clients/batch-service/client-batch.ts",
+          "hash": "12044042862071451180"
+        },
+        {
+          "file": "packages/common/src/clients/batch-service/index.ts",
+          "hash": "3508994301665047339"
+        },
+        {
+          "file": "packages/common/src/clients/coordinator-service/client-coordinator.module.ts",
+          "hash": "7686532513068260187"
+        },
+        {
+          "file": "packages/common/src/clients/coordinator-service/client-coordinator.ts",
+          "hash": "9603589604931291115"
+        },
+        {
+          "file": "packages/common/src/clients/coordinator-service/index.ts",
+          "hash": "9297436243349723064"
+        },
+        {
+          "file": "packages/common/src/clients/index.ts",
+          "hash": "13902024341861559448"
+        },
+        {
+          "file": "packages/common/src/clients/permission-service/client-permission.module.ts",
+          "hash": "1064160757422617330"
+        },
+        {
+          "file": "packages/common/src/clients/permission-service/client-permission.ts",
+          "hash": "15702354237379718005"
+        },
+        {
+          "file": "packages/common/src/clients/permission-service/index.ts",
+          "hash": "3772761351755934325"
+        },
+        {
+          "file": "packages/common/src/clients/user-service/client-user.module.ts",
+          "hash": "9366846037504527519"
+        },
+        {
+          "file": "packages/common/src/clients/user-service/client-user.ts",
+          "hash": "3941806052948894131"
+        },
+        {
+          "file": "packages/common/src/clients/user-service/index.ts",
+          "hash": "17788392663731493011"
+        },
+        {
+          "file": "packages/common/src/constants/constants.ts",
+          "hash": "4620070383844232019"
+        },
+        {
+          "file": "packages/common/src/constants/index.ts",
+          "hash": "8907358931578483814"
+        },
+        {
+          "file": "packages/common/src/constants/partners.constants.ts",
+          "hash": "3494680333304627871"
+        },
+        {
+          "file": "packages/common/src/dto/base.dto.ts",
+          "hash": "7335514590517519263"
+        },
+        {
+          "file": "packages/common/src/dto/index.ts",
+          "hash": "16086250840603323478"
+        },
+        {
+          "file": "packages/common/src/dto/pagination-query.dto.ts",
+          "hash": "1022202300607580731"
+        },
+        {
+          "file": "packages/common/src/entities/auth/api-key.entity.ts",
+          "hash": "13417453851382022150"
+        },
+        {
+          "file": "packages/common/src/entities/auth/index.ts",
+          "hash": "18087691425543960698"
+        },
+        {
+          "file": "packages/common/src/entities/auth/invitation.entity.ts",
+          "hash": "15824756910516828370"
+        },
+        {
+          "file": "packages/common/src/entities/auth/session.entity.ts",
+          "hash": "11036060288524819306"
+        },
+        {
+          "file": "packages/common/src/entities/batch/index.ts",
+          "hash": "14683523834288703496"
+        },
+        {
+          "file": "packages/common/src/entities/batch/operation.entity.ts",
+          "hash": "14591010938648330205"
+        },
+        {
+          "file": "packages/common/src/entities/index.ts",
+          "hash": "16225542049718774380"
+        },
+        {
+          "file": "packages/common/src/entities/user/2fa-permissions.entity.ts",
+          "hash": "9589834377158868526"
+        },
+        {
+          "file": "packages/common/src/entities/user/entry-method.entity.ts",
+          "hash": "17382874310853253636"
+        },
+        {
+          "file": "packages/common/src/entities/user/index.ts",
+          "hash": "9273616222409242861"
+        },
+        {
+          "file": "packages/common/src/entities/user/permissions.entity.ts",
+          "hash": "4321462010829029399"
+        },
+        {
+          "file": "packages/common/src/entities/user/role.entity.ts",
+          "hash": "68007925456204877"
+        },
+        {
+          "file": "packages/common/src/entities/user/user-role.entity.ts",
+          "hash": "8246855568845883741"
+        },
+        {
+          "file": "packages/common/src/entities/user/user.entity.ts",
+          "hash": "78665820806576538"
+        },
+        {
+          "file": "packages/common/src/entities/ws-coordinator/index.ts",
+          "hash": "7299960343852482365"
+        },
+        {
+          "file": "packages/common/src/entities/ws-coordinator/service.entity.ts",
+          "hash": "1166140819059187175"
+        },
+        {
+          "file": "packages/common/src/enums/auth-service/api-key.enums.ts",
+          "hash": "10983479467705180383"
+        },
+        {
+          "file": "packages/common/src/enums/auth-service/index.ts",
+          "hash": "8002134341121757517"
+        },
+        {
+          "file": "packages/common/src/enums/diff-time.enums.ts",
+          "hash": "16358885622612625168"
+        },
+        {
+          "file": "packages/common/src/enums/direction.enum.ts",
+          "hash": "255420485120262613"
+        },
+        {
+          "file": "packages/common/src/enums/index.ts",
+          "hash": "16814268269281492654"
+        },
+        {
+          "file": "packages/common/src/enums/user-operation.enum.ts",
+          "hash": "3376318489809883998"
+        },
+        {
+          "file": "packages/common/src/enums/user.enums.ts",
+          "hash": "4493836317914309441"
+        },
+        {
+          "file": "packages/common/src/errors/auth-service/api-key.errors.ts",
+          "hash": "9568735887481432395"
+        },
+        {
+          "file": "packages/common/src/errors/auth-service/auth.errors.ts",
+          "hash": "2854084246312470221"
+        },
+        {
+          "file": "packages/common/src/errors/errors.ts",
+          "hash": "7753330870377321631"
+        },
+        {
+          "file": "packages/common/src/errors/global-exception-filter.ts",
+          "hash": "14812194798680901460"
+        },
+        {
+          "file": "packages/common/src/errors/index.ts",
+          "hash": "8881134098041221109"
+        },
+        {
+          "file": "packages/common/src/index.ts",
+          "hash": "314918882191742337"
+        },
+        {
+          "file": "packages/common/src/interfaces/auth-service/api-key.interface.ts",
+          "hash": "2126572635107017683"
+        },
+        {
+          "file": "packages/common/src/interfaces/auth-service/auth-strategy.interface.ts",
+          "hash": "226820637983623718"
+        },
+        {
+          "file": "packages/common/src/interfaces/auth-service/index.ts",
+          "hash": "14445271801428812948"
+        },
+        {
+          "file": "packages/common/src/interfaces/auth-service/invitation.interface.ts",
+          "hash": "13950799924525792496"
+        },
+        {
+          "file": "packages/common/src/interfaces/auth-service/request/auth.request.interface.ts",
+          "hash": "14764141817371530957"
+        },
+        {
+          "file": "packages/common/src/interfaces/auth-service/response/auth.response.interface.ts",
+          "hash": "2247625618409468602"
+        },
+        {
+          "file": "packages/common/src/interfaces/auth-service/session.interface.ts",
+          "hash": "9198331014270436727"
+        },
+        {
+          "file": "packages/common/src/interfaces/batch-service/batch-operation.interface.ts",
+          "hash": "9038224713946875197"
+        },
+        {
+          "file": "packages/common/src/interfaces/batch-service/index.ts",
+          "hash": "16230723523002182857"
+        },
+        {
+          "file": "packages/common/src/interfaces/coordinator-service/coordinator.interface.ts",
+          "hash": "2370021587655727677"
+        },
+        {
+          "file": "packages/common/src/interfaces/coordinator-service/index.ts",
+          "hash": "880266424413151782"
+        },
+        {
+          "file": "packages/common/src/interfaces/entity-response.types.ts",
+          "hash": "181755234985895614"
+        },
+        {
+          "file": "packages/common/src/interfaces/index.ts",
+          "hash": "3705498119788476769"
+        },
+        {
+          "file": "packages/common/src/interfaces/pagination.interface.ts",
+          "hash": "11187181583040851747"
+        },
+        {
+          "file": "packages/common/src/interfaces/response.interface.ts",
+          "hash": "7198114706578165613"
+        },
+        {
+          "file": "packages/common/src/interfaces/user-service/index.ts",
+          "hash": "3737214394007349657"
+        },
+        {
+          "file": "packages/common/src/interfaces/user-service/interfaces/index.ts",
+          "hash": "6775240511137209214"
+        },
+        {
+          "file": "packages/common/src/interfaces/user-service/interfaces/twofa-permissions.interface.ts",
+          "hash": "13152121821856711812"
+        },
+        {
+          "file": "packages/common/src/interfaces/user-service/interfaces/user.interface.ts",
+          "hash": "17591665097185413400"
+        },
+        {
+          "file": "packages/common/src/utils/controller-meta.decorator.ts",
+          "hash": "14197142624290858651"
+        },
+        {
+          "file": "packages/common/src/utils/createRmqMessage.ts",
+          "hash": "12998195560480302101"
+        },
+        {
+          "file": "packages/common/src/utils/doWithCatch.ts",
+          "hash": "2973662787144236247"
+        },
+        {
+          "file": "packages/common/src/utils/encryption.util.ts",
+          "hash": "4340784866009481585"
+        },
+        {
+          "file": "packages/common/src/utils/function-type.decorator.ts",
+          "hash": "4797452684961768514"
+        },
+        {
+          "file": "packages/common/src/utils/generateRandom.ts",
+          "hash": "2617858395936006365"
+        },
+        {
+          "file": "packages/common/src/utils/generateRandomNumber.ts",
+          "hash": "2980811607555495684"
+        },
+        {
+          "file": "packages/common/src/utils/getTimePeriod.ts",
+          "hash": "9576511246517670767"
+        },
+        {
+          "file": "packages/common/src/utils/getUnixTime.ts",
+          "hash": "13974665836520428913"
+        },
+        {
+          "file": "packages/common/src/utils/hashPassword.ts",
+          "hash": "8040630026480160542"
+        },
+        {
+          "file": "packages/common/src/utils/index.ts",
+          "hash": "3813259818200431874"
+        },
+        {
+          "file": "packages/common/src/utils/interpolateSql.ts",
+          "hash": "12570816339648492489"
+        },
+        {
+          "file": "packages/common/src/utils/mps_signature.ts",
+          "hash": "17375075884519024685"
+        },
+        {
+          "file": "packages/common/src/utils/permission-registrar.module.ts",
+          "hash": "4897698379000623570"
+        },
+        {
+          "file": "packages/common/src/utils/permissions-registrar.service.ts",
+          "hash": "14438501845341962456"
+        },
+        {
+          "file": "packages/common/src/utils/redisLocks.ts",
+          "hash": "18143567899693307097"
+        },
+        {
+          "file": "packages/common/src/utils/require-confirmation.decorator.ts",
+          "hash": "13932207467356838797"
+        },
+        {
+          "file": "packages/common/src/utils/require-confirmation.interceptor.ts",
+          "hash": "15006596636391881323"
+        },
+        {
+          "file": "packages/common/src/utils/service-jwt.interceptor.ts",
+          "hash": "11352378273085016387"
+        },
+        {
+          "file": "packages/common/src/utils/service-jwt.use-case.ts",
+          "hash": "2461937448935195412"
+        },
+        {
+          "file": "packages/common/src/utils/timeDelay.ts",
+          "hash": "7308274041849589404"
+        },
+        {
+          "file": "packages/common/tsconfig.json",
+          "hash": "14336570634951319863"
+        }
+      ],
       "@crypton-nestjs-kit/gateway": [
         {
           "file": "apps/api-gateway/.env.example",
@@ -420,12 +1053,16 @@
             "npm:@types/passport-twitter",
             "npm:@types/passport-apple",
             "npm:@types/eslint-plugin-prettier",
+            "npm:@types/express@4.17.23",
             "npm:@types/jest",
+            "npm:@types/jsonwebtoken@9.0.10",
+            "npm:@types/node@20.19.1",
             "npm:@types/supertest@6.0.3",
             "npm:@typescript-eslint/eslint-plugin@5.62.0",
             "npm:@typescript-eslint/parser@5.62.0",
             "npm:concurrently@8.2.2",
             "npm:copyfiles",
+            "npm:dotenv@16.4.7",
             "npm:dotenv-cli@7.4.4",
             "npm:eslint@8.57.1",
             "npm:eslint-config-prettier@8.10.0",
@@ -437,6 +1074,7 @@
             "npm:prettier@2.8.8",
             "npm:rimraf",
             "npm:supertest@7.1.1",
+            "npm:ts-jest",
             "npm:ts-loader",
             "npm:ts-node",
             "npm:typescript",
@@ -535,7 +1173,7 @@
         },
         {
           "file": "apps/api-gateway/src/dto/base.dto.ts",
-          "hash": "6859449116572400496"
+          "hash": "12071662732475083549"
         },
         {
           "file": "apps/api-gateway/src/dto/error-response-dto.ts",
@@ -555,7 +1193,7 @@
         },
         {
           "file": "apps/api-gateway/src/gateway.module.ts",
-          "hash": "1242639909809284007"
+          "hash": "16966361445762517684"
         },
         {
           "file": "apps/api-gateway/src/guards/api-key.guard.ts",
@@ -619,11 +1257,15 @@
         },
         {
           "file": "apps/api-gateway/src/v1/auth/auth.controller.ts",
-          "hash": "1790296624967095042"
+          "hash": "6163462555145601446"
         },
         {
           "file": "apps/api-gateway/src/v1/auth/dto/auth.dto.ts",
-          "hash": "642320129522692876"
+          "hash": "17670959148312616967"
+        },
+        {
+          "file": "apps/api-gateway/src/v1/auth/dto/invitation.dto.ts",
+          "hash": "12421466682075730624"
         },
         {
           "file": "apps/api-gateway/src/v1/auth/dto/session.dto.ts",
@@ -636,6 +1278,10 @@
         {
           "file": "apps/api-gateway/src/v1/auth/interfaces/auth.interfaces.ts",
           "hash": "17929983324955048810"
+        },
+        {
+          "file": "apps/api-gateway/src/v1/auth/invitation.controller.ts",
+          "hash": "14509842547988673072"
         },
         {
           "file": "apps/api-gateway/src/v1/auth/services/captcha.service.ts",
@@ -706,966 +1352,6 @@
           "hash": "9999468553007873044"
         }
       ],
-      "@crypton-nestjs-kit/user-service": [
-        {
-          "file": "apps/user-service/.dockerignore",
-          "hash": "10261366091226277543"
-        },
-        {
-          "file": "apps/user-service/.env.example",
-          "hash": "15841696911245973166"
-        },
-        {
-          "file": "apps/user-service/.eslintrc.js",
-          "hash": "17009857754095399352"
-        },
-        {
-          "file": "apps/user-service/.gitignore",
-          "hash": "1545212619125482044"
-        },
-        {
-          "file": "apps/user-service/.prettierrc",
-          "hash": "4808572120966128913"
-        },
-        {
-          "file": "apps/user-service/Dockerfile",
-          "hash": "8413809494581712536"
-        },
-        {
-          "file": "apps/user-service/README.md",
-          "hash": "17896459175792473804"
-        },
-        {
-          "file": "apps/user-service/docker-compose.yml",
-          "hash": "9469173400285883344"
-        },
-        {
-          "file": "apps/user-service/nest-cli.json",
-          "hash": "11299044278503621101"
-        },
-        {
-          "file": "apps/user-service/package.json",
-          "hash": "12205388860428081976",
-          "deps": [
-            "npm:@compodoc/compodoc",
-            "npm:@nestjs/cli@10.4.9",
-            "npm:@nestjs/schematics@10.2.3",
-            "npm:@nestjs/testing@10.4.15",
-            "npm:@types/eslint-plugin-prettier",
-            "npm:@types/supertest@6.0.3",
-            "npm:@typescript-eslint/eslint-plugin@5.62.0",
-            "npm:@typescript-eslint/parser@5.62.0",
-            "npm:concurrently@8.2.2",
-            "npm:copyfiles",
-            "npm:dotenv-cli@7.4.4",
-            "npm:eslint@8.57.1",
-            "npm:eslint-config-prettier@8.10.0",
-            "npm:eslint-plugin-import",
-            "npm:eslint-plugin-prettier@4.2.1",
-            "npm:eslint-plugin-simple-import-sort",
-            "npm:nock",
-            "npm:nodemon@3.1.10",
-            "npm:prettier@2.8.8",
-            "npm:rimraf",
-            "npm:supertest@7.1.1",
-            "npm:ts-loader",
-            "npm:ts-node",
-            "npm:typescript",
-            "npm:@nestjs/cache-manager",
-            "npm:@nestjs/common@10.4.15",
-            "npm:@nestjs/core@10.4.15",
-            "npm:@nestjs/microservices",
-            "npm:@nestjs/platform-express",
-            "npm:@nestjs/swagger@7.3.1",
-            "npm:@nestjs/terminus",
-            "npm:@nestjs/typeorm",
-            "npm:@nestjs/jwt",
-            "@crypton-nestjs-kit/common",
-            "@crypton-nestjs-kit/config",
-            "@crypton-nestjs-kit/database",
-            "@crypton-nestjs-kit/logger",
-            "npm:axios",
-            "npm:cache-manager",
-            "npm:cache-manager-redis-yet",
-            "npm:class-transformer",
-            "npm:class-validator",
-            "npm:express",
-            "npm:pg",
-            "npm:redis",
-            "npm:reflect-metadata",
-            "npm:rxjs@7.8.1",
-            "npm:typeorm",
-            "npm:url-join-ts",
-            "npm:uuid",
-            "npm:uuidv4",
-            "npm:winston"
-          ]
-        },
-        {
-          "file": "apps/user-service/src/controllers/user.controller.ts",
-          "hash": "15416444848939630871"
-        },
-        {
-          "file": "apps/user-service/src/interfaces/index.ts",
-          "hash": "14946197316738457207"
-        },
-        {
-          "file": "apps/user-service/src/interfaces/user.interface.ts",
-          "hash": "10493769972204129331"
-        },
-        {
-          "file": "apps/user-service/src/main.ts",
-          "hash": "8363016835359574878"
-        },
-        {
-          "file": "apps/user-service/src/services/user.service.ts",
-          "hash": "13207682143262669761"
-        },
-        {
-          "file": "apps/user-service/src/user.module.ts",
-          "hash": "16179658459674389181"
-        },
-        {
-          "file": "apps/user-service/tsconfig.build.json",
-          "hash": "276845246908739715"
-        },
-        {
-          "file": "apps/user-service/tsconfig.json",
-          "hash": "4085406884277372939"
-        }
-      ],
-      "@crypton-nestjs-kit/logger": [
-        {
-          "file": "packages/logger/.eslintrc.js",
-          "hash": "5805275214944404113"
-        },
-        {
-          "file": "packages/logger/.prettierrc",
-          "hash": "4808572120966128913"
-        },
-        {
-          "file": "packages/logger/jest.config.js",
-          "hash": "1256365898827067825"
-        },
-        {
-          "file": "packages/logger/package.json",
-          "hash": "2236290059702246454",
-          "deps": [
-            "npm:@nestjs/common@10.4.15",
-            "npm:@nestjs/config@3.2.2",
-            "npm:@nestjs/core@10.4.15",
-            "npm:@nestjs/testing@10.4.15",
-            "npm:@nestjs/typeorm",
-            "npm:@types/eslint-plugin-prettier",
-            "npm:@types/jest",
-            "npm:@types/uuid@9.0.8",
-            "npm:@typescript-eslint/eslint-plugin@5.62.0",
-            "npm:@typescript-eslint/parser@5.62.0",
-            "npm:@opentelemetry/api",
-            "npm:@opentelemetry/core@2.0.1",
-            "npm:@opentelemetry/propagator-jaeger",
-            "npm:eslint@8.57.1",
-            "npm:eslint-config-prettier@8.10.0",
-            "npm:eslint-plugin-import",
-            "npm:eslint-plugin-prettier@4.2.1",
-            "npm:eslint-plugin-simple-import-sort",
-            "npm:prettier@2.8.8",
-            "npm:express",
-            "npm:reflect-metadata",
-            "npm:rxjs@7.8.1",
-            "npm:tslib@2.8.1",
-            "npm:typeorm",
-            "npm:typescript",
-            "@crypton-nestjs-kit/config",
-            "@crypton-nestjs-kit/common",
-            "npm:@types/luxon@3.6.2",
-            "npm:luxon@3.6.1",
-            "npm:moment",
-            "npm:winston"
-          ]
-        },
-        {
-          "file": "packages/logger/src/index.ts",
-          "hash": "5136850600633699525"
-        },
-        {
-          "file": "packages/logger/src/interceptors/logging.interceptor.ts",
-          "hash": "13221537220781190782"
-        },
-        {
-          "file": "packages/logger/src/logger.middleware.ts",
-          "hash": "5028759679828998175"
-        },
-        {
-          "file": "packages/logger/src/logger.module.ts",
-          "hash": "13722525425234399057"
-        },
-        {
-          "file": "packages/logger/src/logger.service.ts",
-          "hash": "10683026098747570710"
-        },
-        {
-          "file": "packages/logger/src/loglevel.ts",
-          "hash": "14372657752409921850"
-        },
-        {
-          "file": "packages/logger/tsconfig.json",
-          "hash": "8294437799332674063"
-        }
-      ],
-      "@crypton-nestjs-kit/settings": [
-        {
-          "file": "packages/global-settings/.eslintrc.js",
-          "hash": "3428559314374055786"
-        },
-        {
-          "file": "packages/global-settings/.gitignore",
-          "hash": "672911037926083482"
-        },
-        {
-          "file": "packages/global-settings/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "packages/global-settings/.prettierrc",
-          "hash": "4808572120966128913"
-        },
-        {
-          "file": "packages/global-settings/README.md",
-          "hash": "4501775954294626685"
-        },
-        {
-          "file": "packages/global-settings/jest.config.js",
-          "hash": "1256365898827067825"
-        },
-        {
-          "file": "packages/global-settings/package.json",
-          "hash": "4429342253958991731",
-          "deps": [
-            "npm:@nestjs/common@10.4.15",
-            "npm:@nestjs/config@3.2.2",
-            "npm:@nestjs/core@10.4.15",
-            "npm:@nestjs/microservices",
-            "npm:@nestjs/testing@10.4.15",
-            "npm:@types/eslint-plugin-prettier",
-            "npm:@types/jest",
-            "npm:@types/uuid@9.0.8",
-            "npm:@typescript-eslint/eslint-plugin@5.62.0",
-            "npm:@typescript-eslint/parser@5.62.0",
-            "@crypton-nestjs-kit/common",
-            "@crypton-nestjs-kit/config",
-            "@crypton-nestjs-kit/database",
-            "npm:eslint@8.57.1",
-            "npm:eslint-config-prettier@8.10.0",
-            "npm:eslint-plugin-import",
-            "npm:eslint-plugin-prettier@4.2.1",
-            "npm:eslint-plugin-simple-import-sort",
-            "npm:prettier@2.8.8",
-            "npm:reflect-metadata",
-            "npm:rxjs@7.8.1",
-            "npm:tslib@2.8.1",
-            "npm:typescript",
-            "npm:@nestjs/schedule",
-            "npm:@nestjs/typeorm",
-            "npm:typeorm",
-            "npm:uuid"
-          ]
-        },
-        {
-          "file": "packages/global-settings/src/index.ts",
-          "hash": "6517461792682388286"
-        },
-        {
-          "file": "packages/global-settings/src/settings.default.ts",
-          "hash": "7706869097100805266"
-        },
-        {
-          "file": "packages/global-settings/src/settings.entity.ts",
-          "hash": "15936853205961265167"
-        },
-        {
-          "file": "packages/global-settings/src/settings.interface.ts",
-          "hash": "5543324126539015322"
-        },
-        {
-          "file": "packages/global-settings/src/settings.module.ts",
-          "hash": "15851367752237391785"
-        },
-        {
-          "file": "packages/global-settings/src/settings.service.ts",
-          "hash": "12746127134933829077"
-        },
-        {
-          "file": "packages/global-settings/tsconfig.json",
-          "hash": "8294437799332674063"
-        }
-      ],
-      "@crypton-nestjs-kit/coordinator-service": [
-        {
-          "file": "apps/ws-coordinator-service/.dockerignore",
-          "hash": "10261366091226277543"
-        },
-        {
-          "file": "apps/ws-coordinator-service/.env.example",
-          "hash": "3522753027448313173"
-        },
-        {
-          "file": "apps/ws-coordinator-service/.eslintrc.js",
-          "hash": "3428559314374055786"
-        },
-        {
-          "file": "apps/ws-coordinator-service/.gitignore",
-          "hash": "1545212619125482044"
-        },
-        {
-          "file": "apps/ws-coordinator-service/.prettierrc",
-          "hash": "4808572120966128913"
-        },
-        {
-          "file": "apps/ws-coordinator-service/README.md",
-          "hash": "13522945567585205679"
-        },
-        {
-          "file": "apps/ws-coordinator-service/package.json",
-          "hash": "4054819325797371299",
-          "deps": [
-            "npm:@nestjs/common@10.4.15",
-            "npm:@nestjs/config@2.3.1",
-            "npm:@nestjs/core@10.4.15",
-            "npm:@nestjs/microservices",
-            "npm:@nestjs/platform-express",
-            "npm:@nestjs/typeorm",
-            "@crypton-nestjs-kit/common",
-            "@crypton-nestjs-kit/config",
-            "@crypton-nestjs-kit/database",
-            "@crypton-nestjs-kit/logger",
-            "npm:axios",
-            "npm:express",
-            "npm:pg",
-            "npm:reflect-metadata",
-            "npm:rxjs@7.8.1",
-            "npm:typeorm"
-          ]
-        },
-        {
-          "file": "apps/ws-coordinator-service/src/controller/coordinator.controller.ts",
-          "hash": "10338850494741287137"
-        },
-        {
-          "file": "apps/ws-coordinator-service/src/coordinator.module.ts",
-          "hash": "560854049260300149"
-        },
-        {
-          "file": "apps/ws-coordinator-service/src/main.ts",
-          "hash": "16528736319462431714"
-        },
-        {
-          "file": "apps/ws-coordinator-service/src/services/coordinator.service.ts",
-          "hash": "5452257677822176301"
-        },
-        {
-          "file": "apps/ws-coordinator-service/src/services/coordinator.worker.ts",
-          "hash": "9046235878407007180"
-        },
-        {
-          "file": "apps/ws-coordinator-service/tsconfig.build.json",
-          "hash": "276845246908739715"
-        },
-        {
-          "file": "apps/ws-coordinator-service/tsconfig.json",
-          "hash": "3422841129992048439"
-        }
-      ],
-      "@crypton-nestjs-kit/common": [
-        {
-          "file": "packages/common/.eslintrc.js",
-          "hash": "6301319824584087331"
-        },
-        {
-          "file": "packages/common/.gitignore",
-          "hash": "1545212619125482044"
-        },
-        {
-          "file": "packages/common/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "packages/common/.prettierrc",
-          "hash": "4808572120966128913"
-        },
-        {
-          "file": "packages/common/jest.config.js",
-          "hash": "1256365898827067825"
-        },
-        {
-          "file": "packages/common/package-lock.json",
-          "hash": "10615652422708614388"
-        },
-        {
-          "file": "packages/common/package.json",
-          "hash": "11727615907401928000",
-          "deps": [
-            "@crypton-nestjs-kit/config",
-            "npm:@nestjs/testing@10.4.15",
-            "npm:@types/eslint-plugin-prettier",
-            "npm:@types/jest",
-            "npm:@types/uuid@9.0.8",
-            "npm:@typescript-eslint/eslint-plugin@5.62.0",
-            "npm:@typescript-eslint/parser@5.62.0",
-            "npm:class-transformer",
-            "npm:class-validator",
-            "npm:eslint@8.57.1",
-            "npm:eslint-config-prettier@8.10.0",
-            "npm:eslint-plugin-import",
-            "npm:eslint-plugin-prettier@4.2.1",
-            "npm:eslint-plugin-simple-import-sort",
-            "npm:prettier@2.8.8",
-            "npm:reflect-metadata",
-            "npm:rxjs@7.8.1",
-            "npm:tslib@2.8.1",
-            "npm:typescript",
-            "npm:@nestjs/typeorm",
-            "npm:bcrypt",
-            "npm:typeorm",
-            "npm:uuid",
-            "npm:@nestjs/common@10.4.15",
-            "npm:@nestjs/config@3.2.2",
-            "npm:@nestjs/core@10.4.15",
-            "npm:@nestjs/jwt",
-            "npm:@nestjs/microservices",
-            "npm:@nestjs/swagger@7.3.1",
-            "npm:@types/bcrypt",
-            "npm:redis"
-          ]
-        },
-        {
-          "file": "packages/common/src/clients/auth-service/auth-client.module.ts",
-          "hash": "6768198128722286774"
-        },
-        {
-          "file": "packages/common/src/clients/auth-service/auth.client.ts",
-          "hash": "11720165822080981916"
-        },
-        {
-          "file": "packages/common/src/clients/auth-service/index.ts",
-          "hash": "18222668895522058364"
-        },
-        {
-          "file": "packages/common/src/clients/batch-service/client-batch.module.ts",
-          "hash": "4963112346591591443"
-        },
-        {
-          "file": "packages/common/src/clients/batch-service/client-batch.ts",
-          "hash": "6489491046395273125"
-        },
-        {
-          "file": "packages/common/src/clients/batch-service/index.ts",
-          "hash": "3508994301665047339"
-        },
-        {
-          "file": "packages/common/src/clients/coordinator-service/client-coordinator.module.ts",
-          "hash": "7686532513068260187"
-        },
-        {
-          "file": "packages/common/src/clients/coordinator-service/client-coordinator.ts",
-          "hash": "5536516448729695173"
-        },
-        {
-          "file": "packages/common/src/clients/coordinator-service/index.ts",
-          "hash": "9297436243349723064"
-        },
-        {
-          "file": "packages/common/src/clients/index.ts",
-          "hash": "13902024341861559448"
-        },
-        {
-          "file": "packages/common/src/clients/permission-service/client-permission.module.ts",
-          "hash": "1064160757422617330"
-        },
-        {
-          "file": "packages/common/src/clients/permission-service/client-permission.ts",
-          "hash": "15702354237379718005"
-        },
-        {
-          "file": "packages/common/src/clients/permission-service/index.ts",
-          "hash": "3772761351755934325"
-        },
-        {
-          "file": "packages/common/src/clients/user-service/client-user.module.ts",
-          "hash": "9366846037504527519"
-        },
-        {
-          "file": "packages/common/src/clients/user-service/client-user.ts",
-          "hash": "3670184865309919927"
-        },
-        {
-          "file": "packages/common/src/clients/user-service/index.ts",
-          "hash": "17788392663731493011"
-        },
-        {
-          "file": "packages/common/src/constants/constants.ts",
-          "hash": "4620070383844232019"
-        },
-        {
-          "file": "packages/common/src/constants/index.ts",
-          "hash": "8907358931578483814"
-        },
-        {
-          "file": "packages/common/src/constants/partners.constants.ts",
-          "hash": "3494680333304627871"
-        },
-        {
-          "file": "packages/common/src/dto/base.dto.ts",
-          "hash": "7335514590517519263"
-        },
-        {
-          "file": "packages/common/src/dto/index.ts",
-          "hash": "16086250840603323478"
-        },
-        {
-          "file": "packages/common/src/dto/pagination-query.dto.ts",
-          "hash": "1022202300607580731"
-        },
-        {
-          "file": "packages/common/src/entities/auth/api-key.entity.ts",
-          "hash": "13417453851382022150"
-        },
-        {
-          "file": "packages/common/src/entities/auth/index.ts",
-          "hash": "16368678038421059534"
-        },
-        {
-          "file": "packages/common/src/entities/auth/session.entity.ts",
-          "hash": "15695952572389134099"
-        },
-        {
-          "file": "packages/common/src/entities/batch/index.ts",
-          "hash": "14683523834288703496"
-        },
-        {
-          "file": "packages/common/src/entities/batch/operation.entity.ts",
-          "hash": "9524245216185637996"
-        },
-        {
-          "file": "packages/common/src/entities/index.ts",
-          "hash": "10347628175539283960"
-        },
-        {
-          "file": "packages/common/src/entities/user/2fa-permissions.entity.ts",
-          "hash": "2629913454461790242"
-        },
-        {
-          "file": "packages/common/src/entities/user/index.ts",
-          "hash": "1097423739083130857"
-        },
-        {
-          "file": "packages/common/src/entities/user/permissions.entity.ts",
-          "hash": "4321462010829029399"
-        },
-        {
-          "file": "packages/common/src/entities/user/role.entity.ts",
-          "hash": "4874327055523074353"
-        },
-        {
-          "file": "packages/common/src/entities/user/user-login-method.entity.ts",
-          "hash": "2234231222890793221"
-        },
-        {
-          "file": "packages/common/src/entities/user/user-role.entity.ts",
-          "hash": "8246855568845883741"
-        },
-        {
-          "file": "packages/common/src/entities/user/user.entity.ts",
-          "hash": "3096475390087353776"
-        },
-        {
-          "file": "packages/common/src/entities/ws-coordinator/index.ts",
-          "hash": "7299960343852482365"
-        },
-        {
-          "file": "packages/common/src/entities/ws-coordinator/service.entity.ts",
-          "hash": "8736706323233477231"
-        },
-        {
-          "file": "packages/common/src/enums/diff-time.enums.ts",
-          "hash": "16358885622612625168"
-        },
-        {
-          "file": "packages/common/src/enums/direction.enum.ts",
-          "hash": "255420485120262613"
-        },
-        {
-          "file": "packages/common/src/enums/index.ts",
-          "hash": "11217443837259631593"
-        },
-        {
-          "file": "packages/common/src/enums/user-operation.enum.ts",
-          "hash": "3376318489809883998"
-        },
-        {
-          "file": "packages/common/src/enums/user.enums.ts",
-          "hash": "4493836317914309441"
-        },
-        {
-          "file": "packages/common/src/errors/auth-service/api-key.errors.ts",
-          "hash": "9568735887481432395"
-        },
-        {
-          "file": "packages/common/src/errors/auth-service/auth.errors.ts",
-          "hash": "2391729754976694764"
-        },
-        {
-          "file": "packages/common/src/errors/errors.ts",
-          "hash": "7753330870377321631"
-        },
-        {
-          "file": "packages/common/src/errors/global-exception-filter.ts",
-          "hash": "14812194798680901460"
-        },
-        {
-          "file": "packages/common/src/errors/index.ts",
-          "hash": "8881134098041221109"
-        },
-        {
-          "file": "packages/common/src/index.ts",
-          "hash": "7288686279386777105"
-        },
-        {
-          "file": "packages/common/src/types/auth-service/api-key.interface.ts",
-          "hash": "11445018786527015833"
-        },
-        {
-          "file": "packages/common/src/types/auth-service/auth-strategy.interface.ts",
-          "hash": "226820637983623718"
-        },
-        {
-          "file": "packages/common/src/types/auth-service/dto/api-key.dto.ts",
-          "hash": "15691068880836236782"
-        },
-        {
-          "file": "packages/common/src/types/auth-service/index.ts",
-          "hash": "2921114416922408766"
-        },
-        {
-          "file": "packages/common/src/types/auth-service/request/auth.request.interface.ts",
-          "hash": "1988195126358975425"
-        },
-        {
-          "file": "packages/common/src/types/auth-service/response/auth.response.interface.ts",
-          "hash": "12563965213241455504"
-        },
-        {
-          "file": "packages/common/src/types/auth-service/session.interface.ts",
-          "hash": "9198331014270436727"
-        },
-        {
-          "file": "packages/common/src/types/batch-service/batch-operation.interface.ts",
-          "hash": "9038224713946875197"
-        },
-        {
-          "file": "packages/common/src/types/batch-service/index.ts",
-          "hash": "16230723523002182857"
-        },
-        {
-          "file": "packages/common/src/types/coordinator-service/coordinator.interface.ts",
-          "hash": "2370021587655727677"
-        },
-        {
-          "file": "packages/common/src/types/coordinator-service/index.ts",
-          "hash": "880266424413151782"
-        },
-        {
-          "file": "packages/common/src/types/entity-response.types.js",
-          "hash": "12786652013915444041"
-        },
-        {
-          "file": "packages/common/src/types/entity-response.types.ts",
-          "hash": "1546661744200774710"
-        },
-        {
-          "file": "packages/common/src/types/index.ts",
-          "hash": "3705498119788476769"
-        },
-        {
-          "file": "packages/common/src/types/pagination.interface.ts",
-          "hash": "11187181583040851747"
-        },
-        {
-          "file": "packages/common/src/types/response.interface.ts",
-          "hash": "7198114706578165613"
-        },
-        {
-          "file": "packages/common/src/types/user-service/index.ts",
-          "hash": "3737214394007349657"
-        },
-        {
-          "file": "packages/common/src/types/user-service/interfaces/index.ts",
-          "hash": "6775240511137209214"
-        },
-        {
-          "file": "packages/common/src/types/user-service/interfaces/twofa-permissions.interface.ts",
-          "hash": "7318542403458461148"
-        },
-        {
-          "file": "packages/common/src/types/user-service/interfaces/user.interface.ts",
-          "hash": "17169750435055812589"
-        },
-        {
-          "file": "packages/common/src/utils/controller-meta.decorator.ts",
-          "hash": "14197142624290858651"
-        },
-        {
-          "file": "packages/common/src/utils/createRmqMessage.ts",
-          "hash": "14388063620587511002"
-        },
-        {
-          "file": "packages/common/src/utils/doWithCatch.ts",
-          "hash": "2973662787144236247"
-        },
-        {
-          "file": "packages/common/src/utils/encryption.util.ts",
-          "hash": "4340784866009481585"
-        },
-        {
-          "file": "packages/common/src/utils/function-type.decorator.ts",
-          "hash": "4797452684961768514"
-        },
-        {
-          "file": "packages/common/src/utils/generateRandomNumber.ts",
-          "hash": "2980811607555495684"
-        },
-        {
-          "file": "packages/common/src/utils/getTimePeriod.ts",
-          "hash": "9576511246517670767"
-        },
-        {
-          "file": "packages/common/src/utils/getUnixTime.ts",
-          "hash": "13974665836520428913"
-        },
-        {
-          "file": "packages/common/src/utils/hashPassword.ts",
-          "hash": "8040630026480160542"
-        },
-        {
-          "file": "packages/common/src/utils/index.ts",
-          "hash": "6039927981684899923"
-        },
-        {
-          "file": "packages/common/src/utils/interpolateSql.ts",
-          "hash": "12570816339648492489"
-        },
-        {
-          "file": "packages/common/src/utils/mps_signature.ts",
-          "hash": "17375075884519024685"
-        },
-        {
-          "file": "packages/common/src/utils/permission-registrar.module.ts",
-          "hash": "4897698379000623570"
-        },
-        {
-          "file": "packages/common/src/utils/permissions-registrar.service.ts",
-          "hash": "14438501845341962456"
-        },
-        {
-          "file": "packages/common/src/utils/redisLocks.ts",
-          "hash": "18143567899693307097"
-        },
-        {
-          "file": "packages/common/src/utils/require-confirmation.decorator.ts",
-          "hash": "13932207467356838797"
-        },
-        {
-          "file": "packages/common/src/utils/require-confirmation.interceptor.ts",
-          "hash": "10119584785503245414"
-        },
-        {
-          "file": "packages/common/src/utils/service-jwt.interceptor.ts",
-          "hash": "11352378273085016387"
-        },
-        {
-          "file": "packages/common/src/utils/service-jwt.use-case.ts",
-          "hash": "2461937448935195412"
-        },
-        {
-          "file": "packages/common/src/utils/timeDelay.ts",
-          "hash": "7308274041849589404"
-        },
-        {
-          "file": "packages/common/tsconfig.json",
-          "hash": "14336570634951319863"
-        }
-      ],
-      "@crypton-nestjs-kit/config": [
-        {
-          "file": "packages/config/.eslintrc.js",
-          "hash": "5805275214944404113"
-        },
-        {
-          "file": "packages/config/.gitignore",
-          "hash": "672911037926083482"
-        },
-        {
-          "file": "packages/config/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "packages/config/.prettierrc",
-          "hash": "4808572120966128913"
-        },
-        {
-          "file": "packages/config/jest.config.js",
-          "hash": "1256365898827067825"
-        },
-        {
-          "file": "packages/config/package.json",
-          "hash": "10121674757891404517",
-          "deps": [
-            "npm:@nestjs/common@10.4.15",
-            "npm:@nestjs/microservices",
-            "npm:@nestjs/config@3.2.2",
-            "npm:@nestjs/core@10.4.15",
-            "npm:@nestjs/testing@10.4.15",
-            "npm:@types/eslint-plugin-prettier",
-            "npm:@types/jest",
-            "npm:@types/uuid@9.0.8",
-            "npm:@typescript-eslint/eslint-plugin@5.62.0",
-            "npm:@typescript-eslint/parser@5.62.0",
-            "npm:eslint@8.57.1",
-            "npm:eslint-config-prettier@8.10.0",
-            "npm:eslint-plugin-import",
-            "npm:eslint-plugin-prettier@4.2.1",
-            "npm:eslint-plugin-simple-import-sort",
-            "npm:prettier@2.8.8",
-            "npm:reflect-metadata",
-            "npm:rxjs@7.8.1",
-            "npm:tslib@2.8.1",
-            "npm:typescript",
-            "npm:uuid"
-          ]
-        },
-        {
-          "file": "packages/config/src/config.default.ts",
-          "hash": "2063213510081599995"
-        },
-        {
-          "file": "packages/config/src/config.interface.ts",
-          "hash": "16793077965068248892"
-        },
-        {
-          "file": "packages/config/src/config.module.ts",
-          "hash": "1390726477728201836"
-        },
-        {
-          "file": "packages/config/src/config.service.ts",
-          "hash": "5537662474378052086"
-        },
-        {
-          "file": "packages/config/src/index.ts",
-          "hash": "1558983561062361818"
-        },
-        {
-          "file": "packages/config/tsconfig.json",
-          "hash": "8294437799332674063"
-        }
-      ],
-      "@crypton-nestjs-kit/notification-gateway": [
-        {
-          "file": "apps/notification-gateway/.dockerignore",
-          "hash": "10261366091226277543"
-        },
-        {
-          "file": "apps/notification-gateway/.env.example",
-          "hash": "18150790313621456824"
-        },
-        {
-          "file": "apps/notification-gateway/.eslintrc.js",
-          "hash": "3428559314374055786"
-        },
-        {
-          "file": "apps/notification-gateway/.gitignore",
-          "hash": "1545212619125482044"
-        },
-        {
-          "file": "apps/notification-gateway/.prettierrc",
-          "hash": "4808572120966128913"
-        },
-        {
-          "file": "apps/notification-gateway/README.md",
-          "hash": "6644666684578115928"
-        },
-        {
-          "file": "apps/notification-gateway/nest-cli.json",
-          "hash": "11299044278503621101"
-        },
-        {
-          "file": "apps/notification-gateway/package.json",
-          "hash": "1162600192747514540",
-          "deps": [
-            "npm:@nestjs/common@10.4.15",
-            "npm:@nestjs/core@10.4.15",
-            "npm:@nestjs/platform-socket.io",
-            "npm:@nestjs/swagger@7.4.2",
-            "npm:@nestjs/websockets",
-            "npm:@socket.io/redis-adapter",
-            "@crypton-nestjs-kit/common",
-            "@crypton-nestjs-kit/config",
-            "@crypton-nestjs-kit/io-emitter",
-            "@crypton-nestjs-kit/logger",
-            "npm:class-transformer",
-            "npm:class-validator",
-            "npm:redis",
-            "npm:reflect-metadata",
-            "npm:rxjs@7.8.1",
-            "npm:socket.io",
-            "npm:uuid",
-            "npm:uuidv4"
-          ]
-        },
-        {
-          "file": "apps/notification-gateway/src/gateway.controller.ts",
-          "hash": "3697280047785792112"
-        },
-        {
-          "file": "apps/notification-gateway/src/gateway.module.ts",
-          "hash": "987869576099404655"
-        },
-        {
-          "file": "apps/notification-gateway/src/guards/jwt-socket.guard.ts",
-          "hash": "8420609423488859332"
-        },
-        {
-          "file": "apps/notification-gateway/src/main.ts",
-          "hash": "4008229180612898946"
-        },
-        {
-          "file": "apps/notification-gateway/src/websocket-gateway/index.ts",
-          "hash": "7533070682032154061"
-        },
-        {
-          "file": "apps/notification-gateway/src/websocket-gateway/websocket-gateway.module.ts",
-          "hash": "767989017450681733"
-        },
-        {
-          "file": "apps/notification-gateway/src/websocket-gateway/websocket-gateway.ts",
-          "hash": "10203606934093403618"
-        },
-        {
-          "file": "apps/notification-gateway/src/ws/index.ts",
-          "hash": "18343069700683742446"
-        },
-        {
-          "file": "apps/notification-gateway/src/ws/redis-io.adapter.ts",
-          "hash": "13724776044469088301"
-        },
-        {
-          "file": "apps/notification-gateway/tsconfig.build.json",
-          "hash": "276845246908739715"
-        },
-        {
-          "file": "apps/notification-gateway/tsconfig.json",
-          "hash": "3422841129992048439"
-        }
-      ],
       "@crypton-nestjs-kit/auth-service": [
         {
           "file": "apps/auth-service/.dockerignore",
@@ -1673,7 +1359,7 @@
         },
         {
           "file": "apps/auth-service/.env.example",
-          "hash": "452316191214445215"
+          "hash": "2170351216574974178"
         },
         {
           "file": "apps/auth-service/.eslintrc.js",
@@ -1697,7 +1383,7 @@
         },
         {
           "file": "apps/auth-service/README.md",
-          "hash": "9346639699721574147"
+          "hash": "14320808037981688137"
         },
         {
           "file": "apps/auth-service/docker-compose.yml",
@@ -1717,8 +1403,10 @@
             "npm:@nestjs/testing@9.4.3",
             "npm:@types/bcrypt",
             "npm:@types/eslint-plugin-prettier",
+            "npm:@types/express@4.17.23",
             "npm:@types/jest",
             "npm:@types/jsonwebtoken@8.5.9",
+            "npm:@types/node@20.19.1",
             "npm:@types/passport",
             "npm:@types/passport-apple",
             "npm:@types/passport-google-oauth20",
@@ -1788,15 +1476,19 @@
         },
         {
           "file": "apps/auth-service/src/auth.module.ts",
-          "hash": "10641994099300098971"
+          "hash": "15404735273725042211"
         },
         {
           "file": "apps/auth-service/src/controllers/api-key.controller.ts",
-          "hash": "6976293334025032649"
+          "hash": "9561105269397689333"
         },
         {
           "file": "apps/auth-service/src/controllers/auth.controller.ts",
-          "hash": "871749274100862036"
+          "hash": "9295848806087955161"
+        },
+        {
+          "file": "apps/auth-service/src/controllers/invitation.controller.ts",
+          "hash": "12747432762449102785"
         },
         {
           "file": "apps/auth-service/src/main.ts",
@@ -1804,7 +1496,7 @@
         },
         {
           "file": "apps/auth-service/src/services/api-key/api-key.service.ts",
-          "hash": "16837450120024826600"
+          "hash": "10298964283935581859"
         },
         {
           "file": "apps/auth-service/src/services/auth/auth-strategy-factory.service.ts",
@@ -1812,7 +1504,7 @@
         },
         {
           "file": "apps/auth-service/src/services/auth/auth.service.ts",
-          "hash": "9320973401523023812"
+          "hash": "11126999722921514279"
         },
         {
           "file": "apps/auth-service/src/services/auth/strategies/apple-oauth.strategy.ts",
@@ -1831,12 +1523,381 @@
           "hash": "16227954903152513100"
         },
         {
+          "file": "apps/auth-service/src/services/invitation/invitation.service.ts",
+          "hash": "17285591003707966829"
+        },
+        {
           "file": "apps/auth-service/tsconfig.build.json",
           "hash": "276845246908739715"
         },
         {
           "file": "apps/auth-service/tsconfig.json",
           "hash": "4085406884277372939"
+        }
+      ],
+      "@crypton-nestjs-kit/coordinator-service": [
+        {
+          "file": "apps/ws-coordinator-service/.dockerignore",
+          "hash": "10261366091226277543"
+        },
+        {
+          "file": "apps/ws-coordinator-service/.env.example",
+          "hash": "3522753027448313173"
+        },
+        {
+          "file": "apps/ws-coordinator-service/.eslintrc.js",
+          "hash": "3428559314374055786"
+        },
+        {
+          "file": "apps/ws-coordinator-service/.gitignore",
+          "hash": "1545212619125482044"
+        },
+        {
+          "file": "apps/ws-coordinator-service/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "apps/ws-coordinator-service/README.md",
+          "hash": "13522945567585205679"
+        },
+        {
+          "file": "apps/ws-coordinator-service/package.json",
+          "hash": "4054819325797371299",
+          "deps": [
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/config@2.3.1",
+            "npm:@nestjs/core@10.4.15",
+            "npm:@nestjs/microservices",
+            "npm:@nestjs/platform-express",
+            "npm:@nestjs/typeorm",
+            "@crypton-nestjs-kit/common",
+            "@crypton-nestjs-kit/config",
+            "@crypton-nestjs-kit/database",
+            "@crypton-nestjs-kit/logger",
+            "npm:axios",
+            "npm:dotenv@16.4.7",
+            "npm:express",
+            "npm:pg",
+            "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
+            "npm:typeorm"
+          ]
+        },
+        {
+          "file": "apps/ws-coordinator-service/src/controller/coordinator.controller.ts",
+          "hash": "10338850494741287137"
+        },
+        {
+          "file": "apps/ws-coordinator-service/src/coordinator.module.ts",
+          "hash": "560854049260300149"
+        },
+        {
+          "file": "apps/ws-coordinator-service/src/main.ts",
+          "hash": "16528736319462431714"
+        },
+        {
+          "file": "apps/ws-coordinator-service/src/services/coordinator.service.ts",
+          "hash": "5452257677822176301"
+        },
+        {
+          "file": "apps/ws-coordinator-service/src/services/coordinator.worker.ts",
+          "hash": "9046235878407007180"
+        },
+        {
+          "file": "apps/ws-coordinator-service/tsconfig.build.json",
+          "hash": "276845246908739715"
+        },
+        {
+          "file": "apps/ws-coordinator-service/tsconfig.json",
+          "hash": "3422841129992048439"
+        }
+      ],
+      "@crypton-nestjs-kit/database": [
+        {
+          "file": "packages/database/.eslintrc.js",
+          "hash": "5805275214944404113"
+        },
+        {
+          "file": "packages/database/.gitignore",
+          "hash": "672911037926083482"
+        },
+        {
+          "file": "packages/database/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/database/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "packages/database/jest.config.js",
+          "hash": "1256365898827067825"
+        },
+        {
+          "file": "packages/database/package.json",
+          "hash": "14897775273192807294",
+          "deps": [
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/config@3.2.2",
+            "npm:@nestjs/core@10.4.15",
+            "npm:@nestjs/testing@10.4.15",
+            "npm:@types/eslint-plugin-prettier",
+            "npm:@types/jest",
+            "npm:@types/node@20.19.1",
+            "npm:@types/uuid@9.0.8",
+            "npm:@typescript-eslint/eslint-plugin@5.62.0",
+            "npm:@typescript-eslint/parser@5.62.0",
+            "npm:eslint@8.57.1",
+            "npm:eslint-config-prettier@8.10.0",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-prettier@4.2.1",
+            "npm:eslint-plugin-simple-import-sort",
+            "npm:prettier@2.8.8",
+            "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
+            "npm:tslib@2.8.1",
+            "npm:typescript",
+            "npm:@nestjs/typeorm",
+            "npm:typeorm",
+            "npm:uuid",
+            "@crypton-nestjs-kit/config"
+          ]
+        },
+        {
+          "file": "packages/database/src/db.interface.ts",
+          "hash": "6478891147157009501"
+        },
+        {
+          "file": "packages/database/src/db.module.ts",
+          "hash": "7322094094041955914"
+        },
+        {
+          "file": "packages/database/src/index.ts",
+          "hash": "5402081641373161748"
+        },
+        {
+          "file": "packages/database/tsconfig.json",
+          "hash": "8294437799332674063"
+        }
+      ],
+      "@crypton-nestjs-kit/notification-gateway": [
+        {
+          "file": "apps/notification-gateway/.dockerignore",
+          "hash": "10261366091226277543"
+        },
+        {
+          "file": "apps/notification-gateway/.env.example",
+          "hash": "18150790313621456824"
+        },
+        {
+          "file": "apps/notification-gateway/.eslintrc.js",
+          "hash": "3428559314374055786"
+        },
+        {
+          "file": "apps/notification-gateway/.gitignore",
+          "hash": "1545212619125482044"
+        },
+        {
+          "file": "apps/notification-gateway/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "apps/notification-gateway/README.md",
+          "hash": "6644666684578115928"
+        },
+        {
+          "file": "apps/notification-gateway/nest-cli.json",
+          "hash": "11299044278503621101"
+        },
+        {
+          "file": "apps/notification-gateway/package.json",
+          "hash": "1162600192747514540",
+          "deps": [
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/core@10.4.15",
+            "npm:@nestjs/platform-socket.io",
+            "npm:@nestjs/swagger@7.4.2",
+            "npm:@nestjs/websockets",
+            "npm:@socket.io/redis-adapter",
+            "@crypton-nestjs-kit/common",
+            "@crypton-nestjs-kit/config",
+            "@crypton-nestjs-kit/io-emitter",
+            "@crypton-nestjs-kit/logger",
+            "npm:class-transformer",
+            "npm:class-validator",
+            "npm:dotenv@16.4.7",
+            "npm:redis",
+            "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
+            "npm:socket.io",
+            "npm:uuid",
+            "npm:uuidv4"
+          ]
+        },
+        {
+          "file": "apps/notification-gateway/src/gateway.controller.ts",
+          "hash": "3697280047785792112"
+        },
+        {
+          "file": "apps/notification-gateway/src/gateway.module.ts",
+          "hash": "987869576099404655"
+        },
+        {
+          "file": "apps/notification-gateway/src/guards/jwt-socket.guard.ts",
+          "hash": "8420609423488859332"
+        },
+        {
+          "file": "apps/notification-gateway/src/main.ts",
+          "hash": "4008229180612898946"
+        },
+        {
+          "file": "apps/notification-gateway/src/websocket-gateway/index.ts",
+          "hash": "7533070682032154061"
+        },
+        {
+          "file": "apps/notification-gateway/src/websocket-gateway/websocket-gateway.module.ts",
+          "hash": "767989017450681733"
+        },
+        {
+          "file": "apps/notification-gateway/src/websocket-gateway/websocket-gateway.ts",
+          "hash": "10203606934093403618"
+        },
+        {
+          "file": "apps/notification-gateway/src/ws/index.ts",
+          "hash": "18343069700683742446"
+        },
+        {
+          "file": "apps/notification-gateway/src/ws/redis-io.adapter.ts",
+          "hash": "13724776044469088301"
+        },
+        {
+          "file": "apps/notification-gateway/tsconfig.build.json",
+          "hash": "276845246908739715"
+        },
+        {
+          "file": "apps/notification-gateway/tsconfig.json",
+          "hash": "3422841129992048439"
+        }
+      ],
+      "@crypton-nestjs-kit/batch-service": [
+        {
+          "file": "apps/batch-service/.dockerignore",
+          "hash": "5740037249133305333"
+        },
+        {
+          "file": "apps/batch-service/.env.example",
+          "hash": "17229603336384604662"
+        },
+        {
+          "file": "apps/batch-service/.eslintrc.js",
+          "hash": "3428559314374055786"
+        },
+        {
+          "file": "apps/batch-service/.gitignore",
+          "hash": "1545212619125482044"
+        },
+        {
+          "file": "apps/batch-service/.prettierrc",
+          "hash": "4808572120966128913"
+        },
+        {
+          "file": "apps/batch-service/README.md",
+          "hash": "16885832076152562690"
+        },
+        {
+          "file": "apps/batch-service/nest-cli.json",
+          "hash": "11299044278503621101"
+        },
+        {
+          "file": "apps/batch-service/package.json",
+          "hash": "18060889149835742833",
+          "deps": [
+            "npm:@nestjs/cli@10.4.9",
+            "npm:@nestjs/schematics@10.2.3",
+            "npm:@nestjs/testing@10.4.15",
+            "npm:@types/eslint-plugin-prettier",
+            "npm:@types/node@18.19.112",
+            "npm:@types/supertest@6.0.3",
+            "npm:@types/uuid@9.0.8",
+            "npm:@typescript-eslint/eslint-plugin@5.62.0",
+            "npm:@typescript-eslint/parser@5.62.0",
+            "npm:dotenv@16.4.7",
+            "npm:dotenv-cli@7.4.4",
+            "npm:eslint@8.57.1",
+            "npm:eslint-config-prettier@8.10.0",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-prettier@4.2.1",
+            "npm:eslint-plugin-simple-import-sort",
+            "npm:prettier@2.8.8",
+            "npm:rimraf@3.0.2",
+            "npm:supertest@7.1.1",
+            "npm:ts-jest",
+            "npm:ts-loader",
+            "npm:ts-node",
+            "npm:typescript",
+            "npm:@nestjs/cache-manager",
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/core@10.4.15",
+            "npm:@nestjs/microservices",
+            "npm:@nestjs/platform-express",
+            "npm:@nestjs/typeorm",
+            "@crypton-nestjs-kit/common",
+            "@crypton-nestjs-kit/config",
+            "@crypton-nestjs-kit/database",
+            "@crypton-nestjs-kit/logger",
+            "@crypton-nestjs-kit/settings",
+            "npm:cache-manager-redis-yet",
+            "npm:pg",
+            "npm:redis",
+            "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
+            "npm:typeorm",
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "apps/batch-service/src/batch.module.ts",
+          "hash": "7461112025001148720"
+        },
+        {
+          "file": "apps/batch-service/src/controllers/batch.controller.ts",
+          "hash": "10631247311331299656"
+        },
+        {
+          "file": "apps/batch-service/src/interfaces/batch.interface.ts",
+          "hash": "6779721643178874389"
+        },
+        {
+          "file": "apps/batch-service/src/main.ts",
+          "hash": "605834824509388263"
+        },
+        {
+          "file": "apps/batch-service/src/services/batch.constants.ts",
+          "hash": "15016309228536002967"
+        },
+        {
+          "file": "apps/batch-service/src/services/batch.service.ts",
+          "hash": "7382867679046395258"
+        },
+        {
+          "file": "apps/batch-service/src/services/batch.worker.ts",
+          "hash": "5133599714230362469"
+        },
+        {
+          "file": "apps/batch-service/src/services/worker.service.ts",
+          "hash": "17692385756062675659"
+        },
+        {
+          "file": "apps/batch-service/src/utils/utils.ts",
+          "hash": "7441516150616625155"
+        },
+        {
+          "file": "apps/batch-service/tsconfig.build.json",
+          "hash": "13486305771528990272"
+        },
+        {
+          "file": "apps/batch-service/tsconfig.json",
+          "hash": "1266461945096300629"
         }
       ],
       "@crypton-nestjs-kit/permission-service": [
@@ -1881,25 +1942,40 @@
           "hash": "14688665980045716390",
           "deps": [
             "npm:@compodoc/compodoc",
+            "npm:@nestjs/cli@10.4.9",
+            "npm:@nestjs/schematics@10.2.3",
+            "npm:@nestjs/testing@10.4.15",
             "npm:@types/eslint-plugin-prettier",
-            "npm:@typescript-eslint/eslint-plugin",
-            "npm:@typescript-eslint/parser",
+            "npm:@types/express@4.17.23",
+            "npm:@types/jsonwebtoken@9.0.10",
+            "npm:@types/node@20.19.1",
+            "npm:@types/supertest@6.0.3",
+            "npm:@typescript-eslint/eslint-plugin@5.62.0",
+            "npm:@typescript-eslint/parser@5.62.0",
+            "npm:concurrently@8.2.2",
             "npm:copyfiles",
-            "npm:eslint@9.29.0",
-            "npm:eslint-config-prettier",
+            "npm:dotenv@16.4.7",
+            "npm:dotenv-cli@7.4.4",
+            "npm:eslint@8.57.1",
+            "npm:eslint-config-prettier@8.10.0",
             "npm:eslint-plugin-import",
-            "npm:eslint-plugin-prettier@5.5.1",
+            "npm:eslint-plugin-prettier@4.2.1",
             "npm:eslint-plugin-simple-import-sort",
             "npm:nock",
-            "npm:prettier@3.6.2",
+            "npm:nodemon@3.1.10",
+            "npm:prettier@2.8.8",
             "npm:rimraf",
-            "npm:ts-jest@29.4.0",
+            "npm:supertest@7.1.1",
+            "npm:ts-jest",
             "npm:ts-loader",
             "npm:ts-node",
             "npm:typescript",
             "npm:@nestjs/cache-manager",
+            "npm:@nestjs/common@10.4.15",
+            "npm:@nestjs/core@10.4.15",
             "npm:@nestjs/microservices",
             "npm:@nestjs/platform-express",
+            "npm:@nestjs/swagger@7.3.1",
             "npm:@nestjs/terminus",
             "npm:@nestjs/typeorm",
             "npm:@nestjs/jwt",
@@ -1916,6 +1992,7 @@
             "npm:pg",
             "npm:redis",
             "npm:reflect-metadata",
+            "npm:rxjs@7.8.1",
             "npm:typeorm",
             "npm:url-join-ts",
             "npm:uuid",
@@ -1933,11 +2010,11 @@
         },
         {
           "file": "apps/permission-service/src/permission.module.ts",
-          "hash": "12553354917497749954"
+          "hash": "18087170936730270091"
         },
         {
           "file": "apps/permission-service/src/services/permission.service.ts",
-          "hash": "7048838763219096031"
+          "hash": "11050387374476628444"
         },
         {
           "file": "apps/permission-service/tsconfig.build.json",

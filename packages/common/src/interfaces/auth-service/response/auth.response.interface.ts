@@ -3,9 +3,8 @@ import { IResponse } from '../../response.interface';
 import { ITokensData } from '../request/auth.request.interface';
 
 export interface ITwoFaCodes {
-  emailCode: number;
-  phoneCode: number;
-  googleCode: number;
+  email: number;
+  phone: number;
 }
 
 export interface ITokens {
@@ -77,4 +76,9 @@ export interface ISession {
   status: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IUserRegistrationResponse extends IResponse {
+  user?: any;
+  created?: boolean;
 }

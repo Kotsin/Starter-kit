@@ -29,6 +29,7 @@ import { CaptchaGuard } from './guards/captcha.guard';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
 import { BaseCodeBruteForceGuard } from './guards/twoFA.guard';
 import { AuthController } from './v1/auth/auth.controller';
+import { InvitationController } from './v1/auth/invitation.controller';
 import { CaptchaService } from './v1/auth/services/captcha.service';
 import { SessionsController } from './v1/auth/sessions.controller';
 import { UserController } from './v1/user/user.controller';
@@ -79,6 +80,7 @@ import { ApiKeyController } from './v1';
   ],
   controllers: [
     AuthController,
+    InvitationController,
     ApiKeyController,
     SessionsController,
     GatewayController,

@@ -7,13 +7,10 @@
     "check-engines": "pnpm run check-engines -r",
     "prebuild": "npm run check-engines",
     "prepare": "husky",
-    "start:gateway": "node apps/api-gateway/dist/main.js",
     "prettier": "../node_modules/.bin/prettier --check \"**/*.{js,json,ts,yml,yaml}\"",
     "prettier:write": "../node_modules/.bin/prettier --write \"**/*.{js,json,ts,yml,yaml}\"",
-    "docs:generate": "pnpm run docs:generate -r",
-    "docs:serve": "pnpm run docs:serve -r",
-    "docs:watch": "pnpm run docs:watch -r",
-    "check-nx-rules": "node scripts/check-nx-rules.js"
+    "check-nx-rules": "node scripts/check-nx-rules.js",
+    "generate:microservice": "node scripts/generate-microservice.js"
   },
   "keywords": [],
   "license": "UNLICENSED",
@@ -37,7 +34,8 @@
     "rimraf": "^5.0.7",
     "ts-jest": "^29.1.2",
     "typescript": "^5.2.2",
-    "@compodoc/compodoc": "^1.1.23"
+    "@compodoc/compodoc": "^1.1.23",
+    "inquirer": "^12.8.1"
   },
   "config": {
     "commitizen": {

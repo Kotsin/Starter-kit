@@ -1,6 +1,6 @@
+import { ApiKeyType } from '../../enums';
+import { IRequest } from '../entity-response.types';
 import { IResponse } from '../response.interface';
-
-import { ApiKeyType } from './dto/api-key.dto';
 
 export interface IApiKey {
   id: string;
@@ -11,6 +11,25 @@ export interface IApiKey {
   isActive: boolean;
   expiredAt: string;
   createdAt: string;
+}
+
+export interface ICreateApiKeyData extends IRequest {
+  userId?: string;
+  type: ApiKeyType | undefined;
+  allowedIps?: string[];
+  permissions?: string[];
+}
+
+export interface IUpdateApiKeyData extends IRequest {
+  type?: string;
+  isActive?: boolean;
+  allowedIps?: string[];
+  permissions?: string[];
+}
+
+export interface IApiKeyValidateData extends IRequest {
+  rawKey: string;
+  ip: string;
 }
 
 export interface IApiKeyCreateResponse extends IResponse {

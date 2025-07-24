@@ -1,4 +1,4 @@
-import { UserStatus, UserType } from '../../../enums';
+import { DefaultRole, UserStatus } from '../../../enums';
 
 export interface User {
   id: string;
@@ -6,7 +6,7 @@ export interface User {
   username: string | null;
   referralCode: number;
   status: UserStatus;
-  type: UserType;
+  type: DefaultRole;
   loginMethods?: any;
   role?: any;
   password?: string;

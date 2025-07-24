@@ -101,11 +101,13 @@ export class AuthController {
     @CorrelationIdFromRequest() trace_id: string,
     @Body() body: RegisterDtoRequest,
   ): Promise<IRegistrationResponse> {
-    const userData = await this.userClient.ensureUserExists(
+    const userData = await this.authClient.registerUser(
       {
         password: body.password,
         login: body.login,
         loginType: body['loginType'],
+        referralCode: body.referralCode,
+        invitationCode: body.invitationCode,
       },
       trace_id,
       'service',

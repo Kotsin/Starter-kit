@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MessagePattern } from '@nestjs/microservices';
 import {
   AuthClientPatterns,
   ControllerMeta,
@@ -7,12 +7,7 @@ import {
   IActiveSessionsRequest,
   IActiveSessionsResponse,
   IAuthenticateNative,
-  INativeAuthCredentials,
   INativeLoginResponse,
-  IOAuthAuthCredentials,
-  ISessionCreateRequest,
-  ISessionCreateResponse,
-  ISessionData,
   ISessionsHistoryRequest,
   ISessionsHistoryResponse,
   ISessionUntilDateRequest,
@@ -21,14 +16,13 @@ import {
   ITerminateAllResponse,
   ITerminateSessionRequest,
   ITerminateSessionResponse,
-  ITokenCreateRequest,
-  ITokenCreateResponse,
   ITokenRefreshRequest,
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
   IWeb3AuthCredentials,
-  Permission,
+  IUserRegistrationRequest,
+  IUserRegistrationResponse,
 } from '@crypton-nestjs-kit/common';
 
 import { AuthService } from '../services/auth/auth.service';
@@ -36,6 +30,24 @@ import { AuthService } from '../services/auth/auth.service';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  /**
+   * User registration
+   */
+  @ControllerMeta({
+    name: 'User registration',
+    description: 'Register a new user',
+    isPublic: true,
+    type: ControllerType.WRITE,
+    needsConfirmation: false,
+    needsPermission: false,
+  })
+  @MessagePattern(AuthClientPatterns.USER_REGISTER)
+  public async registerUser(
+    data: IUserRegistrationRequest,
+  ): Promise<IUserRegistrationResponse> {
+    return await this.authService.registerUser(data);
+  }
 
   /**
    * Native authentication (email/password)

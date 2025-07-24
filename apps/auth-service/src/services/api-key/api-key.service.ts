@@ -6,12 +6,12 @@ import {
   ApiKeyEntity,
   apiKeyErrorMessages,
   ApiKeyType,
-  CreateApiKeyDto,
   decrypt,
   encrypt,
   IApiKey,
+  ICreateApiKeyData,
+  IUpdateApiKeyData,
   ServiceJwtGenerator,
-  UpdateApiKeyDto,
   UserClient,
 } from '@crypton-nestjs-kit/common';
 import * as crypto from 'crypto';
@@ -32,7 +32,7 @@ export class ApiKeyService {
     private readonly userClient: UserClient,
   ) {}
 
-  async createApiKey(dto: CreateApiKeyDto): Promise<IApiKey> {
+  async createApiKey(dto: ICreateApiKeyData): Promise<IApiKey> {
     const rawKey = crypto.randomBytes(32).toString('hex');
     const encryptedKey = encrypt(rawKey);
     const encryptedAllowedIps = dto.allowedIps?.map((ip) => encrypt(ip)) || [];
@@ -97,7 +97,7 @@ export class ApiKeyService {
   async updateApiKey(
     id: string,
     userId: string,
-    dto: UpdateApiKeyDto,
+    dto: IUpdateApiKeyData,
   ): Promise<IApiKey> {
     const apiKey = await this.apiKeyRepo.findOne({ where: { id } });
 

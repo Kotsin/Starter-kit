@@ -3,7 +3,7 @@ export * from './createRmqMessage';
 export * from './doWithCatch';
 export * from './encryption.util';
 export * from './function-type.decorator';
-export * from './generateRandomNumber';
+export * from './generateRandom';
 export * from './getTimePeriod';
 export * from './getUnixTime';
 export * from './hashPassword';

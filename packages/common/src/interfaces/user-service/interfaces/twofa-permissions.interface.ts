@@ -1,4 +1,4 @@
-import { LoginMethod } from '../../../entities/user/user-login-method.entity';
+import { LoginMethod } from '../../../entities/user/entry-method.entity';
 import { ControllerType } from '../../../utils';
 import { IRequest } from '../../entity-response.types';
 import { IResponse } from '../../response.interface';
@@ -56,4 +56,19 @@ export interface IGetTwoFaPermissionsResponse extends IResponse {
   readonly twoFaPermissions: ITwoFaPermission[];
   /** Meta information for the response */
   readonly meta: ITwoFaPermissionsMeta;
+}
+
+/**
+ * Request for checking if user has 2FA permission for a specific messagePattern
+ */
+export interface ICheckTwoFaPermissionRequest extends IRequest {
+  userId: string;
+  permissionId: string;
+}
+
+/**
+ * Response for checking if user has 2FA permission for a specific messagePattern
+ */
+export interface ICheckTwoFaPermissionResponse extends IResponse {
+  needConfirmation: boolean;
 }

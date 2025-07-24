@@ -22,3 +22,17 @@ export function generateRandomNumber(min = 1, max = 10): number {
 
   return result;
 }
+
+/**Generate random string with prefix
+ * @param length length of string default(10)
+ * @param prefix prefix of string default('')
+ * */
+export function generateRandomString(length = 10, prefix = ''): string {
+  const randomString =
+    prefix +
+    Math.random()
+      .toString(36)
+      .substring(2, length + 2);
+
+  return randomString.toUpperCase();
+}

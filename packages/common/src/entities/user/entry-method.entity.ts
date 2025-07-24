@@ -21,9 +21,9 @@ export enum LoginMethod {
   WEB3 = 'web3',
 }
 
-@Entity('UserLoginMethods')
+@Entity('UserEntryMethods')
 @Index(['login'], { unique: true })
-export class UserLoginMethodsEntity extends BaseEntity {
+export class UserEntryMethodsEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 

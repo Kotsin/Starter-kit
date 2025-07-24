@@ -30,6 +30,8 @@ import {
   ITokenRefreshResponse,
   ITokenVerifyRequest,
   ITokenVerifyResponse,
+  IUserRegistrationRequest,
+  IUserRegistrationResponse,
   PermissionClient,
   ServiceJwtGenerator,
   SessionEntity,
@@ -39,8 +41,36 @@ import {
 import { ConfigService } from '@crypton-nestjs-kit/config';
 import { In, LessThan, Repository } from 'typeorm';
 
+import { InvitationService } from '../invitation/invitation.service';
+
 import { AuthStrategyFactory } from './auth-strategy-factory.service';
 import { Web3Strategy } from './strategies/web3.strategy';
+
+// Интерфейсы для типизации параметров и возвращаемых значений
+
+interface IExistingUserCheckResult {
+  status: boolean;
+  message: string;
+  errorCode?: AUTH_ERROR_CODES;
+  user?: any;
+}
+
+interface IInvitationValidationResult {
+  status: boolean;
+  invitationRequired?: boolean;
+  invitationData?: any;
+  message: string;
+  error?: string;
+  errorCode?: AUTH_ERROR_CODES;
+}
+
+interface IUserCreationResult {
+  status: boolean;
+  user?: any;
+  message: string;
+  error?: string;
+  errorCode?: AUTH_ERROR_CODES;
+}
 
 @Injectable()
 export class AuthService {
@@ -56,6 +86,7 @@ export class AuthService {
     private readonly authStrategyFactory: AuthStrategyFactory,
     private readonly serviceJwtGenerator: ServiceJwtGenerator,
     private readonly web3Strategy: Web3Strategy,
+    private readonly invitationService: InvitationService,
   ) {}
 
   async authenticate(credentials: AuthCredentials): Promise<any> {
@@ -188,6 +219,244 @@ export class AuthService {
     errorCode?: AUTH_ERROR_CODES;
   }> {
     return await this.web3Strategy.generateNonce(walletAddress);
+  }
+
+  /**
+   * Регистрация пользователя с поддержкой приглашений
+   */
+  async registerUser(
+    data: IUserRegistrationRequest,
+  ): Promise<IUserRegistrationResponse> {
+    try {
+      const traceId = data.traceId || 'register-user-trace';
+      const serviceToken = await this.generateServiceToken(data.login);
+
+      const existingUserCheck = await this.checkExistingUser(
+        data.login,
+        traceId,
+        serviceToken,
+      );
+
+      if (!existingUserCheck.status) {
+        return existingUserCheck;
+      }
+
+      const invitationValidation = await this.validateInvitation(
+        data.invitationCode,
+      );
+
+      if (!invitationValidation.status) {
+        return invitationValidation;
+      }
+
+      const userCreation = await this.createUserWithInvitation(
+        data,
+        traceId,
+        serviceToken,
+        invitationValidation.invitationData,
+      );
+
+      if (!userCreation.status) {
+        return userCreation;
+      }
+
+      if (
+        invitationValidation.invitationRequired &&
+        invitationValidation.invitationData
+      ) {
+        await this.useInvitationAfterCreation(
+          data.invitationCode,
+          userCreation.user.id,
+        );
+      }
+
+      return {
+        status: true,
+        message: 'User registered successfully',
+        user: userCreation.user,
+        created: true,
+      };
+    } catch (error) {
+      return this.handleRegistrationError(error);
+    }
+  }
+
+  private async generateServiceToken(login: string): Promise<string> {
+    return await this.serviceJwtGenerator.generateServiceJwt({
+      subject: login,
+      actor: 'auth-service',
+      issuer: 'auth-service',
+      audience: 'user',
+      type: 'service',
+      expiresIn: '5m',
+    });
+  }
+
+  private async checkExistingUser(
+    login: string,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<IExistingUserCheckResult> {
+    const existingUserResult = await this.userClient.getUserByLoginSecure(
+      { login },
+      traceId,
+      serviceToken,
+    );
+
+    if (existingUserResult.status && existingUserResult.user) {
+      return {
+        status: false,
+        message: AuthErrorMessages[AUTH_ERROR_CODES.USER_ALREADY_EXISTS],
+        errorCode: AUTH_ERROR_CODES.USER_ALREADY_EXISTS,
+        user: existingUserResult.user,
+      };
+    }
+
+    return { status: true, message: 'User does not exist' };
+  }
+
+  private async validateInvitation(
+    invitationCode?: string,
+  ): Promise<IInvitationValidationResult> {
+    const invitationRequired = process.env.INVITATION_REQUIRED === 'true';
+
+    if (!invitationRequired) {
+      return {
+        status: true,
+        message: 'Invitation not required',
+        invitationRequired: false,
+        invitationData: null,
+      };
+    }
+
+    if (!invitationCode) {
+      return {
+        status: false,
+        message: 'Invitation code is required for registration',
+        errorCode: AUTH_ERROR_CODES.INVALID_CREDENTIALS,
+      };
+    }
+
+    try {
+      const invitationResult = await this.invitationService.getInvitation(
+        invitationCode,
+      );
+
+      if (!invitationResult.status || !invitationResult.invitation) {
+        return {
+          status: false,
+          message: invitationResult.message || 'Invalid invitation code',
+          error: invitationResult.message || 'Invalid invitation code',
+          errorCode: AUTH_ERROR_CODES.INVALID_CREDENTIALS,
+        };
+      }
+
+      return {
+        status: true,
+        message: 'Invitation validated successfully',
+        invitationRequired: true,
+        invitationData: invitationResult.invitation,
+      };
+    } catch (invitationError) {
+      return {
+        status: false,
+        message: 'Failed to validate invitation code',
+        error: invitationError.message,
+        errorCode: AUTH_ERROR_CODES.INVALID_CREDENTIALS,
+      };
+    }
+  }
+
+  private async createUserWithInvitation(
+    data: IUserRegistrationRequest,
+    traceId: string,
+    serviceToken: string,
+    invitationData: any,
+  ): Promise<IUserCreationResult> {
+    try {
+      const userResult = await this.userClient.ensureUserExists(
+        {
+          login: data.login,
+          password: data.password,
+          loginType: data.loginType,
+          invitedBy: invitationData?.createdBy,
+          roleId: invitationData?.invitedUserRole || null,
+        },
+        traceId,
+        serviceToken,
+      );
+
+      if (!userResult.status) {
+        return {
+          status: false,
+          message: userResult.message || 'User creation failed',
+          error: userResult.error || 'Failed to create user',
+          errorCode: AUTH_ERROR_CODES.UNKNOWN_ERROR,
+          user: null,
+        };
+      }
+
+      if (!userResult.created) {
+        return {
+          status: false,
+          message: 'User already exists',
+          error: 'User with this login already exists',
+          errorCode: AUTH_ERROR_CODES.USER_ALREADY_EXISTS,
+          user: userResult.user,
+        };
+      }
+
+      return {
+        status: true,
+        message: 'User created successfully',
+        user: userResult.user,
+      };
+    } catch (userCreationError) {
+      return {
+        status: false,
+        message: 'User creation failed',
+        error: userCreationError.message,
+        errorCode: AUTH_ERROR_CODES.UNKNOWN_ERROR,
+        user: null,
+      };
+    }
+  }
+
+  private async useInvitationAfterCreation(
+    invitationCode: string,
+    userId: string,
+  ): Promise<void> {
+    try {
+      const useInvitationResult = await this.invitationService.useInvitation(
+        invitationCode,
+        userId,
+      );
+
+      if (!useInvitationResult.status) {
+        console.error(
+          'Failed to use invitation after user creation:',
+          useInvitationResult.message,
+        );
+      }
+    } catch (invitationUsageError) {
+      console.error(
+        'Exception during invitation usage:',
+        invitationUsageError.message,
+      );
+    }
+  }
+
+  /**
+   * Обработка общих ошибок регистрации
+   */
+  private handleRegistrationError(error: any): any {
+    return {
+      status: false,
+      message: 'Registration process failed',
+      error: error.message || AuthErrorMessages[AUTH_ERROR_CODES.UNKNOWN_ERROR],
+      errorCode: AUTH_ERROR_CODES.UNKNOWN_ERROR,
+      user: null,
+    };
   }
 
   /**

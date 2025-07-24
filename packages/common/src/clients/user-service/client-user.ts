@@ -3,13 +3,13 @@ import { ClientProxy, RmqOptions, Transport } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 import {
+  IGetTwoFaPermissionsRequest,
+  IGetTwoFaPermissionsResponse,
   IRequest,
   IResponse,
   IUpdate2faPermissionsRequest,
-  IGetTwoFaPermissionsRequest,
-  IGetTwoFaPermissionsResponse,
   User,
-} from '../../types';
+} from '../../interfaces';
 import { createRmqMessage } from '../../utils';
 
 export const USER_INJECT_TOKEN = 'USER_SERVICE';
@@ -338,6 +338,46 @@ export class UserClient {
       ),
     );
   }
+
+  /**
+   * Returns role by ID.
+   * @param request - Request data containing role ID.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @returns Role information response.
+   */
+  async getRoleById(
+    request: { roleId: string },
+    traceId: string,
+    serviceToken: string,
+  ): Promise<any> {
+    return await firstValueFrom(
+      this.userClientProxy.send(
+        UserClientPatterns.GET_ROLE_BY_ID,
+        await createRmqMessage(traceId, serviceToken, request),
+      ),
+    );
+  }
+
+  /**
+   * Returns role by user ID.
+   * @param userId - User ID.
+   * @param traceId - Trace identifier for request tracing in the system.
+   * @param serviceToken - Token for zero-trust authorization between services.
+   * @returns Role information response.
+   */
+  async getRoleByUserId(
+    userId: string,
+    traceId: string,
+    serviceToken: string,
+  ): Promise<IGetRoleByUserIdResponse> {
+    return await firstValueFrom(
+      this.userClientProxy.send(
+        UserClientPatterns.GET_ROLE_BY_USER_ID,
+        await createRmqMessage(traceId, serviceToken, userId),
+      ),
+    );
+  }
 }
 
 export enum UserClientPatterns {
@@ -356,6 +396,8 @@ export enum UserClientPatterns {
   FIND_OR_CREATE_USER = 'user:find_or_create',
   REGISTRATION_CONFIRM = 'registration:confirm',
   CREATE_CONFIRMATION_CODES = 'confirmation_codes:create',
+  GET_ROLE_BY_ID = 'role:get:by_id',
+  GET_ROLE_BY_USER_ID = 'role:get:by_user_id',
 }
 
 // --- User ---
@@ -397,6 +439,8 @@ export interface IFindOrCreateUserRequest extends IRequest {
   password: string;
   loginType: string;
   referralCode?: number;
+  invitedBy?: string;
+  roleId?: string;
 }
 
 export interface IConfirmRegistrationRequest extends IRequest {
@@ -416,4 +460,30 @@ export interface ICreateConfirmationCodesResponse extends IResponse {
 export interface IFindOrCreateUserResponse extends IResponse {
   readonly user: IUser;
   readonly created?: boolean;
+}
+
+export interface IGetRoleByIdRequest extends IRequest {
+  readonly roleId: string;
+}
+
+export interface IGetRoleByIdResponse extends IResponse {
+  readonly role: IRole;
+}
+
+export interface IRole {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string;
+  readonly level: number;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly createdBy: string;
+}
+
+export interface IGetRoleByUserIdRequest extends IRequest {
+  readonly userId: string;
+}
+
+export interface IGetRoleByUserIdResponse extends IResponse {
+  readonly roles: IRole[];
 }

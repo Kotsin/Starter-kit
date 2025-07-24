@@ -152,3 +152,11 @@ export interface INativeLogin {
   };
   traceId?: string;
 }
+
+export interface IUserRegistrationRequest extends IRequest {
+  login: string;
+  password: string;
+  loginType: string;
+  referralCode?: string;
+  invitationCode?: string;
+}

@@ -5,20 +5,21 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  ManyToOne,
   OneToMany,
   // OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { UserStatus, UserType } from '../../enums';
+import { DefaultRole, UserStatus } from '../../enums';
 
 import { TwoFactorPermissionsEntity } from './2fa-permissions.entity';
-import { UserLoginMethodsEntity } from './user-login-method.entity';
+import { UserEntryMethodsEntity } from './entry-method.entity';
 import { UserRoleEntity } from './user-role.entity';
 
 @Index(['type', 'status'])
-@Entity('User')
+@Entity('Users')
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
@@ -64,13 +65,19 @@ export class UserEntity extends BaseEntity {
   @Index()
   @Column({
     type: 'enum',
-    enum: UserType,
-    default: UserType.USER,
+    enum: DefaultRole,
+    default: DefaultRole.USER,
   })
-  public type!: UserType;
+  public type!: DefaultRole;
 
   @Column({ type: 'jsonb', nullable: false, default: {}, name: 'extra_data' })
   public extraData?: any;
+
+  @Column({ type: 'uuid', nullable: true, name: 'invited_by_id' })
+  public invitedById?: string | null;
+
+  @ManyToOne(() => UserEntity, { nullable: true })
+  public invitedBy?: UserEntity | null;
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -93,10 +100,10 @@ export class UserEntity extends BaseEntity {
   })
   public deletedAt!: Date;
 
-  @OneToMany(() => UserLoginMethodsEntity, (loginMethod) => loginMethod.user, {
+  @OneToMany(() => UserEntryMethodsEntity, (loginMethod) => loginMethod.user, {
     cascade: true,
   })
-  public loginMethods!: UserLoginMethodsEntity[];
+  public loginMethods!: UserEntryMethodsEntity[];
 
   @OneToMany(() => UserRoleEntity, (userRole) => userRole.user, {
     cascade: true,

@@ -1,0 +1,190 @@
+name: Deployment to the server
+
+on:
+  workflow_dispatch:
+
+jobs:
+    linter:
+        runs-on: ${{ vars.OS_VERSION }}
+        timeout-minutes: 10
+        steps:
+
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install pnpm
+          uses: pnpm/action-setup@v4
+          with:
+            version: ${{ vars.PNPM_VERSION }}
+            run_install: false
+
+        - name: Install Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ vars.NODE_VERSION }}
+            cache: 'pnpm'
+        
+        - name: Install dependencies
+          run: pnpm install
+        
+        - name: Lint
+          run: pnpm -r lint || exit 0
+
+    audit:
+        runs-on: ${{ vars.OS_VERSION }}
+        timeout-minutes: 10
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install pnpm
+          uses: pnpm/action-setup@v4
+          with:
+            version: ${{ vars.PNPM_VERSION }}
+            run_install: false
+
+        - name: Install Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ vars.NODE_VERSION }}
+            cache: 'pnpm'
+        
+        - name: Install dependencies
+          run: pnpm install
+        
+        - name: Audit
+          run: pnpm audit || exit 0
+
+    nx-check:
+        runs-on: ${{ vars.OS_VERSION }}
+        timeout-minutes: 10
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install pnpm
+          uses: pnpm/action-setup@v4
+          with:
+            version: ${{ vars.PNPM_VERSION }}
+            run_install: false
+
+        - name: Install Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ vars.NODE_VERSION }}
+            cache: 'pnpm'
+        
+        - name: Install dependencies
+          run: pnpm install
+        
+        - name: Audit
+          run: pnpm check-nx-rules || exit 0
+
+    sonarqube:
+        runs-on: ${{ vars.OS_VERSION }}
+        timeout-minutes: 10
+        steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+        - uses: sonarsource/sonarqube-scan-action@v4
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+        # If you wish to fail your job when the Quality Gate is red, uncomment the
+        # following lines. This would typically be used to fail a deployment.
+        # We do not recommend to use this in a pull request. Prefer using pull request
+        # decoration instead.
+        # - uses: sonarsource/sonarqube-quality-gate-action@v1
+        #   timeout-minutes: 5
+        #   env:
+        #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    deploy:
+        runs-on: ${{ vars.OS_VERSION }}
+        needs: [audit, nx-check, linter, sonarqube]
+        timeout-minutes: 10
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install pnpm
+          uses: pnpm/action-setup@v4
+          with:
+            version: ${{ vars.PNPM_VERSION }}
+            run_install: false
+
+        - name: Install Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ vars.NODE_VERSION }}
+            cache: 'pnpm'
+
+        - name: Install dependencies
+          run: pnpm install
+
+        - name: Build services
+          run: pnpm -r build
+        
+        - name: Prepare connection to the server
+          run: |
+            mkdir -p ~/.ssh/
+            touch ~/.ssh/id_rsa
+            chmod -R go= ~/.ssh
+            chmod 600 ~/.ssh/id_rsa
+            echo "${{ secrets.SERVER_SSH_KEY }}" >> ~/.ssh/id_rsa
+            echo "${{ secrets.SERVER_HOSTS }}" >> ci-scripts/hosts
+
+        - name: Deploy to the server
+          run: |
+              chmod 700 ci-scripts
+              cd ci-scripts
+              ansible-playbook -i hosts -e "ansible_user=${{ vars.SERVER_USER }} \
+              BACKEND_BIN=${{ vars.BACKEND_BIN }} \
+              
+              DB_HOST=${{ vars.DB_HOST }} \
+              DB_PORT=${{ vars.DB_PORT }} \
+              DB_USERNAME=${{ secrets.DB_USERNAME }} \
+              DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+
+              DB_NAME=${{ secrets.DB_NAME }} \
+              BATCH_DB_NAME=${{ secrets.BATCH_DB_NAME }} \
+              NOTIFICATION_DB_NAME=${{ secrets.NOTIFICATION_DB_NAME }} \
+              WS_DB_NAME=${{ secrets.WS_DB_NAME }} \
+
+              REDIS_URL=${{ secrets.REDIS_URL }} \
+
+              SWAGGER_USERNAME=${{ secrets.SWAGGER_USERNAME }} \
+              SWAGGER_PASSWORD=${{ secrets.SWAGGER_PASSWORD }} \
+
+              AUTH_SERVICE_RMQ_URL=${{ secrets.AUTH_SERVICE_RMQ_URL }} \
+              USER_SERVICE_RMQ_URL=${{ secrets.USER_SERVICE_RMQ_URL }} \
+              RMQ_URL=${{ secrets.RMQ_URL }} \
+              AUTH_SERVICE_RMQ_QUEUE=${{ vars.AUTH_SERVICE_RMQ_QUEUE }} \
+              BATCH_RMQ_QUEUE=${{ vars.BATCH_RMQ_QUEUE }} \
+              NOTIFICATION_RMQ_QUEUE=${{ vars.NOTIFICATION_RMQ_QUEUE }} \
+              USER_SERVICE_RMQ_QUEUE=${{ vars.USER_SERVICE_RMQ_QUEUE }} \
+              WS_RMQ_QUEUE=${{ vars.WS_RMQ_QUEUE }} \
+
+              AUTH_TOKEN_SECRET=${{ secrets.AUTH_TOKEN_SECRET }} \
+              AUTH_ACCESS_TOKEN_EXPIRES_IN=${{ vars.AUTH_ACCESS_TOKEN_EXPIRES_IN }} \
+              AUTH_REFRESH_TOKEN_EXPIRES_IN=${{ vars.AUTH_REFRESH_TOKEN_EXPIRES_IN }} \
+              AUTH_MAX_SESSIONS_PER_USER=${{ vars.AUTH_MAX_SESSIONS_PER_USER }} \
+              AUTH_SESSION_CACHE_TTL=${{ vars.AUTH_SESSION_CACHE_TTL }} \
+
+              SECRET_API_KEY=${{ secrets.SECRET_API_KEY }} \
+
+              CAPTCHA_ENABLED=${{ vars.CAPTCHA_ENABLED }} \
+              CAPTCHA_SECRET_KEY=${{ secrets.CAPTCHA_SECRET_KEY }} \
+              CAPTCHA_SITE_KEY=${{ secrets.CAPTCHA_SITE_KEY }} \
+
+              HOST=${{ vars.HOST }} \
+              PORT=${{ vars.PORT }} \
+
+              INVITATION_REQUIRED=${{ vars.INVITATION_REQUIRED }} \
+
+              LOG_LEVEL=${{ vars.LOG_LEVEL }} \
+              NODE_ENV=${{ vars.NODE_ENV }} \
+
+              REF_NAME=${{ github.ref_name }} \
+              SRC_DIR=${{ github.workspace }}/" backend-update.yml;
