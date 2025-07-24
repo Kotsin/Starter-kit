@@ -102,6 +102,7 @@ jobs:
 
     deploy:
         runs-on: ${{ vars.OS_VERSION }}
+        needs: [audit, nx-check, linter, sonarqube]
         timeout-minutes: 10
         steps:
         - name: Checkout repository
