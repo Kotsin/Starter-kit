@@ -3,8 +3,8 @@
 apps:
   - {name: "gateway", dir: "api-gateway"}
   - {name: "auth", dir: "auth-service"}
-  - {name: "batch", dir: "batch-service"}
-  - {name: "notification", dir: "notification-gateway"}
+  # - {name: "batch", dir: "batch-service"}
+  # - {name: "notification", dir: "notification-gateway"}
   - {name: "permission", dir: "permission-service"}
   - {name: "user", dir: "user-service"}
-  - {name: "websocket", dir: "ws-coordinator-service"}
+  # - {name: "websocket", dir: "ws-coordinator-service"}

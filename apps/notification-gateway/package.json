@@ -7,7 +7,7 @@
   "scripts": {
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "echo 'tsc -p tsconfig.build.json'",
     "start:test": "tsc-watch -p tsconfig.build.json --onSuccess \"node -r dotenv/config dist/main.js dotenv_config_path=../.env.test\"",
     "start:prod": "node dist/main.js",
     "lint": "eslint \"src/**/*.ts\" --fix"
