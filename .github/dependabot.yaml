@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    schedule:
+      interval: "daily"
+    directory: "/"
+    reviewers:
+      - "Kirill9970"
+    target-branch: "main"
+    open-pull-requests-limit: 0
+    labels:
+      - "security"

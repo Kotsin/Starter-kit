@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "{{ item.name }}-{{ REF_NAME }}",
+      "exec_mode": "fork",
+      "instances": "1",
+      "merge_logs": true,
+      "script": "./dist/main.js",
+      "time": true,
+      "autorestart": true,
+      "listen_timeout": 15000
+    }
+  ]
+}

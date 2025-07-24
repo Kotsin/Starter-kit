@@ -1,0 +1,62 @@
+---
+# tasks file for backend-update
+- name: Remove old backup dir
+  file:
+    path: '{{ BACKEND_BIN }}_backup'
+    state: absent
+  ignore_errors: true
+
+# - name: Create backup dir
+#   file:
+#     path: '{{ BACKEND_BIN }}_backup'
+#     state: directory
+#     recurse: yes
+#     mode: '0770'
+
+- name: Copy old files to backup dir
+  shell: cp -R '{{ BACKEND_BIN }}' '{{ BACKEND_BIN }}_backup'
+  ignore_errors: true
+
+- name: Delete backend dir
+  file:
+    path: '{{ BACKEND_BIN }}'
+    state: absent
+  ignore_errors: true
+
+- name: Create backend dir
+  file:
+    path: '{{ BACKEND_BIN }}'
+    state: directory
+    recurse: yes
+    mode: '0770'
+
+- name: Upload backend files
+  synchronize:
+    src: '{{ SRC_DIR }}'
+    dest: '{{ BACKEND_BIN }}'
+  register: copyfiles
+
+- name: Generate .env files for service {{ item.name }}
+  template:
+    src: env-{{ item.name }}.j2
+    dest: '{{ BACKEND_BIN }}/apps/{{ item.dir }}/.env'
+  with_items: '{{ apps }}'
+
+- name: Copy or generate app.json for service {{ item.name }}
+  template:
+    src: ./app.json.j2
+    dest: '{{ BACKEND_BIN }}/apps/{{ item.dir }}/app.json'
+  with_items: '{{ apps }}'
+
+- name: Stop backend process
+  shell: pm2 stop app.json
+  args:
+    chdir: '{{ BACKEND_BIN }}/apps/{{ item.dir }}'
+  with_items: '{{ apps }}'
+  ignore_errors: true
+
+- name: Start backend processes
+  shell: pm2 start app.json
+  args:
+    chdir: '{{ BACKEND_BIN }}/apps/{{ item.dir }}'
+  with_items: '{{ apps }}'
