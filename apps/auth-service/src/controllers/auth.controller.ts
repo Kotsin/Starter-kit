@@ -23,6 +23,7 @@ import {
   IWeb3AuthCredentials,
   IUserRegistrationRequest,
   IUserRegistrationResponse,
+  IAuthenticateWeb3
 } from '@crypton-nestjs-kit/common';
 
 import { AuthService } from '../services/auth/auth.service';
@@ -137,10 +138,7 @@ export class AuthController {
     needsConfirmation: false,
   })
   @MessagePattern(AuthClientPatterns.AUTHENTICATE_WEB3)
-  public async authenticateWeb3(data: {
-    credentials: IWeb3AuthCredentials;
-    sessionData: ISessionData;
-  }) {
+  public async authenticateWeb3(data: IAuthenticateWeb3) {
     return await this.authService.authenticateNative(
       data
     );

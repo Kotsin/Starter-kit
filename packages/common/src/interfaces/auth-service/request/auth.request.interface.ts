@@ -3,11 +3,18 @@ import { IRequest } from '../../entity-response.types';
 import {
   AuthCredentials,
   INativeAuthCredentials,
+  IWeb3AuthCredentials,
 } from '../auth-strategy.interface';
 import { ISession } from '../response/auth.response.interface';
 
 export interface IAuthenticateNative extends IRequest {
   credentials: AuthCredentials;
+  sessionData: Partial<ISession>;
+  traceId?: string;
+}
+
+export interface IAuthenticateWeb3 extends IRequest {
+  credentials: IWeb3AuthCredentials;
   sessionData: Partial<ISession>;
   traceId?: string;
 }
